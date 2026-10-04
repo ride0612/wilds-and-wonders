@@ -114,3 +114,29 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
+Node.js runtime v24.19.0
+The Windows distribution includes Node.js for the local account server.
+The complete Node.js and bundled component license notices are provided in
+runtime/NODE-LICENSE.txt (source copy: server/NODE-LICENSE.txt).
+https://nodejs.org/
+
+---------------------------------------------------------
+Generated visual assets and art research (v0.9)
+
+The game character portraits and card illustrations were generated with
+OpenAI imagegen. They are not presented as human-drawn commissioned artwork
+or as a collaboration with the artists listed below.
+
+Official artist/publisher pages were viewed to study general composition,
+line weight, color grouping, lighting, and character silhouette:
+- Mai Yoneyama, EYE, PIE International preview:
+  https://pie.co.jp/book/i/5387/?lang=ja
+- loundraw, official 2017 exhibition key visual:
+  https://yoakimi.loundraw.jp/
+- redjuice, BEATLESS LACIA, official portfolio:
+  https://redjuice.artstation.com/projects/KrGwRy
+
+No artwork from these websites is included in the game or distribution.
+These references imply no artist endorsement, partnership, or license.
+Generation prompts and the project art direction are recorded in
+assets/cards/ART-DIRECTION.md (game/assets/cards/ART-DIRECTION.md in the app).

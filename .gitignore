@@ -1,2 +1,7 @@
 .build/
 release/
+server/data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.log

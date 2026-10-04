@@ -1,3 +1,4 @@
+param([string]$OutputFolder='release\WildsAndWonders')
 $ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
 $sdkPath = Join-Path $PSScriptRoot '.build\webview2'
@@ -6,9 +7,19 @@ if (!(Test-Path -LiteralPath "$sdkPath\lib\net462\Microsoft.Web.WebView2.WinForm
     Invoke-WebRequest -Uri 'https://api.nuget.org/v3-flatcontainer/microsoft.web.webview2/1.0.2903.40/microsoft.web.webview2.1.0.2903.40.nupkg' -OutFile '.build\webview2.zip'
     Expand-Archive -LiteralPath '.build\webview2.zip' -DestinationPath $sdkPath -Force
 }
-$outputPath = Join-Path $PSScriptRoot 'release\WildsAndWonders'
+$outputPath = Join-Path $PSScriptRoot $OutputFolder
 New-Item -ItemType Directory -Force -Path "$outputPath\game" | Out-Null
-Copy-Item -LiteralPath 'index.html','style.css','lobby.css','localization.js','story.js','game.js','lobby.js' -Destination "$outputPath\game" -Force
+Copy-Item -LiteralPath 'index.html','migration.html','style.css','lobby.css','battle.css','portrait-ui.css','cinematics.css','protagonist.css','account.css','gacha.css','gacha-data.js','gacha.js','campaign-expansion.js','skill-fx.js','music.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','campaign.js','presentation.js','cinematics.js','protagonist.js','account.js','lobby.js' -Destination "$outputPath\game" -Force
+New-Item -ItemType Directory -Force -Path "$outputPath\runtime","$outputPath\server" | Out-Null
+$nodePath=(Get-Command node -ErrorAction Stop).Source
+$nodeVersion=(& $nodePath --version).TrimStart('v').Split('.')[0]
+if ([int]$nodeVersion -lt 24) { throw 'Building the account server requires Node.js 24 or later.' }
+$runtimePath=Join-Path $outputPath 'runtime/node.exe'
+if (!(Test-Path -LiteralPath $runtimePath) -or (Get-FileHash -LiteralPath $nodePath).Hash -ne (Get-FileHash -LiteralPath $runtimePath).Hash) {
+    Copy-Item -LiteralPath $nodePath -Destination $runtimePath -Force
+}
+Copy-Item -LiteralPath 'server\server.cjs','server\gacha.cjs','server\README.md','server\启动服务器.ps1' -Destination "$outputPath\server" -Force
+Copy-Item -LiteralPath 'server\NODE-LICENSE.txt' -Destination "$outputPath\runtime\NODE-LICENSE.txt" -Force
 if (Test-Path -LiteralPath 'assets') {
     Copy-Item -LiteralPath 'assets' -Destination "$outputPath\game" -Recurse -Force
 }
@@ -18,5 +29,5 @@ $compilerPath = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.
 if ($LASTEXITCODE -ne 0) { throw 'Windows build failed.' }
 Copy-Item -LiteralPath 'desktop\使用说明.txt' -Destination $outputPath -Force
 Copy-Item -LiteralPath 'THIRD-PARTY-NOTICES.txt' -Destination $outputPath -Force
-Compress-Archive -Path "$outputPath\WildsAndWonders.exe","$outputPath\*.dll","$outputPath\game","$outputPath\使用说明.txt","$outputPath\THIRD-PARTY-NOTICES.txt" -DestinationPath 'release\WildsAndWonders-Windows-x64.zip' -Force
+Compress-Archive -Path "$outputPath\WildsAndWonders.exe","$outputPath\*.dll","$outputPath\game","$outputPath\runtime","$outputPath\server","$outputPath\使用说明.txt","$outputPath\THIRD-PARTY-NOTICES.txt" -DestinationPath 'release\WildsAndWonders-Windows-x64.zip' -Force
 Write-Output "Built: $outputPath\WildsAndWonders.exe"

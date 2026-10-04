@@ -21,7 +21,7 @@ boss:[['Ancient Stone King','Final boss','Earthshatter','Deals 125 damage to eve
 };
 const ZH_QUOTES={oak:'「只要根须还在，就没有谁需要独自承受风雨。」',arrow:'「风记得每一条归途。」',ember:'「一粒余烬，也能向长夜宣战。」',sage:'「受伤的大地，也记得如何开花。」',knight:'「我的誓言属于生者，而非王座。」',frost:'「听，冰层之下还有心跳。」',warden:'「有些约定，比镌刻它的石头更长久。」',moon:'「我行于暗处，好让伙伴追随星光。」'};
 const TRAIT_TEXT={guard:[['Guardian','2 / 3: Team max HP +18% / +30%'],['守護','2 / 3人：全員の最大HP +18% / +30%']],wild:[['Woodland','2 / 3: Team heals 1% / 2% HP each second'],['森林','2 / 3人：全員が毎秒HPを1% / 2%回復']],ranger:[['Ranger','2 / 3: Team attack speed +20% / +35%'],['狩人','2 / 3人：全員の攻撃速度 +20% / +35%']],arcane:[['Arcane','2 / 3: Team skill power +25% / +45%'],['秘術','2 / 3人：全員のスキル威力 +25% / +45%']],dawn:[['Dawn','2 / 3: Team starts with 100 / 180 shield'],['暁光','2 / 3人：開始時、全員に100 / 180の盾']]};
-const STAGE_TEXT=[['Whispering Woods','ささやきの森'],['Forgotten Pass','忘却の峠'],['Moonlit Ruins','月影の遺跡'],['Ember Gate','残火の門'],['Ancient Throne','古の王座']];
+const STAGE_TEXT=[['Rainbound Station','雨夜の駅'],['Observatory Siege','観測所への襲撃'],['Drowned Archive','水没した記録館'],['Dawn Evacuation','夜明けの避難路'],['Submerged Belfry','海底の鐘楼']];
 let language='zh';
 function tr(key,params={}){const entry=TEXT[key];if(!entry)throw new Error('Missing translation: '+key);if(key==='cells'&&language==='en'&&params.n===1)return '1 tile';return entry[{zh:0,en:1,ja:2}[language]].replace(/\{(\w+)\}/g,(_,k)=>params[k]??'{'+k+'}');}
 function heroText(h){if(language==='zh')return {...h,quote:ZH_QUOTES[h.id]||''};const [name,role,skill,desc,quote]=HERO_TEXT[h.id][language==='en'?0:1];return {...h,name,role,skill,desc,quote};}
