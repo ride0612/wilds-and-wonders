@@ -1,0 +1,70 @@
+# 原创角色与美术资源 / v0.4
+
+本版按用户确认采用精细动态立绘，后续再升级真实 3D。立绘使用透明 PNG，加呼吸、轻摆与鼠标景深；战斗使用同设计的 Q 版透明精灵，并做移动、攻击与受击动画。这些素材不包含可旋转模型、骨骼或 Live2D 分层。
+
+美术通过内置 imagegen 工具生成。用户提供的两张截图仅作为空间、配色和界面布局参考，未作为游戏资源复制。角色采用原创服饰、身份与性格设计。
+
+## 素材位置
+
+- 大厅场景：`scenes/academy-atrium.png`
+- 八张立绘：`characters/<hero-id>-portrait.png`
+- 八张 Q 版：`characters/<hero-id>-chibi.png`
+- 星级、性格、描述与素材绑定：根目录 `characters.js`
+- 后续 3D 接入保留同一个英雄 ID 与 `APPEARANCES` 外观 ID；替换展示渲染器，不覆盖玩家的角色选择与进度。
+
+## 初始稀有度
+
+|角色|星级|形象与性格|
+|---|---|---|
+|橡木卫士 oak|4|沉稳守护者，橄榄披肩与橡叶盾|
+|逐风游侠 arrow|4|自由行动派，翡翠马尾与轻装长弓|
+|余烬法师 ember|5|热烈倔强，赤铜长发与黑红礼装|
+|苔光医师 sage|5|温柔理想主义，薄荷卷发与圆框眼镜|
+|曙光骑士 knight|6|正直坚定，白金铠甲与晨金长剑|
+|霜语术士 frost|5|安静敏锐，冰蓝短发与水晶法杖|
+|符石守望 warden|5|自律重诺，紫黑制服与半面银饰|
+|月影猎手 moon|6|独立而温柔，银尾黑发与月牙长弓|
+
+v0.5：六星角色在各自阵营中每场首次施法触发一次 3.2 秒全屏演出，专用动作立绘、技能名、光环与划光；不同角色首次施法按顺序播放，不阻挡暂停或退出按钮。可在扩展菜单中关闭。新增背景和动作立绘的提示词见 `CINEMATICS-ART.md`。
+
+## 最终提示词
+
+### 大厅场景
+
+Use case: stylized-concept. Asset: background plate for an original Japanese-anime fantasy RPG Windows game lobby. Wide landscape 16:9, premium polished 3D anime game environment. An immense luminous neo-gothic academy cathedral atrium, pearl-white limestone columns and carved pointed arches, pale blue stained glass with original abstract star and moon motifs, soft morning light shafts and floating motes, some muted crimson cloth, geometric charcoal and ivory floor tiles receding towards an ornate distant circular window. Camera at standing human chest height, elegant cinematic perspective. Keep foreground center-left and right unobstructed and uncluttered for a full-body character and menu overlay to be composited by the game. Rich architectural detail and subtle physical material texture, desaturated ivory blue-gray palette, crisp sophisticated rendering. No people, no statues of people, no text, no logos, no icons, no user interface, no borders. This is an ORIGINAL architectural setting, not a reproduction of any existing game screenshot.
+
+### oak / 立绘
+
+Use case: stylized-concept. Asset: one original character full-body cutout for a premium Japanese anime fantasy RPG lobby. Single character only, full body from hair to soles, facing camera in a relaxed elegant 3/4 standing pose. Polished high-budget anime game key visual with subtle 3D cel-rendered volume, refined expressive anime face, detailed layered fabric and metallic ornament, beautiful clean confident linework, soft controlled studio lighting and gentle rim light. Portrait canvas 2:3. Leave 5% clear margin around entire silhouette and weapon. TRANSPARENT BACKGROUND with real alpha channel; no scenery, no solid background, no floor, no cast shadow outside character, no text, no logos, no border, no UI, no other people. Entire character and feet visible. Original design, not any existing anime/game character. An adult man, steadfast, patient and protective. Short ash-brown hair swept back, warm forest-green eyes, gentle serious expression, broad shoulders. White and olive tailored academy guardian coat with oak-leaf golden embroidery, layered bronze shoulder armor, deep green half-cape, dark trousers, heavy practical leather boots. One tall polished bronze-and-ivory kite shield with an original oak-leaf crest held beside him, short sword sheathed at hip. Dependable grounded pose and sophisticated garment detailing.
+
+### arrow / 立绘
+
+Use case: stylized-concept. Asset: one original character full-body cutout for a premium Japanese anime fantasy RPG lobby. Single character only, full body from hair to soles, facing camera in a relaxed elegant 3/4 standing pose. Polished high-budget anime game key visual with subtle 3D cel-rendered volume, refined expressive anime face, detailed layered fabric and metallic ornament, beautiful clean confident linework, soft controlled studio lighting and gentle rim light. Portrait canvas 2:3. Leave 5% clear margin around entire silhouette and weapon. TRANSPARENT BACKGROUND with real alpha channel; no scenery, no solid background, no floor, no cast shadow outside character, no text, no logos, no border, no UI, no other people. Entire character and feet visible. Original design, not any existing anime/game character. An adult woman, playful, daring, athletic, free-spirited. Emerald-green high ponytail, lively golden-green anime eyes, warm tan complexion, teasing smile. Forest-green tailored academy archer jacket, ivory tunic, short asymmetrical olive cape, fitted black trousers with practical belts, tall brown leather boots and fingerless gloves. Beautiful bronze folding recurve bow held vertically at her side, slim quiver with copper feather arrows. A windswept ribbon and leaf-shaped clasp, distinct agile silhouette.
+
+### ember / 立绘
+
+Use case: stylized-concept. Asset: one original character full-body cutout for a premium Japanese anime fantasy RPG lobby. Single character only, full body from hair to soles, facing camera in a relaxed elegant 3/4 standing pose. Polished high-budget anime game key visual with subtle 3D cel-rendered volume, refined expressive anime face, detailed layered fabric and metallic ornament, beautiful clean confident linework, soft controlled studio lighting and gentle rim light. Portrait canvas 2:3. Leave 5% clear margin around entire silhouette and weapon. TRANSPARENT BACKGROUND with real alpha channel; no scenery, no solid background, no floor, no cast shadow outside character, no text, no logos, no border, no UI, no other people. Entire character and feet visible. Original design, not any existing anime/game character. An adult woman, passionate, stubborn, fearless. Long copper-red high ponytail with loose curls, vivid amber anime eyes, spirited confident smile. Sophisticated black and deep-crimson academy combat coat with split tails and fine gold fire embroidery, opaque high-neck fitted ivory blouse, fitted black trousers, lace-up armored boots and crimson gloves. One elegant dark staff tipped with a ruby crystal held beside her, small flame crystal earrings. Beautiful restrained flame glow at the staff tip, no surrounding background.
+
+### sage / 立绘
+
+Use case: stylized-concept. Asset: one original character full-body cutout for a premium Japanese anime fantasy RPG lobby. Single character only, full body from hair to soles, facing camera in a relaxed elegant 3/4 standing pose. Polished high-budget anime game key visual with subtle 3D cel-rendered volume, refined expressive anime face, detailed layered fabric and metallic ornament, beautiful clean confident linework, soft controlled studio lighting and gentle rim light. Portrait canvas 2:3. Leave 5% clear margin around entire silhouette and weapon. TRANSPARENT BACKGROUND with real alpha channel; no scenery, no solid background, no floor, no cast shadow outside character, no text, no logos, no border, no UI, no other people. Entire character and feet visible. Original design, not any existing anime/game character. An adult man, gentle, observant, idealistic, softly smiling. Short wavy pale mint-green hair, expressive clear jade anime eyes behind fine round silver glasses. Sophisticated ivory academy physician long coat with teal brocade lining, leaf and petal embroidery, tailored pale gray shirt, dark green vest and trousers, brown polished boots. Slim silver botanical staff with a softly glowing jade lotus crystal, small medical satchel and gloves. Elegant kind posture and detailed layered silhouette, no medical cross logos.
+
+### knight / 立绘
+
+Use case: stylized-concept. Asset: one original character full-body cutout for a premium Japanese anime fantasy RPG lobby. Single character only, full body from hair to soles, facing camera in a relaxed elegant 3/4 standing pose. Polished high-budget anime game key visual with subtle 3D cel-rendered volume, refined expressive anime face, detailed layered fabric and metallic ornament, beautiful clean confident linework, soft controlled studio lighting and gentle rim light. Portrait canvas 2:3. Leave 5% clear margin around entire silhouette and weapon. TRANSPARENT BACKGROUND with real alpha channel; no scenery, no solid background, no floor, no cast shadow outside character, no text, no logos, no border, no UI, no other people. Entire character and feet visible. Original design, not any existing anime/game character. An adult man, principled, courageous, warmhearted leader. Tousled honey-blond hair, bright amber eyes, confident gentle expression. Ivory and midnight-blue ceremonial knight armor with thin gold detailing, one short navy shoulder cape with sun embroidery, tailored dark trousers, armored boots and gauntlets. A long elegant sunblade pointing down beside his right leg. Polished steel and brocade details, heroic straight posture, striking asymmetrical silhouette.
+
+### frost / 立绘
+
+Use case: stylized-concept. Asset: one original character full-body cutout for a premium Japanese anime fantasy RPG lobby. Single character only, full body from hair to soles, facing camera in a relaxed elegant 3/4 standing pose. Polished high-budget anime game key visual with subtle 3D cel-rendered volume, refined expressive anime face, detailed layered fabric and metallic ornament, beautiful clean confident linework, soft controlled studio lighting and gentle rim light. Portrait canvas 2:3. Leave 5% clear margin around entire silhouette and weapon. TRANSPARENT BACKGROUND with real alpha channel; no scenery, no solid background, no floor, no cast shadow outside character, no text, no logos, no border, no UI, no other people. Entire character and feet visible. Original design, not any existing anime/game character. An adult woman, reserved, intensely perceptive, quietly caring. Short softly layered ice-blue bob, blue-white bangs framing expressive aqua anime eyes, thoughtful gentle gaze. Long snow-white high-collared academy coat with pale blue inner layers, silver snow-crystal embroidery, navy fitted trousers, white silver-trimmed boots and elegant gloves. An intricate silver staff with an icy blue crystal held vertically beside her. A translucent pale-blue shoulder shawl and a small crystal hairpin, refined winter silhouette.
+
+### warden / 立绘
+
+Use case: stylized-concept. Asset: one original character full-body cutout for a premium Japanese anime fantasy RPG lobby. Single character only, full body from hair to soles, facing camera in a relaxed elegant 3/4 standing pose. Polished high-budget anime game key visual with subtle 3D cel-rendered volume, refined expressive anime face, detailed layered fabric and metallic ornament, beautiful clean confident linework, soft controlled studio lighting and gentle rim light. Portrait canvas 2:3. Leave 5% clear margin around entire silhouette and weapon. TRANSPARENT BACKGROUND with real alpha channel; no scenery, no solid background, no floor, no cast shadow outside character, no text, no logos, no border, no UI, no other people. Entire character and feet visible. Original design, not any existing anime/game character. An adult man, taciturn, disciplined, intensely loyal. Short asymmetrical dark violet-black hair with one silver streak, expressive violet anime eye. An elegant silver half-mask covering only the left upper face, leaves mouth visible. Structured black and deep violet academy long coat with crisp high collar, silver piping and geometric hexagon rune embroidery, layered armored shoulder and oversized rune gauntlet at left hand, dark fitted trousers and heavy polished boots. Violet crystal focus hovering just above an open gloved palm, faint tiny glow only. Quiet stoic handsome expression, mysterious sophisticated silhouette.
+
+### moon / 立绘
+
+Use case: stylized-concept. Asset: one original character full-body cutout for a premium Japanese anime fantasy RPG lobby. Single character only, full body from hair to soles, facing camera in a relaxed elegant 3/4 standing pose. Polished high-budget anime game key visual with subtle 3D cel-rendered volume, refined expressive anime face, detailed layered fabric and metallic ornament, beautiful clean confident linework, soft controlled studio lighting and gentle rim light. Portrait canvas 2:3. Leave 5% clear margin around entire silhouette and weapon. TRANSPARENT BACKGROUND with real alpha channel; no scenery, no solid background, no floor, no cast shadow outside character, no text, no logos, no border, no UI, no other people. Entire character and feet visible. Original design, not any existing anime/game character. An adult woman, calm, perceptive and independent. Long silky black hair fading to silver at the tips, a delicate side braid with a violet ribbon, luminous lavender eyes, subtle confident smile. Elegant ivory and obsidian long officer coat with silver crescent clasps over a fitted high-neck black dress, layered asymmetrical coat tails, opaque stockings and tall silver-trimmed black boots, gloves. One elaborate slender silver crescent bow held vertically at her side, not across the face. Lunar crystal pendant. All clothing fully opaque and tasteful. Strong flowing silhouette.
+
+### 八张 Q 版（每张以对应立绘为参考，分别生成）
+
+Use case: style-transfer. Input is the original full-size character design. Create ONE matching cute chibi combat sprite of this same character for an isometric anime auto-chess game. Preserve the exact hair color and hairstyle, eye color, distinctive costume palette and primary weapon from the reference, simplifying fine ornament for readability. Transform to an adorable 2.5-head-tall super-deformed adult character: large expressive anime head, tiny compact body and short legs, polished cel-shaded 3D figurine style with clean edges and soft dimensional shading. Full body, feet visible, standing ready with the weapon clearly at one side. Front three-quarter view, camera looking gently down around 15 degrees. Centered with 10% transparent padding. Square canvas. TRUE TRANSPARENT ALPHA BACKGROUND, isolated character only, no floor, no plinth, no text, no scenery, no other character, no aura outside the silhouette, no hard cast shadow. One sprite, not a sheet. Make the head and facial expression very readable at 80px game size.
