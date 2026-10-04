@@ -1,16 +1,38 @@
-(() => {
+(async () => {
  const checks=[];
  const check=(value,label)=>{if(!value)throw Error(label);checks.push(label);};
  try{
   // The desktop host uses a test-only WebView profile, separate from the player's save.
   language='zh';displayHero='oak';cleared=[];stage=0;unlocked=0;mode='prep';battleResult=null;
   document.querySelector('#reset').click();setLanguage('zh');showView('lobby');
+  protagonist=null;featureProtagonist=false;openProtagonistPicker();
+  check($('#protagonist-dialog').open&&$('#protagonist-confirm').disabled,'first launch requires an explicit protagonist choice');
+  $('#protagonist-name').value='星野';$('#protagonist-name').dispatchEvent(new Event('input'));
+  const cancelChoice=new Event('cancel',{cancelable:true});$('#protagonist-dialog').dispatchEvent(cancelChoice);
+  check(cancelChoice.defaultPrevented&&$('#protagonist-close').hidden,'initial choice cannot be dismissed accidentally');
+  for(const locale of ['en','ja','zh']){$('#protagonist-language').value=locale;$('#protagonist-language').dispatchEvent(new Event('change'));check($('#protagonist-title').textContent===tr('protagonistTitle'),'localized protagonist selection '+locale);}
+  const priorFormation=JSON.stringify(lineup);$('#protagonist-male').click();
+  check(!$('#protagonist-confirm').disabled&&$('#protagonist-male').getAttribute('aria-pressed')==='true','male portrait selectable');
+  await confirmProtagonist();check(protagonist==='male'&&!$('#protagonist-dialog').open&&$('#display-art img').getAttribute('src')===protagonistImage('male'),'male selection enters lobby with chosen portrait');
+  $('#protagonist-open').click();$('#protagonist-female').click();$('#protagonist-close').click();
+  check(protagonist==='male','canceling a different preview preserves committed protagonist');
+  $('#protagonist-open').click();$('#protagonist-female').click();await confirmProtagonist();
+  check(protagonist==='female'&&JSON.stringify(lineup)===priorFormation&&JSON.parse(localStorage.getItem(ACCOUNT_ENABLED?'wilds.account.cache.'+accountUser.id:SAVE_KEY)).protagonist==='female','female selection persists without changing formation');
   check(!$('#lobby-view').hidden&&$('#adventure-view').hidden,'boots into camp');
+  check(document.querySelectorAll('.hall-actions button').length===3,'lobby has exactly three main actions');
+  $('#collection-open').click();check($('#collection-dialog').open,'character screen opens from lobby');
   check(document.querySelectorAll('.collection-card').length===8,'eight owned companions');
   const originalLineup=JSON.stringify(lineup);
   document.querySelector('[data-display=moon]').click();
   check(displayHero==='moon'&&$('#display-name').textContent==='月影猎手','select featured companion');
   check(JSON.stringify(lineup)===originalLineup,'featured companion does not change lineup');
+  check($('#display-stars').textContent==='★★★★★★','six-star rarity retained in character data');
+  check(getComputedStyle(document.querySelector('.hero-caption')).display==='none','lobby hides character name and rarity');
+  check($('#display-art img').getAttribute('src')===characterImage('moon'),'featured artwork matches selection');
+  document.querySelector('[data-close="collection-dialog"]').click();check(!$('#collection-dialog').open,'character screen closes');
+  $('#inventory-open').click();check($('#inventory-dialog').open&&document.querySelectorAll('.relic-card').length===0,'inventory starts without unearned relics');
+  document.querySelector('[data-close="inventory-dialog"]').click();
+  $('#extensions-toggle').click();check($('#extensions-dialog').open,'utilities collected in extension menu');
   for(const locale of ['en','ja','zh']){
    $('#language').value=locale;$('#language').dispatchEvent(new Event('change'));
    check(document.documentElement.lang===(locale==='zh'?'zh-CN':locale),'document locale '+locale);
@@ -19,10 +41,23 @@
    check(!document.body.innerText.includes('undefined'),'no missing strings '+locale);
    check(document.documentElement.scrollWidth<=window.innerWidth,'no horizontal overflow '+locale);
   }
-  $('#depart').click();check(currentView==='adventure'&&$('#story-dialog').open,'departure opens prologue');
+  document.querySelector('[data-close="extensions-dialog"]').click();
+  $('#depart').click();check(currentView==='adventure'&&!$('#chapter-library').hidden&&$('#chapter-mission').hidden,'departure opens chapter archive');
+  check(document.querySelectorAll('[data-campaign]:disabled').length===2,'future chapters reserved');
+  document.querySelector('[data-campaign="red-tide"]').click();
+  check(!$('#chapter-mission').hidden&&$('#story-dialog').open,'chapter opens prologue in campaign window');
   $('#story-language').value='en';$('#story-language').dispatchEvent(new Event('change'));
   check($('#story-title').textContent===STORY.en[0].before.title,'live story language switch');
-  $('#story-next').click();check(!$('#story-dialog').open&&mode==='prep','prologue leads to deployment');
+  $('#story-next').click();check(cinema.shot===0&&$('#story-dialogue').textContent.length>0,'first click reveals the whole line');
+  $('#story-next').click();check(cinema.shot===1,'next click advances the shot');
+  $('#cinema-back').click();check(cinema.shot===0,'previous shot works');
+  $('#cinema-auto').click();revealCinematic();tickCinematic(30);check(cinema.shot===1&&cinema.auto,'automatic playback advances after reading time');
+  $('#cinema-auto').click();cinema.shot=3;cinema.chars=0;renderCinematic();revealCinematic();
+  check($('#cinema-left').classList.contains('speaking')&&$('#story-speaker').textContent===heroText(def('arrow')).name,'speaking character receives focus');
+  check($('#story-dialog').getBoundingClientRect().width===window.innerWidth,'cutscene fills the viewport');
+  cinema.shot=6;renderCinematic();revealCinematic();
+  check($('#cinema-right').getAttribute('src')===protagonistImage('female')&&$('#cinema-right').classList.contains('speaking')&&$('#story-speaker').textContent===playerName(),'selected protagonist speaks with matching portrait');
+  $('#cinema-skip').click();check(!$('#story-dialog').open&&mode==='prep','prologue leads to deployment');
   check(document.querySelectorAll('.hero-card').length===8,'battle roster');
   document.querySelector('[data-toggle=oak]').click();check(lineup.length===4,'remove hero');
   document.querySelector('[data-toggle=moon]').click();check(lineup.length===5,'deploy hero');
@@ -33,9 +68,13 @@
   canvas.dispatchEvent(new PointerEvent('pointerup',{clientX:r.left+q.x*r.width/960,clientY:r.top+q.y*r.height/660,pointerId:1}));
   check(lineup[0].x===4&&lineup[0].y===4,'drag deployment');
   $('#start').click();check(mode==='fight','start battle');
+  check(document.body.classList.contains('battle-focus'),'battle switches to focused layout');
+  check(getComputedStyle(document.querySelector('.right-column')).display==='none'&&getComputedStyle(document.querySelector('.roster-section')).display==='none','combat hides dossier log and roster');
+  check(getComputedStyle(document.querySelector('.traits-panel')).display!=='none'&&canvas.getBoundingClientRect().width>500,'combat keeps traits and expanded arena');
   const hpSnapshot=JSON.stringify(units.map(u=>u.hp));setLanguage('ja');
   check(mode==='fight'&&JSON.stringify(units.map(u=>u.hp))===hpSnapshot,'language switch preserves battle');
-  $('#nav-lobby').click();const beforeTime=elapsed;tick(.5);
+  $('#battle-back').click();check(paused&&!document.body.classList.contains('battle-focus'),'arena exit pauses and restores chapter navigation');
+  $('#extensions-toggle').click();$('#nav-lobby').click();const beforeTime=elapsed;tick(.5);
   check(paused&&elapsed===beforeTime,'camp pauses battle');
   $('#depart').click();check(paused&&!$('#story-dialog').open,'return to paused battle');
   $('#pause').click();$('#speed').click();check(!paused&&speed===2,'resume and double speed');
@@ -43,24 +82,51 @@
   check(mode==='win'&&!$('#result').hidden,'first battle victory');
   setLanguage('en');check($('#continue').textContent===tr('continueStory'),'localized victory screen');
   $('#continue').click();check(storyScene.part==='after'&&stage===0,'victory opens aftermath');
-  $('#story-next').click();check(stage===1&&storyScene.part==='before','aftermath unlocks next chapter');
-  $('#story-next').click();
+  $('#cinema-skip').click();check(stage===1&&storyScene.part==='before','aftermath unlocks next chapter');
+  $('#cinema-skip').click();
+  check(isDefense()&&!$('#siege-hud').hidden&&$('#expedition-hud').hidden,'second act switches to defense');
+  const expeditionLineup=JSON.stringify(lineup),first=units.find(u=>u.id==='oak');
+  check(!moveDeployment('oak',0,1),'defense road rejects deployment');
+  check(moveDeployment('oak',0,2)&&units.find(u=>u.id==='oak').x===0,'defender moves to blue pad');
+  check(JSON.stringify(lineup)===expeditionLineup,'defense formation preserves expedition formation');
   // Complete all chapters through their UI transitions, including the final camp return.
   for(let chapter=1;chapter<5;chapter++){
    $('#reset').click();$('#start').click();
+   if(chapter===1){
+    tick(.5);$('#back-chapters').click();const held=elapsed;tick(.5);
+    check(paused&&elapsed===held&&!$('#chapter-library').hidden,'archive pauses live defense');
+    document.querySelector('[data-campaign="red-tide"]').click();
+    check(paused&&!$('#chapter-mission').hidden&&!$('#story-dialog').open,'resume chapter retains live defense');
+    $('#pause').click();
+   }
    for(let i=0;i<2401&&mode==='fight';i++)tick(.05);
    check(mode==='win','chapter '+(chapter+1)+' victory');
    $('#continue').click();check(storyScene.index===chapter&&storyScene.part==='after','chapter '+(chapter+1)+' aftermath');
-   $('#story-next').click();if(chapter<4)$('#story-next').click();
+   $('#cinema-skip').click();if(chapter<4)$('#cinema-skip').click();
   }
   check(cleared.length===5&&currentView==='lobby','finale returns to camp');
+  $('#inventory-open').click();check(document.querySelectorAll('.relic-card').length===5,'five story relics awarded once after completion');
+  check(document.querySelectorAll('.owned-skin').length===8,'warehouse lists eight owned base appearances');
+  document.querySelector('[data-close="inventory-dialog"]').click();
   $('#journal-open').click();check($('#journal-dialog').open,'open journal');
   check(document.querySelectorAll('[data-journal]:disabled').length===0,'all completed story pages unlocked');
   document.querySelector('[data-journal="2"][data-part="after"]').click();
   check(storyScene.intent==='read'&&$('#story-title').textContent===STORY.en[2].after.title,'journal replay');
-  const priorStage=stage;$('#story-next').click();check(stage===priorStage,'replay does not change progress');
+  const priorStage=stage;$('#cinema-skip').click();check(stage===priorStage,'replay does not change progress');
   $('#help').click();check($('#guide').open,'guide');$('#got-it').click();check(!$('#guide').open,'close guide');
-  const saved=JSON.parse(localStorage.getItem(SAVE_KEY));check(saved.displayHero==='moon'&&saved.cleared.length===5,'profile saved');
+  const saved=JSON.parse(localStorage.getItem(ACCOUNT_ENABLED?'wilds.account.cache.'+accountUser.id:SAVE_KEY));check(saved.displayHero==='moon'&&saved.cleared.length===5,'profile saved');
+  stage=0;prepare();showView('adventure');openCampaign();$('#story-dialog').close();storyScene=null;$('#start').click();
+  clearUltimate();cast(units.find(u=>u.team==='blue'&&u.id==='knight'),alive('red')[0]);
+  check(!$('#ultimate-overlay').hidden&&ultimateActive.id==='knight','six-star cast triggers full-screen cinematic');
+  check($('#ultimate-overlay').getBoundingClientRect().width===window.innerWidth&&getComputedStyle($('#ultimate-overlay')).pointerEvents==='none','cinematic covers viewport without blocking controls');
+  const sixState=ultimateActive;tickPresentation(.4);paused=true;tickPresentation(.5);check(ultimateActive.time===.4,'cinematic respects pause');paused=false;tickPresentation(3.3);check($('#ultimate-overlay').hidden,'cinematic ends cleanly');
+  const knightCaster=units.find(u=>u.team==='blue'&&u.id==='knight'),targetAgain=alive('red')[0],hpAgain=targetAgain.hp;cast(knightCaster,targetAgain);
+  check(ultimateActive===null&&targetAgain.hp<hpAgain,'repeated six-star skill still deals damage without replay');
+  clearUltimate();triggerUltimate(knightCaster);check(ultimateActive===null,'clearing overlay does not reset once-per-battle policy');
+  clearUltimate();cast(units.find(u=>u.team==='blue'&&u.id==='ember'),alive('red')[0]);check($('#ultimate-overlay').hidden,'five-star cast keeps normal effects');
+  presentationSettings.effects=false;cast(units.find(u=>u.team==='blue'&&u.id==='knight'),alive('red')[0]);check($('#ultimate-overlay').hidden,'cinematics can be disabled');presentationSettings.effects=true;
+  check(Object.values(CHARACTER_SPRITES).every(img=>img.complete&&img.naturalWidth>0),'eight chibi assets loaded');
+  prepare();showView('lobby');
   return {passed:true,count:checks.length,checks};
  }catch(error){return {passed:false,error:error.message,stack:error.stack,checks};}
-})()
+})().then(result=>window.smokeResult=result).catch(error=>window.smokeResult={passed:false,error:String(error)});
