@@ -1,0 +1,66 @@
+[
+  {
+    "id": "lobby",
+    "bpm": 78,
+    "duration": 49.23,
+    "frames": 1085539,
+    "sampleRate": 22050,
+    "channels": 2
+  },
+  {
+    "id": "red-tide",
+    "bpm": 74,
+    "duration": 51.89,
+    "frames": 1144217,
+    "sampleRate": 22050,
+    "channels": 2
+  },
+  {
+    "id": "white-bell",
+    "bpm": 86,
+    "duration": 44.65,
+    "frames": 984559,
+    "sampleRate": 22050,
+    "channels": 2
+  },
+  {
+    "id": "nameless-court",
+    "bpm": 80,
+    "duration": 48,
+    "frames": 1058400,
+    "sampleRate": 22050,
+    "channels": 2
+  },
+  {
+    "id": "starlit-return",
+    "bpm": 76,
+    "duration": 50.53,
+    "frames": 1114106,
+    "sampleRate": 22050,
+    "channels": 2
+  },
+  {
+    "id": "battle-expedition",
+    "bpm": 114,
+    "duration": 33.68,
+    "frames": 742737,
+    "sampleRate": 22050,
+    "channels": 2
+  },
+  {
+    "id": "battle-defense",
+    "bpm": 104,
+    "duration": 36.92,
+    "frames": 814154,
+    "sampleRate": 22050,
+    "channels": 2
+  },
+  {
+    "id": "battle-boss",
+    "bpm": 122,
+    "duration": 31.48,
+    "frames": 694033,
+    "sampleRate": 22050,
+    "channels": 2
+  }
+]
