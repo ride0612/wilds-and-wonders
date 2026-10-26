@@ -7,7 +7,7 @@ function resetUltimateBattle(){clearUltimate();ultimateSeen.clear();}
 function closeUtilityDialogs(){for(const id of ['extensions-dialog','collection-dialog','inventory-dialog','gacha-dialog'])if($('#'+id).open)$('#'+id).close();}
 function openUtilityDialog(id){closeUtilityDialogs();$('#'+id).showModal();}
 function renderInventory(){
- renderWeapons();
+ renderWeapons();renderDimensionArchive();
  $('#inventory-items').innerHTML=cleared.length?STAGES.map((s,i)=>{if(!cleared.includes(i))return '';const relic=STORY_RELICS[i];return `<article class="relic-card"><span>${relic?relic[2]:s.icon}</span><small>ACT ${String(i+1).padStart(2,'0')}</small><h3>${relic?tr(relic[0]):stageName(i)}</h3><p>${relic?tr(relic[1]):chapterText(i).after.line}</p></article>`;}).join(''):`<p class="inventory-empty">${tr('relicEmpty')}</p>`;
  $('#inventory-skins').innerHTML=OWNED_HEROES.map(id=>`<div class="owned-skin"><img src="${characterImage(id)}" alt=""><span>${heroText(def(id)).name}<small>${tr('baseSkin')}</small></span></div>`).join('');
 }

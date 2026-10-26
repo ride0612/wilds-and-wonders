@@ -13,16 +13,15 @@ Object.assign(TEXT,{
  cinemaNext:['下一句','Next','次へ'],cinemaSkip:['跳过过场','Skip scene','スキップ'],cinemaAuto:['自动播放','Auto','自動再生'],cinemaManual:['手动播放','Manual','手動再生'],cinemaBack:['上一句','Previous','前へ'],cinemaNarrator:['旁白','Narrator','ナレーション'],cinemaRead:['点击显示全文 · 再次点击继续','Click to reveal · Click again to continue','クリックで全文表示・もう一度で次へ'],cinemaReplay:['剧情回看','Story replay','回想']
 });
 let cinema=null;
-function cinematicShots(index,part){
- const c=chapterText(index),s=c[part],loc=language==='en'?1:language==='ja'?2:0;
- const sentences=s.text.match(/[^。！？.!?]+[。！？.!?]?/g)||[s.text];
- const groups=Math.min(3,sentences.length),shots=[];
- for(let i=0;i<groups;i++)shots.push({speaker:null,text:sentences.slice(Math.floor(i*sentences.length/groups),Math.floor((i+1)*sentences.length/groups)).join('').trim()});
- shots.push({speaker:c.speaker,text:(ACCOUNT_ENABLED&&accountName?playerName()+(language==='en'?', ':'，'):'')+s.line},{speaker:CINEMA_PARTNERS[index],text:CINEMA_EXCHANGES[index][part][0][loc]},{speaker:c.speaker,text:CINEMA_EXCHANGES[index][part][1][loc]});
- shots.push({speaker:'protagonist',text:PROTAGONIST_LINES[index][part][loc]});
- return shots;
+function cinematicShots(index,part){return dimensionShots(index,part);}
+function beginCinematic(){
+ const saved=storyScene.intent==='read'?0:(dimensionState.bookmarks[storyScene.index+':'+storyScene.part]||0);
+ cinema={shot:Math.min(saved,cinematicShots(storyScene.index,storyScene.part).length-1),chars:0,hold:0,auto:false};
+ // An unmade invitation can never be skipped by a restored reading position.
+ const choice=cinematicShots(storyScene.index,storyScene.part).findIndex(s=>s.choice);
+ if(choice>=0&&!dimensionState.companion)cinema.shot=Math.min(cinema.shot,choice);
+ $('#cinema-log').open=false;renderCinematic();
 }
-function beginCinematic(){cinema={shot:0,chars:0,hold:0,auto:false};renderCinematic();}
 function cinematicEndLabel(){const {index,part,intent}=storyScene;return tr(intent==='read'?'gotIt':part==='before'?'prepareAction':index===STAGES.length-1?'backCamp':'nextChapter');}
 function renderCinematic(){
  if(!storyScene||!cinema)return;
@@ -30,40 +29,44 @@ function renderCinematic(){
  cinema.shot=Math.min(cinema.shot,shots.length-1);const shot=shots[cinema.shot];
  const dialog=$('#story-dialog');dialog.dataset.part=part;dialog.dataset.shot=cinema.shot;
  $('#cinema-background').src='assets/scenes/'+CINEMA_SCENES[index]+'.png';
- $('#story-kicker').textContent=intent==='read'?tr('cinemaReplay'):tr(part==='before'?'beforeBattle':'afterBattle',{n:index+1,total:STAGES.length});
+ $('#story-kicker').textContent=(intent==='read'?tr('cinemaReplay'):tr(part==='before'?'beforeBattle':'afterBattle',{n:index+1,total:STAGES.length}))+(language==='zh'?'':' · Story text: 简体中文');
  $('#story-title').textContent=c[part].title;$('#story-language').value=language;
+ $('#cinema-location').textContent=DIMENSION_STORY[index].location;
  $('#cinema-progress').textContent=String(cinema.shot+1).padStart(2,'0')+' / '+String(shots.length).padStart(2,'0');
- $('#story-speaker').textContent=shot.speaker==='protagonist'?ACCOUNT_ENABLED&&accountName?playerName():tr('protagonistYou')+' · '+protagonistName():shot.speaker?heroText(def(shot.speaker)).name:tr('cinemaNarrator');
- for(const [side,id] of [['left',c.speaker],['right',shot.speaker===CINEMA_PARTNERS[index]?CINEMA_PARTNERS[index]:'protagonist']]){
-  const actor=$('#cinema-'+side);actor.src=id==='protagonist'?protagonistImage(protagonist||'male'):characterImage(id);actor.alt=id==='protagonist'?protagonistName():heroText(def(id)).name;actor.classList.toggle('speaking',shot.speaker===id);
- }
+ $('#story-speaker').textContent=dimensionActorName(shot.speaker);
+ const actorId=shot.speaker&&shot.speaker!=='protagonist'?shot.speaker:c.speaker,actor=DIMENSION_ACTORS[actorId];
+ $('#cinema-left').hidden=true;
+ const card=$('#cinema-contact');card.hidden=!actor;
+ if(actor){card.style.setProperty('--contact-color',actor.color);$('#cinema-contact-mark').textContent=actor.mark;$('#cinema-contact-name').textContent=actorId;$('#cinema-contact-role').textContent=actor.role;card.classList.toggle('speaking',shot.speaker===actorId);}
+ const portrait=$('#cinema-right');portrait.src=protagonistImage(protagonist||'male');portrait.alt=protagonistName();portrait.classList.toggle('speaking',shot.speaker==='protagonist');
  $('#story-dialogue').textContent=shot.text.slice(0,Math.floor(cinema.chars));
  $('#story-goal').textContent=c.goal;$('#cinema-goal').hidden=cinema.shot!==shots.length-1;
- $('#story-next').textContent=cinema.shot===shots.length-1?cinematicEndLabel():tr('cinemaNext');
+ $('#story-next').textContent=shot.choice&&!dimensionState.companion?'邀请同行者 →':cinema.shot===shots.length-1?cinematicEndLabel():tr('cinemaNext');
  $('#cinema-back').textContent=tr('cinemaBack');$('#cinema-back').disabled=cinema.shot===0;
  $('#cinema-auto').textContent=tr(cinema.auto?'cinemaManual':'cinemaAuto');$('#cinema-auto').setAttribute('aria-pressed',String(cinema.auto));
- $('#cinema-skip').textContent=tr('cinemaSkip');$('#story-dismiss').textContent=tr('close');
- $('#cinema-hint').textContent=tr('cinemaRead');
+ $('#cinema-skip').textContent=tr('cinemaSkip');$('#story-dismiss').textContent=tr('close');$('#cinema-hint').textContent=tr('cinemaRead');
+ if($('#cinema-log').open)renderCinematicLog();
 }
 function revealCinematic(){if(!cinema||!storyScene)return;cinema.chars=cinematicShots(storyScene.index,storyScene.part)[cinema.shot].text.length;cinema.hold=0;renderCinematic();}
 function nextCinematic(){
  if(!cinema||!storyScene)return;const shots=cinematicShots(storyScene.index,storyScene.part);
  if(cinema.chars<shots[cinema.shot].text.length){revealCinematic();return;}
+ if(shots[cinema.shot].choice&&!dimensionState.companion){showReturnCompanionPicker();return;}
  if(cinema.shot===shots.length-1){completeStory();return;}
- cinema.shot++;cinema.chars=0;cinema.hold=0;renderCinematic();
+ cinema.shot++;cinema.chars=0;cinema.hold=0;rememberDimensionScene();renderCinematic();
 }
 function tickCinematic(dt){
- if(!cinema||!storyScene||!$('#story-dialog').open||document.hidden)return;
+ if(!cinema||!storyScene||!$('#story-dialog').open||$('#return-companion-dialog').open||$('#cinema-log').open||document.hidden)return;
  const shot=cinematicShots(storyScene.index,storyScene.part)[cinema.shot];
- if(cinema.chars<shot.text.length){cinema.chars=Math.min(shot.text.length,cinema.chars+dt*(language==='en'?48:24));$('#story-dialogue').textContent=shot.text.slice(0,Math.floor(cinema.chars));}
- else if(cinema.auto){cinema.hold+=dt;if(cinema.hold>Math.max(2.2,shot.text.length*(language==='en'?.025:.055)))nextCinematic();}
+ if(cinema.chars<shot.text.length){cinema.chars=Math.min(shot.text.length,cinema.chars+dt*24);$('#story-dialogue').textContent=shot.text.slice(0,Math.floor(cinema.chars));}
+ else if(cinema.auto){cinema.hold+=dt;if(cinema.hold>Math.max(2.2,shot.text.length*.055))nextCinematic();}
 }
-function dismissCinematic(){cinema=null;storyScene=null;$('#story-dialog').close();}
+function dismissCinematic(){rememberDimensionScene();cinema=null;storyScene=null;$('#story-dialog').close();}
 function initCinematics(){
  $('#story-next').onclick=nextCinematic;$('#cinema-text').onclick=nextCinematic;
  $('#cinema-skip').onclick=completeStory;$('#story-dismiss').onclick=dismissCinematic;
- $('#cinema-back').onclick=()=>{if(!cinema||cinema.shot===0)return;cinema.shot--;cinema.chars=0;cinema.hold=0;renderCinematic();};
+ $('#cinema-back').onclick=()=>{if(!cinema||cinema.shot===0)return;cinema.shot--;cinema.chars=0;cinema.hold=0;rememberDimensionScene();renderCinematic();};
  $('#cinema-auto').onclick=()=>{if(!cinema)return;cinema.auto=!cinema.auto;cinema.hold=0;renderCinematic();};
- $('#story-dialog').addEventListener('cancel',()=>{cinema=null;storyScene=null;});
- $('#story-dialog').addEventListener('keydown',e=>{if((e.code==='Space'||e.code==='ArrowRight')&&e.target.tagName!=='SELECT'&&e.target.tagName!=='BUTTON'){e.preventDefault();nextCinematic();}});
+ $('#story-dialog').addEventListener('cancel',()=>{rememberDimensionScene();cinema=null;storyScene=null;});
+ $('#story-dialog').addEventListener('keydown',e=>{if((e.code==='Space'||e.code==='ArrowRight')&&e.target.tagName!=='SELECT'&&e.target.tagName!=='BUTTON'&&!$('#cinema-log').open){e.preventDefault();nextCinematic();}});
 }

@@ -1,7 +1,13 @@
 .build/
 release/
+.upload/
 server/data/
+**/smoke-profile/
+**/smoke-server-data/
 *.sqlite
 *.sqlite-wal
 *.sqlite-shm
 *.log
+.env
+.env.*
+!.env.example

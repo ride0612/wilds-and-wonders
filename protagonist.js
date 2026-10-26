@@ -22,19 +22,19 @@ const PROTAGONIST_LINES=[
 function renderProtagonistPicker(){
  $('#protagonist-language').value=language;
  for(const id of PROTAGONISTS){const button=$('#protagonist-'+id);button.classList.toggle('selected',pendingProtagonist===id);button.setAttribute('aria-pressed',String(pendingProtagonist===id));}
- $('#protagonist-confirm').disabled=!PROTAGONISTS.includes(pendingProtagonist)||(ACCOUNT_ENABLED&&(accountBusy||!validPlayerName($('#protagonist-name').value)));
- $('#protagonist-name-row').hidden=!ACCOUNT_ENABLED;$('#protagonist-dialog').classList.toggle('naming',ACCOUNT_ENABLED);
+ $('#protagonist-confirm').disabled=!PROTAGONISTS.includes(pendingProtagonist);
+
  $('#protagonist-confirm').textContent=tr(protagonist?'protagonistApply':'protagonistConfirm');
  $('#protagonist-selection').textContent=pendingProtagonist?protagonistName(pendingProtagonist):tr('protagonistChoose');
  $('#protagonist-close').hidden=!protagonist||(ACCOUNT_ENABLED&&!accountName);
 }
 function openProtagonistPicker(){
  if(mode==='fight'){paused=true;renderUI();}
- closeUtilityDialogs();if(ACCOUNT_ENABLED){$('#protagonist-name').value=accountName;$('#protagonist-name-error').textContent='';}pendingProtagonist=protagonist;renderProtagonistPicker();
+ closeUtilityDialogs();pendingProtagonist=protagonist;renderProtagonistPicker();
  if(!$('#protagonist-dialog').open)$('#protagonist-dialog').showModal();
 }
 function confirmProtagonist(){
- if(ACCOUNT_ENABLED)return confirmAccountProtagonist();
+
  if(!PROTAGONISTS.includes(pendingProtagonist))return;
  protagonist=pendingProtagonist;featureProtagonist=true;$('#protagonist-dialog').close();renderLobby();saveProfile();
 }
@@ -50,6 +50,6 @@ function initProtagonist(){
  $('#protagonist-close').onclick=()=>{if(protagonist&&(!ACCOUNT_ENABLED||accountName))$('#protagonist-dialog').close();};
  $('#protagonist-dialog').addEventListener('cancel',e=>{if(!protagonist||(ACCOUNT_ENABLED&&!accountName))e.preventDefault();});
  $('#protagonist-language').onchange=e=>setLanguage(e.target.value);
- $('#protagonist-name').oninput=renderProtagonistPicker;
+
  if(!ACCOUNT_ENABLED&&!protagonist)openProtagonistPicker();
 }

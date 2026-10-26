@@ -1,7 +1,7 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 function element(){return {innerHTML:'',textContent:'',hidden:true,children:[],disabled:false,dataset:{},style:{setProperty(){}},classList:{toggle(){},add(){},remove(){},contains(){return false}},setAttribute(){},querySelector(){return element()},focus(){},addEventListener(){},prepend(p){this.children.unshift(p)},append(){},get lastChild(){return {remove:()=>this.children.pop()}},getContext(){return {}},showModal(){this.open=true},close(){this.open=false}}}
 const nodes=new Map(),storage=new Map();const context=vm.createContext({console,window:{scrollTo(){}},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},document:{body:element(),documentElement:{},querySelectorAll(){return []},querySelector(s){if(!nodes.has(s))nodes.set(s,element());return nodes.get(s)},createElement:element,createTextNode:s=>s},requestAnimationFrame(){}});
-for(const file of ['gacha-data.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','campaign.js','presentation.js','protagonist.js','cinematics.js','account.js','gacha.js','campaign-expansion.js','skill-fx.js','music.js','lobby.js'])vm.runInContext(fs.readFileSync(file,'utf8'),context);
+for(const file of ['gacha-data.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','campaign.js','presentation.js','protagonist.js','cinematics.js','account.js','gacha.js','campaign-expansion.js','skill-fx.js','music.js','dimension-story.js','dimension.js','lobby.js'])vm.runInContext(fs.readFileSync(file,'utf8'),context);
 const run=s=>vm.runInContext(s,context);
 assert.equal(run("$('#protagonist-dialog').open"),true);
 assert.equal(run("$('#protagonist-confirm').disabled"),true);
@@ -91,7 +91,7 @@ for(const locale of ['zh','en','ja']){
  run(`language='${locale}'`);
  for(let i=0;i<20;i++)for(const part of ['before','after']){
   assert.ok(run(`cinematicShots(${i},'${part}').length`)>=6);
-  assert.equal(run(`cinematicShots(${i},'${part}').every(s=>s.text&&(!s.speaker||s.speaker==='protagonist'||OWNED_HEROES.includes(s.speaker)))`),true);
+  assert.equal(run(`cinematicShots(${i},'${part}').every(s=>s.text&&(!s.speaker||s.speaker==='protagonist'||s.speaker==='同行者'||!!DIMENSION_ACTORS[s.speaker]))`),true);
  }
 }
 run("stage=0;unlocked=4;cleared=[0,1,2,3,4];prepare();openStory(0,'before','read');nextCinematic()");
@@ -102,7 +102,7 @@ run("$('#cinema-auto').onclick();revealCinematic();tickCinematic(30)");assert.eq
 run('setLanguage("en")');assert.equal(run('cinema.shot'),1);assert.equal(run('cinema.chars'),0);
 run('completeStory()');assert.equal(run('stage'),0);assert.equal(run('cinema'),null);
 run("openStory(0,'before','read');dismissCinematic();tickCinematic(60)");assert.equal(run('cinema'),null);
-console.log('PASS: once-per-team/hero cinematics, encounter reset, 120 localized cutscenes, reveal/next/back/auto/locale, replay and cleanup');
+console.log('PASS: once-per-team/hero cinematics, encounter reset, 40 Chinese scenes under three UI locales, reveal/next/back/auto/locale, replay and cleanup');
 
 run("protagonist=null;openProtagonistPicker();pendingProtagonist='invalid';confirmProtagonist()");assert.equal(run('protagonist'),null);
 run("pendingProtagonist='male';confirmProtagonist();saveProfile();protagonist=null;featureProtagonist=false;loadProfile()");assert.equal(run('protagonist'),'male');assert.equal(run('featureProtagonist'),true);
@@ -111,7 +111,7 @@ assert.equal(run('JSON.stringify({stage,cleared,lineup})===progressBefore'),true
 assert.equal(run("$('#display-art').dataset.hero"),'protagonist-female');
 for(const locale of ['zh','en','ja']){run(`language='${locale}';openStory(0,'before','read');cinema.shot=6;renderCinematic();revealCinematic()`);assert.equal(run("$('#cinema-right').src"),'assets/characters/protagonist-female-v2.png');assert.equal(run("$('#story-dialogue').textContent.length>0"),true);run('dismissCinematic()');}
 run("localStorage.setItem(SAVE_KEY,JSON.stringify({version:2,protagonist:'bad',stage:2,cleared:[0,1]}));loadProfile()");assert.equal(run('protagonist'),null);assert.equal(run('stage'),2);assert.equal(run('cleared.length'),2);
-console.log('PASS: explicit protagonist choice, both variants, save/reload, old-save migration, progress retention and localized story portraits');
+console.log('PASS: explicit protagonist choice, both variants, save/reload, old-save migration, progress retention and story portraits under three UI locales');
 
 // The starting duo must clear the opener even before using the free recruitment tickets.
 run("lineup=[{id:'oak',x:2,y:3},{id:'arrow',x:1,y:5}];stage=0;prepare();mode='fight';for(let k=0;k<2401&&mode==='fight';k++)tick(.05)");
@@ -123,3 +123,25 @@ for(const five of ['ember','sage','frost','warden'])for(let i=0;i<20;i++){
 }
 console.log('PASS: starter duo and all 80 worst-case limited collection encounters');
 
+(async()=>{
+ assert.equal(run('ACCOUNT_ENABLED'),false);
+ assert.equal(run("$('#account-dialog').open===true"),false);
+ run("initLocalCollection();collectionState.tickets=60;collectionState.pity['limited-weapon']={six:59,five:9}");
+ const draw=await run("accountApi('draw','POST',{banner:'limited-weapon',count:1,requestId:'offline-test-0001'})");
+ assert.equal(draw.results[0].id,'crescent');assert.equal(draw.collection.tickets,59);
+ const repeated=await run("accountApi('draw','POST',{banner:'limited-weapon',count:1,requestId:'offline-test-0001'})");
+ assert.equal(repeated.collection.tickets,59);
+ await run("accountApi('equip','POST',{hero:'oak',weapon:'crescent'})");
+ assert.equal(run('collectionState.equipment.oak'),'crescent');
+ run('collectionState=null;initLocalCollection()');
+ assert.equal(run('collectionState.equipment.oak'),'crescent');
+ await run("accountApi('equip','POST',{hero:'arrow',weapon:'crescent'})");
+ assert.equal(run('collectionState.equipment.oak'),undefined);
+ await run("accountApi('equip','POST',{hero:'arrow',weapon:null})");
+ run('collectionState.dust=100');await run("accountApi('exchange','POST',{})");
+ assert.equal(run('collectionState.tickets'),60);assert.equal(run('collectionState.dust'),0);
+ run('collectionState.rewards=[];queueAccountSave({cleared:[0,1]});queueAccountSave({cleared:[0,1]})');
+ assert.equal(run('collectionState.tickets'),80);
+ run('collectionState.tickets=0');await assert.rejects(run("accountApi('draw','POST',{banner:'limited-weapon',count:10,requestId:'offline-test-0002'})"),/notEnoughTickets/);
+ console.log('PASS: offline boot, local draws, pity, retry, equipment transfer, reload, exchange, first-clear rewards and insufficient tickets');
+})().catch(e=>{console.error(e);process.exitCode=1});

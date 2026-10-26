@@ -1,5 +1,5 @@
 'use strict';
-// Shared, versioned public banner catalog. Random draws and ownership live on the server.
+// Shared, versioned public banner catalog. Offline draws and ownership are saved locally.
 const GACHA_DATA={version:1,starter:['oak','arrow'],initialTickets:60,rates:{six:.02,five:.08},pity:{six:60,five:10},banners:[
  {id:'limited-character',kind:'character',name:['月下回信 · 限定角色','Moonlit Reply · Limited','月下の返事・限定'],six:['moon'],five:['ember','sage','frost','warden'],four:['oak','arrow'],featured:'moon'},
  {id:'standard-character',kind:'character',name:['晨星同行 · 常驻角色','Morningstar · Standard','晨星の仲間・恒常'],six:['knight'],five:['ember','sage','frost','warden'],four:['oak','arrow'],featured:'knight'},

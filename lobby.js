@@ -1,5 +1,5 @@
 'use strict';
-const SAVE_KEY='wilds-and-wonders.profile.v2';
+const SAVE_KEY='never-yield.fold-01.profile.v2';
 const OWNED_HEROES=ACCOUNT_ENABLED?[...GACHA_DATA.starter]:HEROES.map(h=>h.id);
 // Stable appearance IDs keep saved selections compatible with future 3D or layered art.
 const APPEARANCES=Object.fromEntries(HEROES.map(h=>[h.id,[{id:'base',nameKey:'baseSkin',image:characterImage(h.id)}]]));
@@ -7,6 +7,7 @@ let currentView='lobby',displayHero='oak',cleared=[],skinByHero={},storyScene=nu
 
 function loadProfile(incoming){
  let data=incoming;try{if(arguments.length===0)data=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');}catch(error){if(error instanceof SyntaxError)return null;storageAvailable=false;return null;}
+ loadDimensionState(data?.dimension);
  protagonist=null;featureProtagonist=false;
  if(!data||data.version!==2)return null;
  if(PROTAGONISTS.includes(data.protagonist)){protagonist=data.protagonist;featureProtagonist=data.featureProtagonist!==false;}
@@ -28,7 +29,7 @@ function loadProfile(incoming){
  const r=data.result;
  return r&&r.win===true&&cleared.includes(stage)&&Number.isFinite(r.time)&&r.time>=0&&r.time<=181&&Number.isInteger(r.survivors)&&r.survivors>=0&&r.survivors<=5?{win:true,timeout:false,time:r.time,survivors:r.survivors,core:Number.isFinite(r.core)?Math.max(0,Math.min(100,r.core)):100,leaks:Number.isInteger(r.leaks)?Math.max(0,r.leaks):0}:null;
 }
-function profileSnapshot(){return {version:2,protagonist,featureProtagonist,presentation:presentationSettings,language,displayHero,skinByHero,lineup,defensePositions,stage,cleared,result:mode==='win'?battleResult:null};}
+function profileSnapshot(){return {version:2,dimension:dimensionState,protagonist,featureProtagonist,presentation:presentationSettings,language,displayHero,skinByHero,lineup,defensePositions,stage,cleared,result:mode==='win'?battleResult:null};}
 function saveProfile(){
  if(!profileReady||(ACCOUNT_ENABLED&&(!accountUser||accountLoading||!accountReady)))return;
  const snapshot=profileSnapshot();
@@ -67,7 +68,7 @@ function renderLobby(){
  $('#destination-name').textContent=tr(CAMPAIGN_CATALOG[Math.floor(stage/5)].title);$('#hall-progress').textContent=cleared.length===STAGES.length?tr('completed'):tr('clearedCount',{n:cleared.length});
  $('#owned-count').textContent=tr('ownedRoster',{n:OWNED_HEROES.length});$('#relic-summary').textContent=tr('relicCount',{n:cleared.length});
  $('#collection').innerHTML=HEROES.map(h=>h.id).map(id=>{const hero=heroText(def(id));return '<button '+(!OWNED_HEROES.includes(id)?'disabled':'')+' class="collection-card '+(!OWNED_HEROES.includes(id)?'locked':id===displayHero?'active':'')+'" data-display="'+id+'" aria-pressed="'+(id===displayHero)+'"><span class="collection-thumb"><img src="'+characterImage(id)+'" alt=""></span><span class="collection-info"><span class="rarity-stars">'+starText(id)+'</span><strong>'+hero.name+'</strong><small>'+tr(!OWNED_HEROES.includes(id)?'lockedCharacter':id===displayHero?'displayed':'owned')+'</small></span></button>';}).join('');
- renderProtagonistLobby();renderInventory();applyPresentationSettings();
+ renderProtagonistLobby();renderInventory();renderDimensionArchive();applyPresentationSettings();
 }
 function updateStoryBrief(){const c=chapterText(stage);$('#objective-title').textContent=c.before.title;$('#objective-text').textContent=c.goal;$('#story-recap').disabled=mode==='fight';const title=tr(CAMPAIGN_CATALOG[Math.floor(stage/5)].title);$('#current-chapter').textContent=title;$('#battle-chapter-title').textContent=title;}
 function openStory(index,part,intent='read'){
@@ -76,12 +77,17 @@ function openStory(index,part,intent='read'){
 }
 function renderStory(){if(cinema){cinema.chars=0;cinema.hold=0;}renderCinematic();}
 function completeStory(){
- if(!storyScene)return;const {index,part,intent}=storyScene;$('#story-dialog').close();storyScene=null;cinema=null;
+ if(!storyScene)return;
+ if(storyScene.index===19&&storyScene.part==='after'&&cleared.includes(19)){
+  if(!dimensionState.companion){showReturnCompanionPicker();return;}
+  dimensionState.returned=true;
+ }
+ rememberDimensionScene();const {index,part,intent}=storyScene;$('#story-dialog').close();storyScene=null;cinema=null;
  if(intent==='advance'&&part==='after'){
   if(index===STAGES.length-1){stage=STAGES.length-1;prepare();showView('lobby');}
   else{stage=index+1;prepare();openStory(stage,'before','prepare');}
  }
- saveProfile();
+ saveProfile();renderDimensionArchive();
 }
 function renderJournal(){
  $('#journal-entries').innerHTML=STAGES.map((_,i)=>`<section class="journal-entry ${i>unlocked?'locked':''}"><strong>${String(i+1).padStart(2,'0')} · ${stageName(i)}</strong><div><button data-journal="${i}" data-part="before" ${i>unlocked?'disabled':''}>${tr(i>unlocked?'locked':'beforeLabel')}</button><button data-journal="${i}" data-part="after" ${!cleared.includes(i)?'disabled':''}>${tr('afterLabel')}</button></div></section>`).join('');
@@ -94,6 +100,6 @@ $('#story-recap').onclick=()=>openStory(stage,'before','read');$('#story-next').
 $('#story-dismiss').onclick=()=>{$('#story-dialog').close();storyScene=null;};$('#story-dialog').addEventListener('cancel',()=>{storyScene=null;});
 $('#journal-open').onclick=()=>{closeUtilityDialogs();renderJournal();$('#journal-dialog').showModal();};$('#journal-close').onclick=()=>$('#journal-dialog').close();
 $('#journal-entries').addEventListener('click',e=>{const button=e.target.closest('[data-journal]');if(button&&!button.disabled){$('#journal-dialog').close();openStory(Number(button.dataset.journal),button.dataset.part,'read');}});
-const restoredResult=loadProfile();localizePage();prepare();
+initLocalCollection();const restoredResult=loadProfile();localizePage();prepare();
 if(restoredResult){mode='win';battleResult=restoredResult;if(siege){siege.core=restoredResult.core;siege.leaks=restoredResult.leaks;siege.wave=siege.total;}renderUI();}
-profileReady=true;showView('lobby');$('#storage-warning').hidden=storageAvailable;initCampaign();initPresentation();initCinematics();initProtagonist();initGacha();initMusic();if(ACCOUNT_ENABLED)initAccount();requestAnimationFrame(frame);
+profileReady=true;showView('lobby');$('#storage-warning').hidden=storageAvailable;initCampaign();initPresentation();initCinematics();initProtagonist();initGacha();initMusic();initDimension();requestAnimationFrame(frame);

@@ -1,11 +1,11 @@
-# Windows desktop shell
+# 绝不认书：次元回响 — Windows shell
 
-`Program.cs` hosts the game in a WinForms window using Microsoft Edge WebView2.
+WinForms/WebView2 loads local game files through its existing virtual host. No HTTP server, Node runtime, account or registration is used. The original WebView2 user-data directory is retained, while the new chapter uses independent browser-storage keys.
 
-Run `./build.ps1 -OutputFolder 'release/WildsAndWonders-v0.9'` from the repository root to build the Windows x64 application.
-Run `node test.cjs` for game and save-system tests.
-Run `node server/test.cjs` for the account HTTP/SQLite integration tests.
-The Windows package includes Node.js 24 and starts the loopback-only server on port 18765. Account data lives under LocalAppData, outside the installation folder. The client transfers a copy of the legacy virtual-host save for optional import on registration. No password or readable session token is stored in frontend storage.
-After building, use `release/WildsAndWonders-v0.9/WildsAndWonders.exe --smoke-test` for desktop interaction checks. These checks use a separate test profile, server port 18767 and test database. The normal window waits for account saves before closing; smoke tests explicitly flush before reloading.
+Build: ./build.ps1 -OutputFolder release/WildsAndWonders-Offline
+Checks: node test.cjs and node narrative-test.cjs
+Export script: node scripts/export-story.cjs
 
-See the root README and `使用说明.txt` for gameplay and system requirements.
+The package includes 绝不认书.exe and keeps WildsAndWonders.exe as a compatibility filename. Both are the same build. On systems permitting the executable, --smoke-test uses an isolated WebView2 profile, exercises all three invitation routes and compact dialogue layout, captures choice/dialogue images, and reloads the saved ending. Results are smoke-offline.json and smoke-story-reload.json.
+
+Current machine limitation: Windows Application Control blocked the newly compiled executable before launch. The embedded browser also rejects file:// navigation. No successful visual-smoke result exists for this revision; earlier smoke logs do not verify it. Browser users can manually open the root index.html; their saves are separate from desktop saves.
