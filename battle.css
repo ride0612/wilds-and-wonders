@@ -17,3 +17,9 @@
 #adventure-view .arena-head{padding:9px 16px}
 #adventure-view .arena-head h2{margin-top:4px}
 @media(max-height:760px){#adventure-view .title-row{display:none}#adventure-view .board-wrap canvas{height:42vh;width:auto;max-width:100%;margin:auto}#adventure-view .stage{padding:8px}#adventure-view .command-bar{padding:8px 12px}#adventure-view .story-brief p{margin:3px 0}}
+
+/* GPU scene behind the existing pointer and HUD canvas. */
+#adventure-view .board-wrap{position:relative;isolation:isolate}
+#adventure-view .board-wrap .battle3d-surface{position:absolute;z-index:0;pointer-events:none;margin:0;max-width:none;max-height:none;aspect-ratio:auto}
+#adventure-view #board{position:relative;z-index:1;background:transparent;touch-action:none}
+#adventure-view .board-wrap .result{z-index:2}

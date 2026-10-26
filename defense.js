@@ -55,6 +55,7 @@ function tickSiege(dt){
  if(elapsed>=180)finish(false,true);
 }
 function basicAttack(u,target){
+ u.faceX=target.x-u.x;u.faceY=target.y-u.y;
  u.cooldown=u.interval/u.attackMult;u.action=.28;
  effects.push({type:u.range<=1?'slash':'beam',x:u.x,y:u.y,tx:target.x,ty:target.y,color:u.team==='blue'?'#b8e9ff':'#ffb5a1',life:.32,total:.32});
  damage(target,u.atk);u.mana=Math.min(100,u.mana+25);

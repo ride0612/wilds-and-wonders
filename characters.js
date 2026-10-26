@@ -200,11 +200,10 @@ for(const hero of HEROES){
  ZH_QUOTES[hero.id]='「'+c.quote+'」';
  for(const [i,name,skill,quote] of [[0,c.en,c.enSkill,c.enQuote],[1,c.ja,c.jaSkill,c.quote]]){const t=HERO_TEXT[hero.id][i];t[0]=name;t[2]=skill;t[4]=quote;}
 }
-const characterImage=(id,kind='portrait')=>'assets/cast/'+STORY_CAST[id].asset+'-'+(kind==='chibi'?'battle':'portrait')+'.png';
+const characterImage=(id,kind='portrait')=>'assets/cast/'+STORY_CAST[id].asset+'-portrait.png';
+const characterModel=id=>'assets/models/'+STORY_CAST[id].asset+'.glb';
 const characterText=(id,key)=>CHARACTER_DESIGNS[id][key][{zh:0,en:1,ja:2}[language]];
 const starText=id=>language==='zh'?STORY_CAST[id].faction:language==='en'?(STORY_CAST[id].faction==='现实支援'?'EARTH SUPPORT':'ACADEMY ALLY'):(STORY_CAST[id].faction==='现实支援'?'現実支援':'学院協力');
-const CHARACTER_SPRITES={};
-if(typeof Image!=='undefined')for(const id of Object.keys(STORY_CAST)){const img=new Image();img.src=characterImage(id,'chibi');CHARACTER_SPRITES[id]=img;}
 Object.assign(TEXT,{
  atrium:['星穹中庭','CELESTIAL ATRIUM','星穹の中庭'],storyButton:['剧情','STORY','物語'],allCharacters:['全部角色','CHARACTERS','キャラクター'],warehouse:['仓库','INVENTORY','倉庫'],more:['扩展','MORE','その他'],moreTitle:['扩展菜单','More options','拡張メニュー'],collectionSubtitle:['与你同行的八位同伴','Eight companions by your side','共に歩む八人の仲間'],characterProfile:['角色档案','CHARACTER PROFILE','キャラクターファイル'],personality:['性格','PERSONALITY','性格'],featuredNow:['当前大厅展示','Featured in the atrium','ロビー展示中'],chooseDisplay:['点击头像，切换大厅展示角色','Choose a portrait to feature in the lobby','肖像を選ぶとロビーの展示が切り替わります'],
  idleMotion:['大厅动态立绘','Animated lobby portraits','ロビー立ち絵の動き'],settingsSaved:['设置自动保存在本机','Settings save on this device','設定は端末に自動保存されます'],
@@ -217,7 +216,8 @@ Object.assign(TEXT,{
 Object.assign(TEXT,{
  ownedRoster:['主角 + 八位剧情角色 · 全部可用','Protagonist + eight story characters · All available','主人公＋物語の8人・全員使用可能'],
  lockedCharacter:['角色资料','Character dossier','人物資料'],
- rarityNote:['八位角色全部开放；战斗使用协作投影，不受剧情同行席位限制。','All eight characters are available as tactical projections. The return invitation is a separate story choice.','8人全員が協力投影として使用可能。帰還の招待は別の物語選択です。'],
+ battleQuality:['战斗画质','Battle quality','戦闘画質'],qualityHigh:['高 · 软阴影','High · soft shadows','高 · ソフトシャドウ'],qualityBalanced:['均衡','Balanced','標準'],qualityLow:['流畅 · 无阴影','Low · no shadows','低 · 影なし'],battleGrid:['战斗中显示战术网格','Show tactical grid in combat','戦闘中にグリッドを表示'],
+ rarityNote:['八位角色可自由编队，剧情登场以当前场景为准。人物亲自在现场作战，地面网格只是指挥标记。','Build a squad from all eight characters. Story appearances follow each scene; the ground grid is a tactical overlay.','8人から自由に編成。登場は各場面に準じます。地面のグリッドは指揮用の目印です。'],
  ultimateTalent:['行动特写 · 首次技能演出','ACTION CUT-IN · FIRST CAST','アクション演出・初回スキル'],ultimateKicker:['行动特写','ACTION CUT-IN','アクション演出'],fullEffects:['技能特写演出','Skill cinematics','スキル演出'],
  baseSkin:['剧情行动装','Story field outfit','物語の行動服'],skinHint:['人物档案、剧情立绘与战斗形象使用同一套设计。','Dossiers, dialogue portraits and battle miniatures share each character design.','人物資料・立ち絵・戦闘ミニチュアは同じ設定を使用。'],
  collectionSubtitle:['现实与次元世界的八位协作者','Eight allies across two worlds','二つの世界の8人の協力者']
@@ -225,7 +225,7 @@ Object.assign(TEXT,{
 for(const [id,names] of Object.entries({wild:['互助','Mutual Aid','相互支援'],arcane:['共鸣','Resonance','共鳴'],dawn:['先遣','Vanguard','先遣'],ranger:['协同','Coordination','連携'],guard:['守护','Protection','守護']})){TRAITS[id].name=names[0];TRAIT_TEXT[id][0][0]=names[1];TRAIT_TEXT[id][1][0]=names[2];}
 
 // Runtime motion parameters for the new 2D battle miniatures.
-const CHARACTER_MOTION={oak:{scale:1.05,step:14,bounce:2,lunge:3},arrow:{scale:.96,step:20,bounce:3,lunge:2},ember:{scale:1,step:17,bounce:1.8,lunge:5},sage:{scale:.98,step:15,bounce:1.4,lunge:1},knight:{scale:1.06,step:17,bounce:2,lunge:6},frost:{scale:.98,step:18,bounce:2.6,lunge:2},warden:{scale:.97,step:21,bounce:3,lunge:3},moon:{scale:.92,step:16,bounce:1.2,lunge:-2}};
+
 
 for(const h of HEROES){
  const en=h.type==='shield'?'Deploys protective equipment, granting '+h.power+' shield to self and the two nearest allies.':h.type==='heal'?'A medical drone restores 280 HP to the lowest-health ally and 140 HP to adjacent allies.':h.type==='aoe'?'Coordinates an area strike, dealing '+h.power+' damage to the target and enemies within one tile.':'Deals '+h.power+' damage to the nearest enemy.';

@@ -115,7 +115,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 Node.js runtime v24.19.0
-The Windows distribution includes Node.js for the local account server.
+Historical notice only: the current offline Windows distribution does not include Node.js or an account server.
 The complete Node.js and bundled component license notices are provided in
 runtime/NODE-LICENSE.txt (source copy: server/NODE-LICENSE.txt).
 https://nodejs.org/
@@ -140,3 +140,30 @@ No artwork from these websites is included in the game or distribution.
 These references imply no artist endorsement, partnership, or license.
 Generation prompts and the project art direction are recorded in
 assets/cards/ART-DIRECTION.md (game/assets/cards/ART-DIRECTION.md in the app).
+
+---------------------------------------------------------
+Three.js 0.180.0 (MIT)
+Vendored offline build: assets/vendor/three.js
+The MIT License
+
+Copyright © 2010-2025 three.js authors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+Character battle meshes are procedural, project-authored unofficial fan interpretations. See assets/models/README.md.

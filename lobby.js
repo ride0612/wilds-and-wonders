@@ -11,7 +11,8 @@ function loadProfile(incoming){
  protagonist=null;featureProtagonist=false;
  if(!data||data.version!==2)return null;
  if(PROTAGONISTS.includes(data.protagonist)){protagonist=data.protagonist;featureProtagonist=data.featureProtagonist!==false;}
- for(const key of ['effects','motion'])if(typeof data.presentation?.[key]==='boolean')presentationSettings[key]=data.presentation[key];
+ for(const key of ['effects','motion','grid'])if(typeof data.presentation?.[key]==='boolean')presentationSettings[key]=data.presentation[key];
+ if(['high','balanced','low'].includes(data.presentation?.quality))presentationSettings.quality=data.presentation.quality;
  cleared=[];
  if(['zh','en','ja'].includes(data.language))language=data.language;
  if(OWNED_HEROES.includes(data.displayHero))displayHero=data.displayHero;

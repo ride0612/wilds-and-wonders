@@ -20,10 +20,14 @@ foreach ($retiredFile in @('gacha.js','gacha-data.js','gacha.css','account.js','
     $retiredPath = Join-Path "$outputPath\game" $retiredFile
     if (Test-Path -LiteralPath $retiredPath -PathType Leaf) { Remove-Item -LiteralPath $retiredPath -Force }
 }
-Copy-Item -LiteralPath 'index.html','migration.html','style.css','lobby.css','battle.css','portrait-ui.css','cinematics.css','protagonist.css','campaign-expansion.js','skill-fx.js','music.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','campaign.js','presentation.js','cinematics.js','protagonist.js','dimension-story.js','dimension.js','dimension.css','lobby.js' -Destination "$outputPath\game" -Force
+Copy-Item -LiteralPath 'index.html','migration.html','style.css','lobby.css','battle.css','portrait-ui.css','cinematics.css','protagonist.css','campaign-expansion.js','skill-fx.js','music.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','character-models.js','battle3d.js','campaign.js','presentation.js','cinematics.js','protagonist.js','dimension-story.js','dimension.js','dimension.css','lobby.js' -Destination "$outputPath\game" -Force
 Copy-Item -LiteralPath 'desktop\story-smoke.js' -Destination "$outputPath\game" -Force
 if (Test-Path -LiteralPath 'assets') {
     Copy-Item -LiteralPath 'assets' -Destination "$outputPath\game" -Recurse -Force
+}
+foreach ($retiredModel in @('caesar','chuzihang','fangqing','fingel','lumingfei','nono','shenlan','zero')) {
+    $retiredPath = Join-Path "$outputPath\game\assets\cast" "$retiredModel-battle.png"
+    if (Test-Path -LiteralPath $retiredPath -PathType Leaf) { Remove-Item -LiteralPath $retiredPath -Force }
 }
 Copy-Item -LiteralPath "$sdkPath\lib\net462\Microsoft.Web.WebView2.Core.dll","$sdkPath\lib\net462\Microsoft.Web.WebView2.WinForms.dll","$sdkPath\runtimes\win-x64\native\WebView2Loader.dll" -Destination $outputPath -Force
 $compilerPath = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'

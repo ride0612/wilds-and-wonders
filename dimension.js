@@ -14,23 +14,23 @@ const DIMENSION_ACTORS={
 for(const [id,c] of Object.entries(STORY_CAST))if(DIMENSION_ACTORS[c.name])DIMENSION_ACTORS[c.name].hero=id;
 const RETURN_COMPANIONS={
  lmingfei:{name:'路明非',summary:'愿意来看看另一个世界；不安会说出口，也会留意身边被忽略的人。',condition:'固定休息、独立生活、可以拒绝任务、保留返程。',
- accept:'愿意。不过先说好，我可能还是会紧张，会说不合时宜的笑话。你不需要为了邀请我，假装这些毛病突然都变成了优点。我们就从去看看那棵树开始。',
+ accept:'去啊。都说到这儿了，再说不去，显得我前面那些问题像在替芬格尔做市场调查。不过你得走慢一点，我第一次出这么远的门，腿有点不听使唤。',
  arrival:'确认完是不是就能吃饭？我不是催，我只是觉得，跨过两个世界以后还能正常问一句晚饭吃什么，挺让人放心的。',
- room:'钥匙我自己拿着？好。我先记一下门牌，免得第一天就走错。你们不用给我写什么拯救世界的称号，访客就挺好。',
+ room:'这间给我？比照片里还亮一点。我能把窗帘拉开吗？刚才总觉得脚下还在晃……没事了。树没动，是我自己还没缓过来。',
  dinner:'我没什么讲究，能吃饱就行。还有，多放一双筷子。我看门外那位值守员到现在还没换班，他应该也没吃。',
  tomorrow:'那明天叫上我吧。很厉害的事我不敢答应，听录音、认名字、帮忙搬东西总可以。至少你忙起来的时候，我会提醒你还有一顿饭没吃。'},
  nono:{name:'诺诺',summary:'带着自己的判断参与调查；会追问技术用途，也会直接指出你的逃避。',condition:'私人数据可查、任务另行同意、原世界生活与通信权保留。',
- accept:'愿意。我会自己观察，也会继续问让你头疼的问题。别因为走过一扇门，就以为我们已经对所有事情达成了一致。带路吧，这次让我看看你的日常。',
- arrival:'检查流程给我一份。我愿意配合，但每一项结果会被谁看到，要提前写清。等这些说完，你可以带我去看那棵被反复提到的树。',
- room:'窗边那个传感器是环境监测，不是摄像头，对吧？很好。钥匙我收下了。我们先从把一个房间说明白开始，其他承诺以后慢慢验证。',
+ accept:'愿意。你这一路把临江讲得快能画地图了，我得去看看你有没有夸张。箱子给我一个，别什么都往自己身上挂。先说好，到了那边，你也得听我的问题。',
+ arrival:'知道，先检查。那边第二张表给我一份，我想知道数据留在哪里。还有，方晴，你比频道里听起来年轻。原来这家伙每次被你催着吃饭，面对的就是这个表情。',
+ room:'窗边那个是测空气的？行。窗户果然能打开，方晴还特地替我试过吧。你看，纸杯下面压着便签——她连风大会把门吹上都写了。这个欢迎礼不错。',
  dinner:'不吃香菜，谢谢。你问得比有些研究员具体多了。等吃完饭，给我讲讲他平时是什么样的人——不是任务报告里的那种版本。',
  tomorrow:'先把今晚的误差记下来，别让一次成功把问题盖住。明天我陪你去看实际使用的人，他们的抱怨，往往比我们自己写的结论更有用。'},
  chuzihang:{name:'楚子航',summary:'以有限期协作为前提来访；重视实际准备、撤离方案与能交接的防线。',condition:'任务边界、轮值与补休、双向归航、明确的协作期限。',
- accept:'愿意。按我们商定的期限协作，任务前确认风险，结束后复核。这里的收尾已经交接。我不会要求你保证一切顺利，你也不必把所有人都护在自己身后。',
- arrival:'收到。请给我出口示意图和紧急联系方法，检查结束后再看任务资料。现在先让连续值守的人休息。',
- room:'谢谢。备用钥匙由谁保管？确认了。我把随身物品登记后再整理房间，工作设备和私人物品分开。今晚不需要再开一次任务会议。',
- dinner:'都可以。值守人员的饭已经留了吗？如果留了，我们就按时吃。休息不是任务结束后可有可无的奖励，是下一次能正确判断的条件。',
- tomorrow:'我和你一起做现场检查。把今天的办法写成别人也能使用的流程，安排备用人员。等需要离开的时候，防线也要能继续运转。'}
+ accept:'好。这里已经交接，返程时间也确认了。你的手在抖，箱子给我。过门的时候看前面，我就在旁边。',
+ arrival:'好。请把紧急联系号码给我。方晴，你的手背擦伤了，检查时一起处理。饭可以再热，伤口先洗干净。',
+ room:'谢谢。备用钥匙在值班室，对吗？知道了。行李我自己收，你去给家里回电话。刚才在通道里，我听见你念了两次号码。',
+ dinner:'都可以。值班室那份留了吗？好。你的汤快凉了，先喝，别一直给我介绍菜。这些我认识。',
+ tomorrow:'明早我和你去。带两份记录，一份留给车上的人。要是他们能自己处理，下次我们就能去更远的地方。'}
 };
 function freshDimensionState(){return {version:DIMENSION_VERSION,companion:null,returned:false,bookmarks:{}};}
 let dimensionState=freshDimensionState(),pendingReturnCompanion=null;
@@ -71,7 +71,7 @@ function confirmReturnCompanion(){
 function dimensionArchiveHtml(){
  const returned=dimensionState.returned,companion=RETURN_COMPANIONS[dimensionState.companion];
  const samples=[{stage:9,name:'止鳞箔',desc:'局部屏蔽伪造语音；归航后用于现实通信测试。'},{stage:12,name:'相位校准片',desc:'辨认真伪坐标；用于受控的返航与设备验证。'},{stage:15,name:'归航芯与共同研究记录',desc:'稳定路径的研究样本；不能直接复制全部穿越能力。'}];
- return `<section class="dimension-archive"><small>FOLD / CROSSING MANIFEST</small><h3>跨界携行档案</h3><p>${returned?'归航完成 · 成果已带回现实':companion?'邀请已确认 · 继续章末剧情完成归航':'携行舱待命 · 章末可邀请一位同行者'}</p><div class="dimension-cargo">${samples.map(s=>`<article><b>${s.name}</b><span>${cleared.includes(s.stage)?returned?'已带回现实':'已封装 · 等待归航':'尚未取得'}</span><p>${s.desc}</p></article>`).join('')}</div><h4>${companion?'同行者：'+companion.name:'同行者：尚未邀请'}</h4><p>${companion?companion.summary:'完成第 20 关并阅读战后剧情，可在路明非、诺诺、楚子航中邀请一位。'}</p><small>同行者用于本章分支剧情与现实档案。战场上的八个单位为折页计划的战术投影。</small></section>`;
+ return `<section class="dimension-archive"><small>FOLD / CROSSING MANIFEST</small><h3>跨界携行档案</h3><p>${returned?'归航完成 · 成果已带回现实':companion?'邀请已确认 · 继续章末剧情完成归航':'携行舱待命 · 章末可邀请一位同行者'}</p><div class="dimension-cargo">${samples.map(s=>`<article><b>${s.name}</b><span>${cleared.includes(s.stage)?returned?'已带回现实':'已封装 · 等待归航':'尚未取得'}</span><p>${s.desc}</p></article>`).join('')}</div><h4>${companion?'同行者：'+companion.name:'同行者：尚未邀请'}</h4><p>${companion?companion.summary:'完成第 20 关并阅读战后剧情，可在路明非、诺诺、楚子航中邀请一位。'}</p><small>同行邀请影响本章结尾与现实档案。战斗可自由编队，剧情出场以当前场景为准；人物在现场移动，网格只用于报位。</small></section>`;
 }
 function renderDimensionArchive(){
  const manifest=$('#dimension-manifest');if(manifest)manifest.innerHTML=dimensionArchiveHtml();

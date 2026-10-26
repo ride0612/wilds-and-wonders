@@ -1,5 +1,5 @@
 'use strict';
-const presentationSettings={effects:true,motion:true};
+const presentationSettings={effects:true,motion:true,quality:'high',grid:false};
 const STORY_RELICS=[['relicLetter','relicLetterDesc','✉'],['relicKey','relicKeyDesc','⚿'],['relicPhoto','relicPhotoDesc','▧'],['relicStar','relicStarDesc','✧'],['relicBell','relicBellDesc','◷']];
 let ultimateQueue=[],ultimateActive=null;
 const ultimateSeen=new Set();
@@ -14,6 +14,7 @@ function renderInventory(){
 function applyPresentationSettings(){
  if(document.body){document.body.classList.toggle('still-portraits',!presentationSettings.motion);document.body.classList.toggle('fx-paused',paused);}
  $('#effects-toggle').checked=presentationSettings.effects;$('#motion-toggle').checked=presentationSettings.motion;
+ $('#grid-toggle').checked=presentationSettings.grid;$('#quality-select').value=presentationSettings.quality;
  if(ultimateActive)renderUltimateText();
 }
 function syncPresentationLayout(){
@@ -55,6 +56,8 @@ function initPresentation(){
  $('#battle-back').onclick=()=>{clearUltimate();showCampaignLibrary();syncPresentationLayout();};
  $('#effects-toggle').onchange=e=>{presentationSettings.effects=e.target.checked;if(!presentationSettings.effects)clearUltimate();saveProfile();};
  $('#motion-toggle').onchange=e=>{presentationSettings.motion=e.target.checked;applyPresentationSettings();saveProfile();};
+ $('#grid-toggle').onchange=e=>{presentationSettings.grid=e.target.checked;saveProfile();};
+ $('#quality-select').onchange=e=>{if(['high','balanced','low'].includes(e.target.value)){presentationSettings.quality=e.target.value;saveProfile();}};
  $('#lobby-view').addEventListener('pointermove',e=>{if(!presentationSettings.motion)return;const r=$('#lobby-view').getBoundingClientRect();$('#lobby-view').style.setProperty('--look-x',((e.clientX-r.left)/r.width-.5)*12+'px');$('#lobby-view').style.setProperty('--look-y',((e.clientY-r.top)/r.height-.5)*8+'px');});
  $('#lobby-view').addEventListener('pointerleave',()=>{$('#lobby-view').style.setProperty('--look-x','0px');$('#lobby-view').style.setProperty('--look-y','0px');});
  applyPresentationSettings();syncPresentationLayout();

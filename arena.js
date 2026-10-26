@@ -1,9 +1,9 @@
 'use strict';
 // Original vector arena. A shared projection keeps drawing, picking and dragging aligned.
 let visualTime=0,hoverCell=null;
-function project(x,y){return {x:480+(x-4)*(67+y*4),y:105+y*66};}
+function project(x,y){if(typeof Battle3D!=='undefined'&&Battle3D.active)return Battle3D.project(x,y);return {x:480+(x-4)*(67+y*4),y:105+y*66};}
 function center(x,y){return project(x+.5,y+.5);}
-function boardCell(p){const gy=(p.y-105)/66;return {x:Math.floor((p.x-480)/(67+gy*4)+4),y:Math.floor(gy)};}
+function boardCell(p){if(typeof Battle3D!=='undefined'&&Battle3D.active)return Battle3D.pick(p);const gy=(p.y-105)/66;return {x:Math.floor((p.x-480)/(67+gy*4)+4),y:Math.floor(gy)};}
 function polygon(points,fill,stroke,width=1){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.lineWidth=width;ctx.strokeStyle=stroke;ctx.stroke();}}
 function ellipse(x,y,rx,ry,fill,stroke,width=1){ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.stroke();}}
 function line(points,color,width=1){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();}
@@ -85,54 +85,25 @@ function drawArena(){
  for(let i=0;i<18;i++){const x=(i*127+visualTime*(2+i%3))%940,y=80+(i*37)%475+Math.sin(visualTime+i)*7;ellipse(x,y,1.2,1.2,i%3?'#a1eddf55':'#f7d6a466');}
 }
 function drawCore(){const p=center(8,5),pulse=Math.sin(visualTime*2)*3;ellipse(p.x,p.y+8,30,12,'#0b1e29','#8db6b4',2);crystal(p.x,p.y-32,42+pulse,siege&&siege.core<35?'#d49aaa':'#84e1ef');ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillStyle='#c8e9ee';ctx.fillText(tr('coreLabel'),p.x,p.y+33,105);}
+// Compatibility view for systems without WebGL 2: adult proportions, no sprite loading.
 function drawMiniature(u,p){
- const sprite=CHARACTER_SPRITES[u.id];
- if(sprite&&sprite.complete&&sprite.naturalWidth){
-  const model=CHARACTER_MOTION[u.id],s=(.83+u.py*.045)*model.scale,moving=Math.abs(u.x-u.px)+Math.abs(u.y-u.py)>.05;
-  const motion=presentationSettings.motion;const bounce=!motion?0:moving?Math.abs(Math.sin(visualTime*model.step+u.x))*model.bounce:Math.sin(visualTime*2.1+u.x)*.6;
-  const attack=u.action>0?Math.sin(u.action*13)*model.lunge:0;
-  ctx.save();ctx.translate(p.x+attack,p.y-bounce+5);ctx.rotate(attack*.009);
-  if(u.team==='red')ctx.filter='drop-shadow(0 0 2px #ef7e87)';
-  if(u.hitFlash>0)ctx.filter='brightness(1.5)';
-  const height=100*s,width=height*sprite.naturalWidth/sprite.naturalHeight;ctx.drawImage(sprite,-width/2,-height,width,height);ctx.restore();return;
- }
- if(STORY_CAST[u.id]){
-  // A neutral signal silhouette while the new sprite loads, never the retired fantasy costume.
-  ctx.save();ctx.translate(p.x,p.y);ellipse(0,-48,10,12,'#c0cdd6',u.color);
-  roundRect(-13,-34,26,29,4,'#28394a',u.color);line([{x:-7,y:-5},{x:-8,y:4}],u.color,4);line([{x:7,y:-5},{x:8,y:4}],u.color,4);
-  ctx.fillStyle=u.color;ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(STORY_CAST[u.id].name,0,-65,65);ctx.restore();return;
- }
- const s=(.83+u.py*.045)*(u.id==='boss'?1.3:1),hit=u.hitFlash>0;
- const accent=hit?'#fff3d6':u.color,body=u.team==='red'?'#524756':u.bg,edge=u.team==='red'?'#da9d98':'#b4dce2';
- const motion=u.action>0?Math.sin(u.action*12)*5:Math.sin(visualTime*2+u.x)*1.2;
- ctx.save();ctx.translate(p.x,p.y-3);ctx.scale(s,s);ctx.translate(0,-Math.abs(motion)*.35);
- // Boots, shaded coat, shoulders, collar and a face rather than an icon disc.
- roundRect(-13,-7,10,12,3,'#16202b');roundRect(4,-7,10,12,3,'#16202b');
- polygon([{x:-12,y:-39},{x:13,y:-39},{x:22,y:-6},{x:0,y:0},{x:-20,y:-7}],body,'#0b1722',2);
- polygon([{x:0,y:-36},{x:13,y:-36},{x:22,y:-6},{x:2,y:-1}],'#0d1c2944');
- polygon([{x:-12,y:-36},{x:0,y:-29},{x:13,y:-36},{x:9,y:-43},{x:-8,y:-43}],accent,'#0b1722');
- roundRect(-10,-55,20,18,6,u.id==='warden'||u.id==='boss'?'#9aa7ab':'#d7b79a','#152332');
- if(['oak','knight','warden','boss'].includes(u.id)){
-  polygon([{x:-12,y:-47},{x:-12,y:-58},{x:-5,y:-62},{x:6,y:-62},{x:13,y:-55},{x:12,y:-46},{x:6,y:-52},{x:-7,y:-52}],accent,'#26333c');
-  line([{x:-5,y:-46},{x:5,y:-46}],u.team==='red'?'#ffaaaa':'#9ef0ff',2);
- }else{
-  polygon([{x:-13,y:-44},{x:-13,y:-57},{x:0,y:-66},{x:13,y:-57},{x:13,y:-44},{x:8,y:-54},{x:-6,y:-55}],body,accent,1.2);
-  line([{x:-5,y:-46},{x:-1,y:-46}], '#182532',1.4);line([{x:4,y:-46},{x:7,y:-46}], '#182532',1.4);
- }
- line([{x:-4,y:-26},{x:0,y:-21},{x:5,y:-27}],accent,2);roundRect(-12,-14,25,4,1,'#bba77c');
- if(u.type==='shield'){
-  polygon([{x:-24,y:-39},{x:-7,y:-33},{x:-9,y:-12},{x:-18,y:-4},{x:-28,y:-18}],accent,'#172e3d',2);
-  polygon([{x:-20,y:-32},{x:-13,y:-28},{x:-15,y:-15},{x:-19,y:-12},{x:-23,y:-20}],body,'#e4dc9c');
-  line([{x:17,y:-12},{x:20,y:-47}], '#adbcb9',4);
- }else if(u.id==='knight'||u.id==='boss'){
-  ctx.save();ctx.translate(22,-24);ctx.rotate(-.25+motion*.03);polygon([{x:-3,y:10},{x:-3,y:-37},{x:1,y:-47},{x:5,y:-37},{x:4,y:10}],'#c3dce2','#6c98ad');line([{x:-9,y:2},{x:11,y:2}], '#e1bc73',4);ctx.restore();
- }else if(u.id==='arrow'||u.id==='moon'){
-  ctx.beginPath();ctx.ellipse(21,-27,12,24,.15,-Math.PI/2,Math.PI/2);ctx.strokeStyle=accent;ctx.lineWidth=3;ctx.stroke();line([{x:23,y:-51},{x:23,y:-3}], '#c2d3b5',1);line([{x:7,y:-25},{x:36+motion,y:-25}], '#e2d3a2',2);
- }else{
-  line([{x:23,y:-2},{x:23,y:-56}], '#b9a17b',4);glow(23,-58,13,u.color+'60');
-  if(u.id==='sage'){ellipse(23,-60,8,8,accent);line([{x:17,y:-60},{x:29,y:-60}], '#fff9c6',2);line([{x:23,y:-66},{x:23,y:-54}], '#fff9c6',2);}
-  else{polygon([{x:23,y:-74},{x:31,y:-59},{x:23,y:-49},{x:15,y:-59}],accent,'#ecf8ef');}
- }
+ const spec=typeof StoryModels!=='undefined'?(StoryModels.CAST[u.id]||StoryModels.CAST.ember):null;
+ const color=n=>'#'+n.toString(16).padStart(6,'0'),s=(.82+u.py*.045)*(spec?spec.height/1.8:1),moving=Math.hypot(u.x-u.px,u.y-u.py)>.04;
+ const gait=moving?Math.sin(visualTime*10)*5:0,coat=u.team==='red'?'#323341':spec?color(spec.coat):'#2c4046',hair=spec?color(spec.hair):'#292a30';
+ ctx.save();ctx.translate(p.x,p.y);ctx.scale(s,s);
+ // 7.5 heads high; separate long legs, shoulders, arms and equipment.
+ line([{x:-5,y:-35},{x:-6,y:-18+gait},{x:-7,y:-2}], '#29323b',7);
+ line([{x:5,y:-35},{x:6,y:-18-gait},{x:7,y:-2}], '#29323b',7);
+ roundRect(-11,-4,9,5,1,'#151d26');roundRect(3,-4,9,5,1,'#151d26');
+ polygon([{x:-10,y:-59},{x:10,y:-59},{x:8,y:-35},{x:-8,y:-35}],coat,'#121e28',1);
+ line([{x:-10,y:-56},{x:-14,y:-43},{x:-12,y:-32-gait*.4}],coat,6);
+ line([{x:10,y:-56},{x:15,y:-44},{x:13+(u.action>0?7:0),y:-34}],coat,6);
+ ellipse(0,-66,4.6,6,'#dcbba5');ellipse(0,-69,5,3.5,hair);
+ line([{x:-2,y:-57},{x:0,y:-48},{x:2,y:-57}],'#c1c8c5',1);
+ const gear=spec?.gear;if(gear==='katana'||gear==='knife')line([{x:14,y:-33},{x:gear==='katana'?28:20,y:gear==='katana'?-64:-49}],'#b8c8d1',2);
+ else if(gear==='rifle')line([{x:-3,y:-46},{x:25,y:-48}],'#64727d',4);
+ else if(gear==='shield')polygon([{x:-19,y:-49},{x:-8,y:-48},{x:-10,y:-28},{x:-17,y:-25}],'#52656c','#9badb5');
+ else roundRect(10,-39,6,9,1,u.color);
  ctx.restore();
 }
 function drawUnit(u,override){
@@ -143,7 +114,7 @@ function drawUnit(u,override){
  if(u.defender){ellipse(p.x,p.y,34*s,17*s,null,'#80bcd150');}
  drawMiniature(u,p);
  if(u.shield>0){ctx.save();ctx.globalAlpha=.3;ellipse(p.x,p.y-30*s,30*s,43*s,'#95cbda25','#e9d297',2);ctx.restore();}
- const barY=p.y-(CHARACTER_SPRITES[u.id]?.naturalWidth?96:77)*s,w=u.id==='boss'?80:56;
+ const barY=p.y-82*s,w=u.id==='boss'?80:56;
  roundRect(p.x-w/2-2,barY-2,w+4,14,3,'#07101be8');roundRect(p.x-w/2,barY,w,6,1,'#263b3f');
  roundRect(p.x-w/2,barY,w*Math.max(0,u.hp/u.maxHp),6,1,u.team==='blue'?'#91e4ac':'#e68d87');
  for(let i=1;i<Math.ceil(u.maxHp/300);i++){const x=p.x-w/2+w*i*300/u.maxHp;if(x<p.x+w/2)line([{x,y:barY},{x,y:barY+6}],'#163126aa',1);}
@@ -162,6 +133,7 @@ function drawEffects(){
 }
 function draw(){
  if(typeof currentView!=='undefined'&&(currentView!=='adventure'||$('#chapter-mission').hidden))return;
+ if(typeof Battle3D!=='undefined'&&Battle3D.render())return;
  ctx.clearRect(0,0,960,660);drawArena();
  units.filter(u=>u.hp>0).sort((a,b)=>a.py-b.py).forEach(u=>{if(!drag||drag.id!==u.id||u.team!=='blue')drawUnit(u);});
  if(drag){const u=units.find(u=>u.id===drag.id&&u.team==='blue');if(u)drawUnit(u,drag.pos);}

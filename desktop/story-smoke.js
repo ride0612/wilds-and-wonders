@@ -23,7 +23,7 @@
    check($('#return-companion-dialog').open,'skip invitation gate');check($('#return-companion-confirm').disabled,'choice requires selection');
    document.querySelector('[data-return-companion="'+id+'"]').click();check(!$('#return-companion-confirm').disabled,'selection enables confirm');$('#return-companion-confirm').click();
    check(dimensionState.companion===id&&!$('#return-companion-dialog').open,'invitation saved '+id);
-   check(cinema.shot===11,'continue into epilogue');
+   check(cinema.shot===cinematicShots(19,'after').findIndex(s=>s.choice)+1,'continue into epilogue');
    check(cinematicShots(19,'after').some(s=>s.text===RETURN_COMPANIONS[id].arrival),'unique arrival '+id);
    completeStory();check(dimensionState.returned,'return complete '+id);
   }
