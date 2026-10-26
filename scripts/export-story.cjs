@@ -1,5 +1,5 @@
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
-const root=path.join(__dirname,'..'),context=vm.createContext({});
+const root=path.join(__dirname,'..'),context=vm.createContext({STORY_CAST:{}});
 vm.runInContext(fs.readFileSync(path.join(root,'dimension-story.js'),'utf8'),context);
 const engine=fs.readFileSync(path.join(root,'dimension.js'),'utf8');vm.runInContext(engine.slice(0,engine.indexOf('function freshDimensionState')),context);
 const {scenes,routes}=vm.runInContext('({scenes:DIMENSION_STORY,routes:RETURN_COMPANIONS})',context);

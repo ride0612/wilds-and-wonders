@@ -88,13 +88,19 @@ function drawCore(){const p=center(8,5),pulse=Math.sin(visualTime*2)*3;ellipse(p
 function drawMiniature(u,p){
  const sprite=CHARACTER_SPRITES[u.id];
  if(sprite&&sprite.complete&&sprite.naturalWidth){
-  const s=.83+u.py*.045,moving=Math.abs(u.x-u.px)+Math.abs(u.y-u.py)>.05;
-  const bounce=moving?Math.sin(visualTime*19+u.x)*3:Math.sin(visualTime*2.1+u.x)*.8;
-  const attack=u.action>0?Math.sin(u.action*13)*4:0;
+  const model=CHARACTER_MOTION[u.id],s=(.83+u.py*.045)*model.scale,moving=Math.abs(u.x-u.px)+Math.abs(u.y-u.py)>.05;
+  const motion=presentationSettings.motion;const bounce=!motion?0:moving?Math.abs(Math.sin(visualTime*model.step+u.x))*model.bounce:Math.sin(visualTime*2.1+u.x)*.6;
+  const attack=u.action>0?Math.sin(u.action*13)*model.lunge:0;
   ctx.save();ctx.translate(p.x+attack,p.y-bounce+5);ctx.rotate(attack*.009);
   if(u.team==='red')ctx.filter='drop-shadow(0 0 2px #ef7e87)';
   if(u.hitFlash>0)ctx.filter='brightness(1.5)';
-  ctx.drawImage(sprite,-49*s,-94*s,98*s,98*s);ctx.restore();return;
+  const height=100*s,width=height*sprite.naturalWidth/sprite.naturalHeight;ctx.drawImage(sprite,-width/2,-height,width,height);ctx.restore();return;
+ }
+ if(STORY_CAST[u.id]){
+  // A neutral signal silhouette while the new sprite loads, never the retired fantasy costume.
+  ctx.save();ctx.translate(p.x,p.y);ellipse(0,-48,10,12,'#c0cdd6',u.color);
+  roundRect(-13,-34,26,29,4,'#28394a',u.color);line([{x:-7,y:-5},{x:-8,y:4}],u.color,4);line([{x:7,y:-5},{x:8,y:4}],u.color,4);
+  ctx.fillStyle=u.color;ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(STORY_CAST[u.id].name,0,-65,65);ctx.restore();return;
  }
  const s=(.83+u.py*.045)*(u.id==='boss'?1.3:1),hit=u.hitFlash>0;
  const accent=hit?'#fff3d6':u.color,body=u.team==='red'?'#524756':u.bg,edge=u.team==='red'?'#da9d98':'#b4dce2';

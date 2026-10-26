@@ -28,7 +28,7 @@ const GRID={x:88,y:58,w:98,h:87,cols:8,rows:6};
 const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),alive=team=>units.filter(u=>u.team===team&&u.hp>0),def=id=>HEROES.find(h=>h.id===id)||BOSS;
 function traitCounts(ids){const c={};new Set(ids).forEach(id=>def(id).traits.forEach(t=>c[t]=(c[t]||0)+1));return c;}
 function bonus(c,key,low,high){return c[key]>=3?high:c[key]>=2?low:0;}
-function createUnit(id,team,x,y,scale=1){const base=def(id),w=team==='blue'&&typeof collectionState!=='undefined'&&collectionState?.equipment[id],weapon=w?GACHA_DATA.weapons[w]:null,h=weapon?{...base,atk:base.atk+weapon.atk,power:base.power+weapon.power}:base;return {...h,uid:team+'-'+id,team,x,y,px:x,py:y,maxHp:h.hp*scale,hp:h.hp*scale,atk:h.atk*scale,power:h.power*scale,mana:0,shield:0,cooldown:.3,moveCd:0,skillMult:1,regen:0,attackMult:1};}
+function createUnit(id,team,x,y,scale=1){const h=def(id);return {...h,uid:team+'-'+id,team,x,y,px:x,py:y,maxHp:h.hp*scale,hp:h.hp*scale,atk:h.atk*scale,power:h.power*scale,mana:0,shield:0,cooldown:.3,moveCd:0,skillMult:1,regen:0,attackMult:1};}
 function applyTraits(team){const teamUnits=alive(team),c=traitCounts(teamUnits.map(u=>u.id));teamUnits.forEach(u=>{u.maxHp*=1+bonus(c,'guard',.18,.3);u.hp=u.maxHp;u.regen=bonus(c,'wild',.01,.02);u.attackMult=1+bonus(c,'ranger',.2,.35);u.skillMult=1+bonus(c,'arcane',.25,.45);u.shield=bonus(c,'dawn',100,180);});}
 function prepare(){
  mode='prep';paused=false;elapsed=0;accumulator=0;effects=[];battleResult=null;drag=null;resetUltimateBattle();

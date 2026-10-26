@@ -16,7 +16,11 @@ if (!(Test-Path -LiteralPath "$sdkPath\lib\net462\Microsoft.Web.WebView2.WinForm
 }
 $outputPath = Join-Path $PSScriptRoot $OutputFolder
 New-Item -ItemType Directory -Force -Path "$outputPath\game" | Out-Null
-Copy-Item -LiteralPath 'index.html','migration.html','style.css','lobby.css','battle.css','portrait-ui.css','cinematics.css','protagonist.css','account.css','gacha.css','gacha-data.js','gacha.js','campaign-expansion.js','skill-fx.js','music.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','campaign.js','presentation.js','cinematics.js','protagonist.js','account.js','dimension-story.js','dimension.js','dimension.css','lobby.js' -Destination "$outputPath\game" -Force
+foreach ($retiredFile in @('gacha.js','gacha-data.js','gacha.css','account.js','account.css')) {
+    $retiredPath = Join-Path "$outputPath\game" $retiredFile
+    if (Test-Path -LiteralPath $retiredPath -PathType Leaf) { Remove-Item -LiteralPath $retiredPath -Force }
+}
+Copy-Item -LiteralPath 'index.html','migration.html','style.css','lobby.css','battle.css','portrait-ui.css','cinematics.css','protagonist.css','campaign-expansion.js','skill-fx.js','music.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','campaign.js','presentation.js','cinematics.js','protagonist.js','dimension-story.js','dimension.js','dimension.css','lobby.js' -Destination "$outputPath\game" -Force
 Copy-Item -LiteralPath 'desktop\story-smoke.js' -Destination "$outputPath\game" -Force
 if (Test-Path -LiteralPath 'assets') {
     Copy-Item -LiteralPath 'assets' -Destination "$outputPath\game" -Recurse -Force

@@ -1,0 +1,138 @@
+[
+  {
+    "id": "caesar",
+    "kind": "portrait",
+    "prompt": "Use case: stylized-concept. Transparent full-body character portrait for an unofficial Dragon Raja crossover story RPG. Premium detailed anime game illustration, restrained modern academy science-fiction clothing, painterly materials, clean facial anatomy, full figure head to boots visible, centered three-quarter standing pose, no text or logos, no background scenery, genuine alpha transparency, generous margin. 凯撒·加图索 Caesar Gattuso, young adult European man, long blond hair to shoulders swept back, confident blue eyes, proud composed smile, tall athletic silhouette. Tailored ivory suit jacket with black shirt and discreet gold buttons, fitted dark trousers, polished boots, black tactical gloves, holds elegant short hunting blade lowered safely. Leadership and wealth through impeccable tailoring, not medieval armor.",
+    "file": "caesar-portrait.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "nono",
+    "kind": "portrait",
+    "prompt": "Use case: stylized-concept. Transparent full-body character portrait for an unofficial Dragon Raja crossover story RPG. Premium detailed anime game illustration, restrained modern academy science-fiction clothing, painterly materials, clean facial anatomy, full figure head to boots visible, centered three-quarter standing pose, no text or logos, no background scenery, genuine alpha transparency, generous margin. 诺诺 Chen Motong, young adult Chinese woman, long vivid auburn red hair in high flowing ponytail, brown eyes, silver four-leaf-clover earrings. Alert mischievous confident expression. Dark green fitted academy blazer, white shirt, loosely knotted tie, black practical pleated skirt with opaque tights and ankle boots. One hand at earpiece, other holding small investigation notebook. Spirited analytical investigator, no fantasy staff, no magic ice.",
+    "file": "nono-portrait.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "lumingfei",
+    "kind": "portrait",
+    "prompt": "Use case: stylized-concept. Transparent full-body character portrait for an unofficial Dragon Raja crossover story RPG. Premium detailed anime game illustration, restrained modern academy science-fiction clothing, painterly materials, clean facial anatomy, full figure head to boots visible, centered three-quarter standing pose, no text or logos, no background scenery, genuine alpha transparency, generous margin. 路明非 Lu Mingfei, young adult Chinese man, messy short black hair, brown eyes, slightly nervous wry half-smile, slim ordinary build. Slightly rumpled dark green academy blazer, white shirt untucked a little, loose striped tie, charcoal trousers and worn sneakers, messenger bag and small emergency flashlight. Awkward but kind, one hand uncertainly clenched in resolve. No armor, no regal hero makeover.",
+    "file": "lumingfei-portrait.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "fingel",
+    "kind": "portrait",
+    "prompt": "Use case: stylized-concept. Asset type: polished anime story RPG standing portrait, full body head to boots visible, centered with margin, genuine transparent background and NO colored backdrop, no lettering, no logos. Consistent refined painterly anime linework, grounded modern clothing and practical equipment. 芬格尔 Fingel from Dragon Raja, unofficial fan interpretation. Tall broad-shouldered adult German male academy student, tousled ash blond hair, blue-grey eyes, faint stubble, sleepy irreverent grin that conceals competence. Loosely worn dark green blazer over dark hoodie and white shirt, rumpled charcoal pants, heavy sneakers, overstuffed messenger bag, tablet tucked under one arm. Stocky sturdy silhouette, no fantasy armor.",
+    "file": "fingel-portrait.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "zero",
+    "kind": "portrait",
+    "prompt": "Use case: stylized-concept. Asset type: polished anime story RPG standing portrait, full body head to boots visible, centered with margin, genuine transparent background and NO colored backdrop, no lettering, no logos. Consistent refined painterly anime linework, grounded modern clothing and practical equipment. 零 Zero from Dragon Raja, unofficial fan interpretation. Petite adult woman with neat pale blond bob, icy blue eyes, reserved almost expressionless face. White academy field coat over dark green fitted uniform, opaque black tactical leggings, flat practical boots, black gloves. Holds compact folded precision rifle lowered, muzzle toward ground. Controlled efficient pose, modest utilitarian clothing, no fanservice, no fantasy staff.",
+    "file": "zero-portrait.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "shenlan",
+    "kind": "portrait",
+    "prompt": "Use case: stylized-concept. Asset type: polished anime story RPG standing portrait, full body head to boots visible, centered with margin, genuine transparent background and NO colored backdrop, no lettering, no logos. Consistent refined painterly anime linework, grounded modern clothing and practical equipment. 沈岚 Shen Lan, ORIGINAL female scientist in her early thirties, East Asian, shoulder-length straight black hair tucked behind one ear, teal eyes behind thin rectangular glasses, calm tired determined expression. Ivory research coat over slate blue turtleneck and dark practical trousers, teal wrist sensor, compact medical drone hovering close to shoulder, small analysis tablet held at waist, low boots. Civilian scientist who accepts responsibility, understated rather than glamorous, science fiction fold-project equipment.",
+    "file": "shenlan-portrait.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "fangqing",
+    "kind": "portrait",
+    "prompt": "Use case: stylized-concept. Asset type: polished anime story RPG standing portrait, full body head to boots visible, centered with margin, genuine transparent background and NO colored backdrop, no lettering, no logos. Consistent refined painterly anime linework, grounded modern clothing and practical equipment. 方晴 Fang Qing, ORIGINAL young adult East Asian female communications technician and protagonist's old friend. Short dark brown bob with small copper hairpin, warm brown eyes, lively candid smile, bright orange utility jacket over cream T-shirt, charcoal cargo trousers, practical sneakers, lightweight headset microphone, shoulder radio and a coiled cable, holds a palm-size signal beacon. Grounded contemporary civilian style, approachable energetic posture, no fantasy armor.",
+    "file": "fangqing-portrait.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "chuzihang",
+    "kind": "portrait",
+    "prompt": "Use case: stylized-concept. Asset type: transparent full-body game character portrait for Chinese story RPG 绝不认书. Subject: 楚子航 Chu Zihang from Jiang Nan's Dragon Raja, unofficial original fan interpretation. Young adult East Asian man, short straight black hair, calm restrained expression, striking amber golden eyes, lean athletic build. Modern tailored black academy combat uniform, white shirt with loosened narrow tie, long dark coat with subtle red lining, simple black boots; holds a sheathed Japanese katana vertically beside his body, no oversized medieval armor. Crisp premium anime game illustration, refined face, painterly material shading, cool slate black palette and restrained ember accents. Entire figure from head to boots fully visible, upright relaxed three-quarter pose, centered, generous transparent margin, no text, no logo, no scenery, no extra figures. Real transparent background, polished production game cutout.",
+    "file": "chuzihang-portrait.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "chuzihang",
+    "kind": "battle",
+    "reference": "chuzihang-portrait.png",
+    "prompt": "Use case: style-transfer. Transform the supplied full-body portrait into ONE cute but serious 3D-style chibi tactical game miniature (a rendered sprite, not a model file). Preserve this exact person's face identity, hair color/style and uniform colors and equipment. 2.8-head-tall proportions, readable large head and compact full body, sturdy boots, high-quality cel-shaded toy-like volume, sharp silhouette. Three-quarter front view slightly from above, centered on square transparent canvas, entire character and equipment visible with generous margin. Holding katana in both hands in restrained combat-ready pose, small ember at blade. No ground, no pedestal, no scenery, no text, no duplicates, genuine transparent alpha. Keep a consistent modern academy strategy-game style.",
+    "file": "chuzihang-battle.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "caesar",
+    "kind": "battle",
+    "reference": "caesar-portrait.png",
+    "prompt": "Use case: style-transfer. Transform the supplied full-body portrait into ONE cute but serious 3D-style chibi tactical game miniature (a rendered sprite, not a model file). Preserve this exact person's face identity, hair color/style and uniform colors and equipment. 2.8-head-tall proportions, readable large head and compact full body, sturdy boots, high-quality cel-shaded toy-like volume, sharp silhouette. Three-quarter front view slightly from above, centered on square transparent canvas, entire character and equipment visible with generous margin. Hunting blade held low, proud forward stance. No ground, no pedestal, no scenery, no text, no duplicates, genuine transparent alpha. Keep a consistent modern academy strategy-game style.",
+    "file": "caesar-battle.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "nono",
+    "kind": "battle",
+    "reference": "nono-portrait.png",
+    "prompt": "Use case: style-transfer. Transform the supplied full-body portrait into ONE cute but serious 3D-style chibi tactical game miniature (a rendered sprite, not a model file). Preserve this exact person's face identity, hair color/style and uniform colors and equipment. 2.8-head-tall proportions, readable large head and compact full body, sturdy boots, high-quality cel-shaded toy-like volume, sharp silhouette. Three-quarter front view slightly from above, centered on square transparent canvas, entire character and equipment visible with generous margin. Investigative tactical stance, one hand to earpiece, notebook in other hand, no staff. No ground, no pedestal, no scenery, no text, no duplicates, genuine transparent alpha. Keep a consistent modern academy strategy-game style.",
+    "file": "nono-battle.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "lumingfei",
+    "kind": "battle",
+    "reference": "lumingfei-portrait.png",
+    "prompt": "Use case: style-transfer. Transform the supplied full-body portrait into ONE cute but serious 3D-style chibi tactical game miniature (a rendered sprite, not a model file). Preserve this exact person's face identity, hair color/style and uniform colors and equipment. 2.8-head-tall proportions, readable large head and compact full body, sturdy boots, high-quality cel-shaded toy-like volume, sharp silhouette. Three-quarter front view slightly from above, centered on square transparent canvas, entire character and equipment visible with generous margin. Protective nervous stance holding compact emergency shielding device, messenger bag. No ground, no pedestal, no scenery, no text, no duplicates, genuine transparent alpha. Keep a consistent modern academy strategy-game style.",
+    "file": "lumingfei-battle.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "fingel",
+    "kind": "battle",
+    "reference": "fingel-portrait.png",
+    "prompt": "Use case: style-transfer. Transform the supplied full-body portrait into ONE cute but serious 3D-style chibi tactical game miniature (rendered sprite). Preserve exact person's face identity, hair color/style and clothing and equipment. 2.8-head-tall proportions, readable large head, compact full body, sturdy footwear, high-quality cel-shaded volume, sharp silhouette. Three-quarter front view slightly from above, centered square transparent canvas, entire character and equipment visible with margin. A sturdy broad-shouldered miniature, holding a tablet and deploying a small portable cover shield, sleepy irreverent face. No ground, pedestal, scenery, text or extra figures. Genuine alpha transparency. Same modern academy strategy-game style.",
+    "file": "fingel-battle.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "zero",
+    "kind": "battle",
+    "reference": "zero-portrait.png",
+    "prompt": "Use case: style-transfer. Transform the supplied full-body portrait into ONE cute but serious 3D-style chibi tactical game miniature (rendered sprite). Preserve exact person's face identity, hair color/style and clothing and equipment. 2.8-head-tall proportions, readable large head, compact full body, sturdy footwear, high-quality cel-shaded volume, sharp silhouette. Three-quarter front view slightly from above, centered square transparent canvas, entire character and equipment visible with margin. A petite precision specialist holding her compact rifle lowered, very calm controlled stance. No ground, pedestal, scenery, text or extra figures. Genuine alpha transparency. Same modern academy strategy-game style.",
+    "file": "zero-battle.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "shenlan",
+    "kind": "battle",
+    "reference": "shenlan-portrait.png",
+    "prompt": "Use case: style-transfer. Transform the supplied full-body portrait into ONE cute but serious 3D-style chibi tactical game miniature (rendered sprite). Preserve exact person's face identity, hair color/style and clothing and equipment. 2.8-head-tall proportions, readable large head, compact full body, sturdy footwear, high-quality cel-shaded volume, sharp silhouette. Three-quarter front view slightly from above, centered square transparent canvas, entire character and equipment visible with margin. A scientist holding her analysis tablet with small medical drone hovering beside her shoulder, gentle professional expression. No ground, pedestal, scenery, text or extra figures. Genuine alpha transparency. Same modern academy strategy-game style.",
+    "file": "shenlan-battle.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  },
+  {
+    "id": "fangqing",
+    "kind": "battle",
+    "reference": "fangqing-portrait.png",
+    "prompt": "Use case: style-transfer. Transform the supplied full-body portrait into ONE cute but serious 3D-style chibi tactical game miniature (rendered sprite). Preserve exact person's face identity, hair color/style and clothing and equipment. 2.8-head-tall proportions, readable large head, compact full body, sturdy footwear, high-quality cel-shaded volume, sharp silhouette. Three-quarter front view slightly from above, centered square transparent canvas, entire character and equipment visible with margin. A communications technician holding signal beacon and touching headset, energetic stance. No ground, pedestal, scenery, text or extra figures. Genuine alpha transparency. Same modern academy strategy-game style.",
+    "file": "fangqing-battle.png",
+    "generator": "built-in image_gen",
+    "transparent_background": true
+  }
+]

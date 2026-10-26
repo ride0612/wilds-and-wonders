@@ -69,7 +69,7 @@ for(const [offset,c] of EXPANDED_STORY.entries()){
  STAGE_TEXT.push([c.name[1],c.name[2]]);CINEMA_SCENES.push(c.scene);CINEMA_PARTNERS.push(c.partner);
  CINEMA_EXCHANGES.push({before:[c.p,c.b],after:[c.p,c.a]});PROTAGONIST_LINES.push({before:c.you,after:c.you});
  for(const [locale,n] of [['zh',0],['en',1],['ja',2]]){
-  const goal=c.defense?['守住归航核心，抵挡全部来袭波次。首次通关奖励 10 招募券。','Protect the core through every wave. First clear: 10 tickets.','全ウェーブからコアを守る。初回報酬：募集券10枚。'][n]:['击败拦路守卫，继续调查。首次通关奖励 10 招募券。','Defeat the sentries and continue the investigation. First clear: 10 tickets.','守衛を倒して調査を進める。初回報酬：募集券10枚。'][n];
+  const goal=c.defense?['守住归航核心，抵挡全部来袭波次。','Protect the core through every wave.','全ウェーブからコアを守る。'][n]:['击败拦路守卫，继续调查。','Defeat the sentries and continue the investigation.','守衛を倒して調査を進める。'][n];
   STORY[locale].push({speaker:c.speaker,goal,before:{title:String(i+1).padStart(2,'0')+' / '+c.name[n],text:c.before[n],line:c.b[n]},after:{title:String(i+1).padStart(2,'0')+' / '+['回响','Aftermath','残響'][n],text:c.after[n],line:c.a[n]}});
  }
 }
@@ -77,7 +77,7 @@ Object.assign(TEXT,{
  chapterTwo:['第二章 · 借来的明天','CHAPTER II · BORROWED TOMORROWS','第二章・借りた明日'],chapterTwoDesc:['北行夜车开往一座借用明天的城市。被抹去的契约条款，藏着另一种选择。','A night train leads to a city borrowing its tomorrows. Erased clauses conceal another choice.','夜行列車は明日を借りる街へ。消えた条項に、別の選択が隠れる。'],
  chapterThree:['第三章 · 无名者之庭','CHAPTER III · THE NAMELESS COURT','第三章・名なき者の庭'],chapterThreeDesc:['回到学院，直面以保护为名的囚笼。把名字、真相与选择还给每一个人。','Return to an academy imprisoned by protection. Give its people their names, truth and choices back.','保護の檻となった学院へ。名と真実と選択を皆へ返す。'],
  chapterFour:['第四章 · 群星归航','CHAPTER IV · THE STARLIT RETURN','第四章・星々の帰還'],chapterFourDesc:['驶向原初灯塔，与同伴一起改写独自牺牲的契约，写下寄往黎明的回信。','Sail to the First Lighthouse, end the lonely contract and write a reply to the dawn.','原初の灯台へ。孤独な契約を終え、夜明けへの返事を書く。'],
- chapterModes:['5 关 / 出征与防守 / 战前战后过场','5 stages / Expedition & defense / Before & after scenes','全5戦・出征と防衛・戦前戦後の物語'],clearedCount:['已通关 {n} / 20','{n} / 20 stages cleared','クリア {n} / 20'],completed:['群星归航 · 四章完成','Home by starlight · Four chapters complete','星々の帰還・全四章クリア'],relicCount:['已收集 {n} 份行动记录','{n} mission records','任務記録 {n} 件'],guide4:['四章共 20 关。外出调查采用自走棋；据点遇袭采用塔防。每关首次通关赠送 10 招募券，已读剧情可在扩展菜单的剧情回看中重播。','Four chapters, 20 stages. Expeditions use auto chess; base attacks use tower defense. Each first clear grants 10 tickets. Replay scenes in More → Story replay.','全四章20戦。出征はオートチェス、拠点襲撃は防衛。初回クリアで募集券10枚。「その他」の回想で物語を再生。']
+ chapterModes:['5 关 / 出征与防守 / 战前战后过场','5 stages / Expedition & defense / Before & after scenes','全5戦・出征と防衛・戦前戦後の物語'],clearedCount:['已通关 {n} / 20','{n} / 20 stages cleared','クリア {n} / 20'],completed:['群星归航 · 四章完成','Home by starlight · Four chapters complete','星々の帰還・全四章クリア'],relicCount:['已收集 {n} 份行动记录','{n} mission records','任務記録 {n} 件'],guide4:['四章共 20 关。外出调查采用自走棋；据点遇袭采用塔防。已读剧情可在扩展菜单的剧情回看中重播。','Four chapters, 20 stages. Expeditions use auto chess; base attacks use tower defense. Replay scenes in More → Story replay.','全四章20戦。出征はオートチェス、拠点襲撃は防衛。「その他」の回想で物語を再生。']
 });
 CAMPAIGN_CATALOG.splice(0,CAMPAIGN_CATALOG.length,...['red-tide','white-bell','nameless-court','starlit-return'].map((id,i)=>({id,title:['chapterRedTide','chapterTwo','chapterThree','chapterFour'][i],subtitle:['chapterRedTideDesc','chapterTwoDesc','chapterThreeDesc','chapterFourDesc'][i],available:true,start:i*5,stages:STAGES.slice(i*5,i*5+5),emblem:['Ⅰ','Ⅱ','Ⅲ','Ⅳ'][i]})));
 function renderCampaignLibrary(){

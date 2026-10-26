@@ -42,3 +42,31 @@ assert.equal(run('dimensionState.bookmarks["19:after"]'),undefined);
 run("dimensionState=freshDimensionState();dimensionState.bookmarks['19:after']=30;dismissCinematic();dimensionState.bookmarks['19:after']=30;openStory(19,'after','advance')");assert.equal(run('cinema.shot'),run("cinematicShots(19,'after').findIndex(s=>s.choice)"),'stale checkpoint cannot bypass invitation');
 console.log('PASS: real HTML IDs, scripts, localization keys, 20 scenes, save isolation, reading resume, 3 distinct endings, choice lock, skip/auto guard, cargo and persistence');
 
+// Exercise the actual loaded page: removing the feature must not leave hidden APIs or dependencies.
+const scripts=[...html.matchAll(/<script src="([^"]+)"/g)].map(m=>m[1]);
+assert.ok(!scripts.some(p=>/gacha|account/.test(p)));
+assert.ok(!/id="(?:gacha|draw|inventory-weapons)/.test(html));
+assert.equal(run('typeof performDraw'),'undefined');assert.equal(run('typeof accountApi'),'undefined');
+assert.equal(run('OWNED_HEROES.length'),8);
+const cast=run('HEROES.map(h=>({id:h.id,name:h.name,portrait:characterImage(h.id),battle:characterImage(h.id,"chibi")}))');
+assert.deepEqual(Array.from(cast,h=>h.name),['芬格尔','方晴','楚子航','沈岚','凯撒','诺诺','路明非','零']);
+for(const h of cast){
+ assert.ok(run('DIMENSION_STORY.some(s=>[...s.before,...s.after].some(l=>l.speaker==='+JSON.stringify(h.name)+'))'),'story appearance: '+h.name);
+ for(const p of [h.portrait,h.battle]){const b=fs.readFileSync(p);assert.equal(b.subarray(1,4).toString(),'PNG');assert.equal(b[25],6,'RGBA PNG: '+p);}
+ assert.equal(run('DIMENSION_ACTORS['+JSON.stringify(h.name)+'].hero'),h.id);
+}
+for(const language of ['zh','en','ja']){
+ run('language='+JSON.stringify(language)+';setLanguage(language);renderMusicControls()');
+ for(const h of cast)assert.ok(!/Guardian|Mage|Hunter|Healer|骑士|卫士/.test(run('heroText(def('+JSON.stringify(h.id)+')).name')));
+}
+run("storageBefore=JSON.stringify(profileSnapshot());localStorage.setItem('never-yield.fold-01.collection.v1',JSON.stringify({tickets:99999,equipment:{oak:'crescent'}}));saveProfile();loadProfile()");
+assert.equal(run('JSON.stringify(profileSnapshot())'),run('storageBefore'),'cast refresh preserves story progress');
+assert.equal(run("createUnit('oak','blue',1,3).atk"),run("def('oak').atk"),'retired weapon cannot alter stats');
+run("openStory(7,'before','read');cinema.shot=cinematicShots(7,'before').findIndex(s=>s.speaker==='凯撒');renderCinematic()");
+assert.equal(run("$('#cinema-left').src"),'assets/cast/caesar-portrait.png');assert.equal(run("$('#cinema-left').hidden"),false);
+assert.equal(run("$('#cinema-contact').hidden"),true);run('dismissCinematic()');
+// Render branch checks catch missing motion data and accidental aspect-ratio distortion.
+run("for(const key of ['save','restore','translate','rotate','beginPath','ellipse','fill','stroke','moveTo','lineTo','closePath','fillText','quadraticCurveTo'])ctx[key]=()=>{};ctx.drawImage=(image,x,y,w,h)=>{if(![x,y,w,h].every(Number.isFinite)||Math.abs(w/h-image.naturalWidth/image.naturalHeight)>1e-8)throw Error('sprite dimensions')};");
+for(const h of cast){run('CHARACTER_SPRITES['+JSON.stringify(h.id)+']={complete:true,naturalWidth:1024,naturalHeight:1280};drawMiniature(createUnit('+JSON.stringify(h.id)+',"blue",1,4),{x:100,y:200});drawSkillFx({hero:'+JSON.stringify(h.id)+',sx:1,sy:4,color:"#d1a580"},{x:100,y:200},.5)');}
+console.log('PASS: all eight cast assets and story appearances, no draw UI/API, old-save compatibility, localization, music controls, dialogue portraits and battle rendering');
+

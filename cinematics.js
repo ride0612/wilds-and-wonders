@@ -35,8 +35,8 @@ function renderCinematic(){
  $('#cinema-progress').textContent=String(cinema.shot+1).padStart(2,'0')+' / '+String(shots.length).padStart(2,'0');
  $('#story-speaker').textContent=dimensionActorName(shot.speaker);
  const actorId=shot.speaker&&shot.speaker!=='protagonist'?shot.speaker:c.speaker,actor=DIMENSION_ACTORS[actorId];
- $('#cinema-left').hidden=true;
- const card=$('#cinema-contact');card.hidden=!actor;
+ const left=$('#cinema-left');left.hidden=!actor?.hero;if(actor?.hero){left.src=characterImage(actor.hero);left.alt=actorId;left.classList.toggle('speaking',shot.speaker===actorId);}
+ const card=$('#cinema-contact');card.hidden=!actor||!!actor.hero;
  if(actor){card.style.setProperty('--contact-color',actor.color);$('#cinema-contact-mark').textContent=actor.mark;$('#cinema-contact-name').textContent=actorId;$('#cinema-contact-role').textContent=actor.role;card.classList.toggle('speaking',shot.speaker===actorId);}
  const portrait=$('#cinema-right');portrait.src=protagonistImage(protagonist||'male');portrait.alt=protagonistName();portrait.classList.toggle('speaking',shot.speaker==='protagonist');
  $('#story-dialogue').textContent=shot.text.slice(0,Math.floor(cinema.chars));

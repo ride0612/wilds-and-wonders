@@ -1,4 +1,4 @@
-/* Long-form story and crossing manifest. Named NPCs use contact cards, not reused character portraits. */
+/* Long-form story and crossing manifest. Story actors use their dedicated portraits; unknown signals retain contact cards. */
 #cinema-contact{position:absolute;left:4%;top:10%;width:min(34vw,390px);min-height:280px;display:flex;flex-direction:column;justify-content:center;padding:28px 32px;border-left:2px solid var(--contact-color,#c5d1e0);background:linear-gradient(120deg,#0c1b2de8,#152638b5);color:var(--contact-color,#c5d1e0);opacity:.65;transition:opacity .25s}
 #cinema-contact[hidden]{display:none}#cinema-contact.speaking{opacity:1}
 #cinema-contact small{font-size:10px;letter-spacing:3px}#cinema-contact-mark{font-size:92px;font-weight:200;line-height:1.4;opacity:.6}#cinema-contact-name{font-size:30px;letter-spacing:8px}#cinema-contact-role{font-size:13px;line-height:1.8;color:#d6dee8;margin-top:14px}

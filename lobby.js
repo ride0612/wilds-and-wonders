@@ -1,6 +1,6 @@
 'use strict';
 const SAVE_KEY='never-yield.fold-01.profile.v2';
-const OWNED_HEROES=ACCOUNT_ENABLED?[...GACHA_DATA.starter]:HEROES.map(h=>h.id);
+const OWNED_HEROES=HEROES.map(h=>h.id);
 // Stable appearance IDs keep saved selections compatible with future 3D or layered art.
 const APPEARANCES=Object.fromEntries(HEROES.map(h=>[h.id,[{id:'base',nameKey:'baseSkin',image:characterImage(h.id)}]]));
 let currentView='lobby',displayHero='oak',cleared=[],skinByHero={},storyScene=null,profileReady=false,storageAvailable=true;
@@ -31,15 +31,15 @@ function loadProfile(incoming){
 }
 function profileSnapshot(){return {version:2,dimension:dimensionState,protagonist,featureProtagonist,presentation:presentationSettings,language,displayHero,skinByHero,lineup,defensePositions,stage,cleared,result:mode==='win'?battleResult:null};}
 function saveProfile(){
- if(!profileReady||(ACCOUNT_ENABLED&&(!accountUser||accountLoading||!accountReady)))return;
+ if(!profileReady)return;
  const snapshot=profileSnapshot();
- try{localStorage.setItem(ACCOUNT_ENABLED?'wilds.account.cache.'+accountUser.id:SAVE_KEY,JSON.stringify(snapshot));storageAvailable=true;}
+ try{localStorage.setItem(SAVE_KEY,JSON.stringify(snapshot));storageAvailable=true;}
  catch{storageAvailable=false;}
- $('#storage-warning').hidden=storageAvailable;queueAccountSave(snapshot);
+ $('#storage-warning').hidden=storageAvailable;
 }
 function setLanguage(locale){
  if(!['zh','en','ja'].includes(locale))return;
- language=locale;localizePage();renderUI();renderLog();renderLobby();renderJournal();renderCampaignLibrary();if(storyScene)renderStory();if($('#protagonist-dialog').open)renderProtagonistPicker();renderAccount();renderGacha();renderMusicControls();saveProfile();
+ language=locale;localizePage();renderUI();renderLog();renderLobby();renderJournal();renderCampaignLibrary();if(storyScene)renderStory();if($('#protagonist-dialog').open)renderProtagonistPicker();renderMusicControls();saveProfile();
 }
 function showView(view){
  currentView=view;
@@ -58,13 +58,13 @@ function renderLobby(){
  const h=heroText(def(displayHero)),design=CHARACTER_DESIGNS[h.id];
  $('.showcase').style.setProperty('--hero-color',design.tone);
  $('#display-role').textContent=h.role;$('#display-name').textContent=h.name;$('#display-quote').textContent=h.quote;
- $('#display-stars').textContent=starText(h.id);$('#display-stars').setAttribute('aria-label',tr('rarity',{n:h.stars}));$('#display-personality').textContent=characterText(h.id,'personality');
+ $('#display-stars').textContent=starText(h.id);$('#display-stars').setAttribute('aria-label',starText(h.id));$('#display-personality').textContent=characterText(h.id,'personality');
  const skins=APPEARANCES[h.id],skin=skins.find(s=>s.id===skinByHero[h.id])||skins[0];
  $('#skin-select').innerHTML=skins.map(s=>'<option value="'+s.id+'">'+tr(s.nameKey)+'</option>').join('');$('#skin-select').value=skin.id;
  $('#appearance-count').textContent=tr('appearanceCount',{n:skins.length});
  const art=$('#display-art');if(art.dataset.hero!==h.id){art.innerHTML='<img class="featured-portrait" src="'+skin.image+'" alt="'+h.name+'">';art.dataset.hero=h.id;}
  $('#collection-art').src=skin.image;$('#collection-art').alt=h.name;
- $('#display-profile').innerHTML='<div class="rarity-stars">'+starText(h.id)+'</div><h2>'+h.name+'</h2><p class="dossier-role">'+h.role+'</p><div class="tags">'+heroTags(h)+'</div><h3>'+characterText(h.id,'personality')+'</h3><p>'+characterText(h.id,'bio')+'</p><div class="dossier-skill"><b>✧ '+h.skill+'</b><p>'+h.desc+'</p></div>'+(h.stars===6?'<div class="six-star-note">'+tr('ultimateTalent')+'</div>':'');
+ $('#display-profile').innerHTML='<div class="rarity-stars">'+starText(h.id)+'</div><h2>'+h.name+'</h2><p class="dossier-role">'+h.role+'</p><div class="tags">'+heroTags(h)+'</div><h3>'+characterText(h.id,'personality')+'</h3><p>'+characterText(h.id,'bio')+'</p><div class="dossier-skill"><b>✧ '+h.skill+'</b><p>'+h.desc+'</p></div>'+(h.cinematic?'<div class="six-star-note">'+tr('ultimateTalent')+'</div>':'');
  $('#destination-name').textContent=tr(CAMPAIGN_CATALOG[Math.floor(stage/5)].title);$('#hall-progress').textContent=cleared.length===STAGES.length?tr('completed'):tr('clearedCount',{n:cleared.length});
  $('#owned-count').textContent=tr('ownedRoster',{n:OWNED_HEROES.length});$('#relic-summary').textContent=tr('relicCount',{n:cleared.length});
  $('#collection').innerHTML=HEROES.map(h=>h.id).map(id=>{const hero=heroText(def(id));return '<button '+(!OWNED_HEROES.includes(id)?'disabled':'')+' class="collection-card '+(!OWNED_HEROES.includes(id)?'locked':id===displayHero?'active':'')+'" data-display="'+id+'" aria-pressed="'+(id===displayHero)+'"><span class="collection-thumb"><img src="'+characterImage(id)+'" alt=""></span><span class="collection-info"><span class="rarity-stars">'+starText(id)+'</span><strong>'+hero.name+'</strong><small>'+tr(!OWNED_HEROES.includes(id)?'lockedCharacter':id===displayHero?'displayed':'owned')+'</small></span></button>';}).join('');
@@ -100,6 +100,6 @@ $('#story-recap').onclick=()=>openStory(stage,'before','read');$('#story-next').
 $('#story-dismiss').onclick=()=>{$('#story-dialog').close();storyScene=null;};$('#story-dialog').addEventListener('cancel',()=>{storyScene=null;});
 $('#journal-open').onclick=()=>{closeUtilityDialogs();renderJournal();$('#journal-dialog').showModal();};$('#journal-close').onclick=()=>$('#journal-dialog').close();
 $('#journal-entries').addEventListener('click',e=>{const button=e.target.closest('[data-journal]');if(button&&!button.disabled){$('#journal-dialog').close();openStory(Number(button.dataset.journal),button.dataset.part,'read');}});
-initLocalCollection();const restoredResult=loadProfile();localizePage();prepare();
+const restoredResult=loadProfile();localizePage();prepare();
 if(restoredResult){mode='win';battleResult=restoredResult;if(siege){siege.core=restoredResult.core;siege.leaks=restoredResult.leaks;siege.wave=siege.total;}renderUI();}
-profileReady=true;showView('lobby');$('#storage-warning').hidden=storageAvailable;initCampaign();initPresentation();initCinematics();initProtagonist();initGacha();initMusic();initDimension();requestAnimationFrame(frame);
+profileReady=true;showView('lobby');$('#storage-warning').hidden=storageAvailable;initCampaign();initPresentation();initCinematics();initProtagonist();initMusic();initDimension();requestAnimationFrame(frame);

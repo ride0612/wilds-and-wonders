@@ -7,8 +7,11 @@ const DIMENSION_ACTORS={
  '诺诺':{role:'龙族世界 · 调查协作者',mark:'诺',color:'#e49b91'},
  '楚子航':{role:'龙族世界 · 行动协作者',mark:'楚',color:'#d4b782'},
  '芬格尔':{role:'龙族世界 · 情报协作者',mark:'芬',color:'#b8acd8'},
+ '凯撒':{role:'龙族世界 · 外围行动领队',mark:'凯',color:'#e3c78c'},
+ '零':{role:'龙族世界 · 观测与精密支援',mark:'零',color:'#bbd1df'},
  '回声':{role:'寂蚀群 · 伪造信号',mark:'∅',color:'#b4b4c0'}
 };
+for(const [id,c] of Object.entries(STORY_CAST))if(DIMENSION_ACTORS[c.name])DIMENSION_ACTORS[c.name].hero=id;
 const RETURN_COMPANIONS={
  lmingfei:{name:'路明非',summary:'愿意来看看另一个世界；不安会说出口，也会留意身边被忽略的人。',condition:'固定休息、独立生活、可以拒绝任务、保留返程。',
  accept:'愿意。不过先说好，我可能还是会紧张，会说不合时宜的笑话。你不需要为了邀请我，假装这些毛病突然都变成了优点。我们就从去看看那棵树开始。',
@@ -97,8 +100,8 @@ Object.assign(TEXT,{
  protagonistSubtitle:['你来自现代平行世界。故事，从一道没有被写下的门开始。','A young traveler from a parallel modern Earth.','現代の平行世界から来た若い旅人。'],protagonistRole:['折页计划 · 次元行者','Fold Project · Wayfarer','折頁計画・次元の旅人'],protagonistUniform:['行者形象','Wayfarer portrait','旅人の姿'],protagonistUniformDesc:['你的现实身份是年轻的普通人。所选形象用于大厅和剧情演出。','Your portrait represents a young civilian in the lobby and story.','若い一般人としての、ロビーと会話の表示用の姿です。'],
  storyButton:['次元远征','DIMENSION STORY','次元遠征'],completed:['第一章任务完成 · 可回看归航结尾','Chapter 1 cleared · Replay the return','第一章クリア・帰還の結末を再生'],clearedCount:['第一章 {n} / 20','Chapter 1 · {n} / 20','第一章 {n} / 20'],nextChapter:['前往下一节 →','Next scene →','次の節へ →'],backCamp:['返回现实锚站 →','Return to reality →','現実の拠点へ →'],finalVictory:['归航之路已开启','The way home is open','帰還の道が開いた'],
  guide4:['第一章含现实救援与龙族世界原创调查，共 20 关。战前战后可阅读长篇中文对话、查看台词记录；章末邀请一位同行者并归航。进度与阅读位置自动保存。','20 encounters with Chinese story scenes, reading checkpoints and a final companion choice. Progress saves locally.','全20戦。中国語の長編会話、読書位置の保存、章末の同行者選択に対応。'],
- ownedRoster:['战术投影 {n} / 8','Tactical echoes {n} / 8','戦術投影 {n} / 8'],collectionSubtitle:['折页计划的八种战术投影','Eight tactical echo templates','折頁計画の八つの戦術投影'],relicCount:['行动记录 {n} 份 · 查看携行舱','{n} records · Crossing manifest','記録{n}件・携行品'],
- allCharacters:['战术投影','TACTICAL ECHOES','戦術投影'],summon:['投影招募','ECHO RECRUITMENT','投影募集'],summonSubtitle:['投影与装备补给','Echoes & equipment','投影と装備の補給'],footer:['读过故事，仍要亲自选择。','Read the story. Make your own choices.','物語を読み、自分で選ぶ。']
+ ownedRoster:['八位剧情角色 · 全部可用','Eight story characters · All available','物語の8人・全員使用可能'],collectionSubtitle:['现实与次元世界的协作者','Allies across two worlds','二つの世界の協力者'],relicCount:['行动记录 {n} 份 · 查看携行舱','{n} records · Crossing manifest','記録{n}件・携行品'],
+ allCharacters:['剧情角色','STORY CAST','物語の人物'],footer:['读过故事，仍要亲自选择。','Read the story. Make your own choices.','物語を読み、自分で選ぶ。']
 });
 DIMENSION_ACTS.forEach(([title,desc],i)=>{TEXT['dimensionAct'+i]=[title,title,title];TEXT['dimensionActDesc'+i]=[desc,desc,desc];});
 CAMPAIGN_CATALOG.splice(0,CAMPAIGN_CATALOG.length,...DIMENSION_ACTS.map((_,i)=>({id:'fold-act-'+i,title:'dimensionAct'+i,subtitle:'dimensionActDesc'+i,start:i*5,stages:STAGES.slice(i*5,i*5+5),available:true,emblem:['序','遇','证','归'][i]})));

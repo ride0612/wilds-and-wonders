@@ -4,10 +4,10 @@ const STORY_RELICS=[['relicLetter','relicLetterDesc','✉'],['relicKey','relicKe
 let ultimateQueue=[],ultimateActive=null;
 const ultimateSeen=new Set();
 function resetUltimateBattle(){clearUltimate();ultimateSeen.clear();}
-function closeUtilityDialogs(){for(const id of ['extensions-dialog','collection-dialog','inventory-dialog','gacha-dialog'])if($('#'+id).open)$('#'+id).close();}
+function closeUtilityDialogs(){for(const id of ['extensions-dialog','collection-dialog','inventory-dialog'])if($('#'+id).open)$('#'+id).close();}
 function openUtilityDialog(id){closeUtilityDialogs();$('#'+id).showModal();}
 function renderInventory(){
- renderWeapons();renderDimensionArchive();
+ renderDimensionArchive();
  $('#inventory-items').innerHTML=cleared.length?STAGES.map((s,i)=>{if(!cleared.includes(i))return '';const relic=STORY_RELICS[i];return `<article class="relic-card"><span>${relic?relic[2]:s.icon}</span><small>ACT ${String(i+1).padStart(2,'0')}</small><h3>${relic?tr(relic[0]):stageName(i)}</h3><p>${relic?tr(relic[1]):chapterText(i).after.line}</p></article>`;}).join(''):`<p class="inventory-empty">${tr('relicEmpty')}</p>`;
  $('#inventory-skins').innerHTML=OWNED_HEROES.map(id=>`<div class="owned-skin"><img src="${characterImage(id)}" alt=""><span>${heroText(def(id)).name}<small>${tr('baseSkin')}</small></span></div>`).join('');
 }
@@ -36,7 +36,7 @@ function startNextUltimate(){
  overlay.classList.remove('playing');void overlay.offsetWidth;overlay.classList.add('playing');
 }
 function triggerUltimate(u){
- if(u.stars!==6||!presentationSettings.effects||typeof currentView==='undefined'||currentView!=='adventure')return;
+ if(!u.cinematic||!presentationSettings.effects||typeof currentView==='undefined'||currentView!=='adventure')return;
  // Only the first cast of each character and team in this encounter gets a cut-in.
  const key=u.team+':'+u.id;if(ultimateSeen.has(key))return;ultimateSeen.add(key);
  ultimateQueue.push({id:u.id,team:u.team});startNextUltimate();

@@ -26,7 +26,7 @@ function renderProtagonistPicker(){
 
  $('#protagonist-confirm').textContent=tr(protagonist?'protagonistApply':'protagonistConfirm');
  $('#protagonist-selection').textContent=pendingProtagonist?protagonistName(pendingProtagonist):tr('protagonistChoose');
- $('#protagonist-close').hidden=!protagonist||(ACCOUNT_ENABLED&&!accountName);
+ $('#protagonist-close').hidden=!protagonist;
 }
 function openProtagonistPicker(){
  if(mode==='fight'){paused=true;renderUI();}
@@ -47,9 +47,9 @@ function initProtagonist(){
  for(const id of PROTAGONISTS)$('#protagonist-'+id).onclick=()=>{pendingProtagonist=id;renderProtagonistPicker();};
  $('#protagonist-confirm').onclick=confirmProtagonist;
  $('#protagonist-open').onclick=openProtagonistPicker;
- $('#protagonist-close').onclick=()=>{if(protagonist&&(!ACCOUNT_ENABLED||accountName))$('#protagonist-dialog').close();};
- $('#protagonist-dialog').addEventListener('cancel',e=>{if(!protagonist||(ACCOUNT_ENABLED&&!accountName))e.preventDefault();});
+ $('#protagonist-close').onclick=()=>{if(protagonist&&true)$('#protagonist-dialog').close();};
+ $('#protagonist-dialog').addEventListener('cancel',e=>{if(!protagonist)e.preventDefault();});
  $('#protagonist-language').onchange=e=>setLanguage(e.target.value);
 
- if(!ACCOUNT_ENABLED&&!protagonist)openProtagonistPicker();
+ if(!protagonist)openProtagonistPicker();
 }

@@ -1,7 +1,7 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 function element(){return {innerHTML:'',textContent:'',hidden:true,children:[],disabled:false,dataset:{},style:{setProperty(){}},classList:{toggle(){},add(){},remove(){},contains(){return false}},setAttribute(){},querySelector(){return element()},focus(){},addEventListener(){},prepend(p){this.children.unshift(p)},append(){},get lastChild(){return {remove:()=>this.children.pop()}},getContext(){return {}},showModal(){this.open=true},close(){this.open=false}}}
 const nodes=new Map(),storage=new Map();const context=vm.createContext({console,window:{scrollTo(){}},localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)},document:{body:element(),documentElement:{},querySelectorAll(){return []},querySelector(s){if(!nodes.has(s))nodes.set(s,element());return nodes.get(s)},createElement:element,createTextNode:s=>s},requestAnimationFrame(){}});
-for(const file of ['gacha-data.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','campaign.js','presentation.js','protagonist.js','cinematics.js','account.js','gacha.js','campaign-expansion.js','skill-fx.js','music.js','dimension-story.js','dimension.js','lobby.js'])vm.runInContext(fs.readFileSync(file,'utf8'),context);
+for(const file of ['localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','campaign.js','presentation.js','protagonist.js','cinematics.js','campaign-expansion.js','skill-fx.js','music.js','dimension-story.js','dimension.js','lobby.js'])vm.runInContext(fs.readFileSync(file,'utf8'),context);
 const run=s=>vm.runInContext(s,context);
 assert.equal(run("$('#protagonist-dialog').open"),true);
 assert.equal(run("$('#protagonist-confirm').disabled"),true);
@@ -68,18 +68,18 @@ run("mode='fight';showCampaignLibrary();const libraryTime=elapsed;tick(1)");
 assert.equal(run('paused&&elapsed===libraryTime'),true);
 
 console.log('PASS: wave gates, core destruction, stationary defense, legal pads, swaps, saved formations, projection and chapter locks');
-assert.equal(run('HEROES.every(h=>[4,5,6].includes(h.stars))'),true);
-assert.equal(run('HEROES.filter(h=>h.stars===6).length'),2);
+assert.equal(run('HEROES.every(h=>h.stars===0)'),true);
+assert.equal(run('HEROES.filter(h=>h.cinematic).length'),3);
 run("showView('adventure');stage=0;prepare();mode='fight';clearUltimate();cast(units.find(u=>u.id==='knight'&&u.team==='blue'),alive('red')[0])");
 assert.equal(run('ultimateActive.id'),'knight');assert.equal(run("$('#ultimate-overlay').hidden"),false);
 run("triggerUltimate(createUnit('moon','blue',1,4))");assert.equal(run('ultimateQueue.length'),1);
 run('tickPresentation(3.3)');assert.equal(run('ultimateActive.id'),'moon');
 run('paused=true;tickPresentation(2)');assert.equal(run('ultimateActive.time'),0);
 run('paused=false;tickPresentation(3.3)');assert.equal(run('ultimateActive'),null);
-run("triggerUltimate(createUnit('ember','blue',1,4))");assert.equal(run('ultimateActive'),null);
+run("triggerUltimate(createUnit('sage','blue',1,4))");assert.equal(run('ultimateActive'),null);
 run("presentationSettings.effects=false;triggerUltimate(createUnit('knight','blue',1,4));saveProfile();presentationSettings.effects=true;loadProfile()");assert.equal(run('presentationSettings.effects'),false);
 run('presentationSettings.effects=true;prepare()');assert.equal(run('ultimateQueue.length'),0);
-console.log('PASS: character rarities, six-star cast trigger, simultaneous cast queue, pause, lower rarity effects and saved cinematic preference');
+console.log('PASS: story cast, signature cast trigger, simultaneous cast queue, pause, support effects and saved cinematic preference');
 
 run("showView('adventure');stage=0;prepare();mode='fight';triggerUltimate(createUnit('knight','blue',1,4));triggerUltimate(createUnit('knight','blue',1,4))");
 assert.equal(run('ultimateQueue.length'),0);
@@ -113,35 +113,17 @@ for(const locale of ['zh','en','ja']){run(`language='${locale}';openStory(0,'bef
 run("localStorage.setItem(SAVE_KEY,JSON.stringify({version:2,protagonist:'bad',stage:2,cleared:[0,1]}));loadProfile()");assert.equal(run('protagonist'),null);assert.equal(run('stage'),2);assert.equal(run('cleared.length'),2);
 console.log('PASS: explicit protagonist choice, both variants, save/reload, old-save migration, progress retention and story portraits under three UI locales');
 
-// The starting duo must clear the opener even before using the free recruitment tickets.
+// A two-person formation can still clear the opener.
 run("lineup=[{id:'oak',x:2,y:3},{id:'arrow',x:1,y:5}];stage=0;prepare();mode='fight';for(let k=0;k<2401&&mode==='fight';k++)tick(.05)");
 assert.equal(run('mode'),'win','starter duo opener');
-// Every possible worst-case limited pool collection (duo, Moon, one five-star) remains playable.
+// Each tested four-person formation remains playable across all encounters.
 for(const five of ['ember','sage','frost','warden'])for(let i=0;i<20;i++){
  run(`lineup=[{id:'oak',x:2,y:3},{id:'${five}',x:5,y:4},{id:'arrow',x:1,y:5},{id:'moon',x:3,y:5}];defensePositions={};stage=${i};prepare();mode='fight';for(let k=0;k<3601&&mode==='fight';k++)tick(.05)`);
  assert.equal(run('mode'),'win',five+' minimum collection stage '+(i+1));
 }
-console.log('PASS: starter duo and all 80 worst-case limited collection encounters');
+console.log('PASS: starter duo and all 80 four-person formation encounters');
 
-(async()=>{
- assert.equal(run('ACCOUNT_ENABLED'),false);
- assert.equal(run("$('#account-dialog').open===true"),false);
- run("initLocalCollection();collectionState.tickets=60;collectionState.pity['limited-weapon']={six:59,five:9}");
- const draw=await run("accountApi('draw','POST',{banner:'limited-weapon',count:1,requestId:'offline-test-0001'})");
- assert.equal(draw.results[0].id,'crescent');assert.equal(draw.collection.tickets,59);
- const repeated=await run("accountApi('draw','POST',{banner:'limited-weapon',count:1,requestId:'offline-test-0001'})");
- assert.equal(repeated.collection.tickets,59);
- await run("accountApi('equip','POST',{hero:'oak',weapon:'crescent'})");
- assert.equal(run('collectionState.equipment.oak'),'crescent');
- run('collectionState=null;initLocalCollection()');
- assert.equal(run('collectionState.equipment.oak'),'crescent');
- await run("accountApi('equip','POST',{hero:'arrow',weapon:'crescent'})");
- assert.equal(run('collectionState.equipment.oak'),undefined);
- await run("accountApi('equip','POST',{hero:'arrow',weapon:null})");
- run('collectionState.dust=100');await run("accountApi('exchange','POST',{})");
- assert.equal(run('collectionState.tickets'),60);assert.equal(run('collectionState.dust'),0);
- run('collectionState.rewards=[];queueAccountSave({cleared:[0,1]});queueAccountSave({cleared:[0,1]})');
- assert.equal(run('collectionState.tickets'),80);
- run('collectionState.tickets=0');await assert.rejects(run("accountApi('draw','POST',{banner:'limited-weapon',count:10,requestId:'offline-test-0002'})"),/notEnoughTickets/);
- console.log('PASS: offline boot, local draws, pity, retry, equipment transfer, reload, exchange, first-clear rewards and insufficient tickets');
-})().catch(e=>{console.error(e);process.exitCode=1});
+assert.equal(run('OWNED_HEROES.length'),8);
+assert.equal(run('typeof accountApi'),'undefined');
+assert.equal(run('typeof performDraw'),'undefined');
+console.log('PASS: no draw API, no wallet, all eight story characters available');
