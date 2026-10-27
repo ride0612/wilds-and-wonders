@@ -136,7 +136,8 @@ function pose(model,time,move=0,attack=0,cast=0,hit=0){
  const stride=Math.sin(time*9),swing=stride*.48*move;
  b.legL.rotation.x=swing;b.legR.rotation.x=-swing;b.kneeL.rotation.x=Math.max(0,-stride)*.65*move;b.kneeR.rotation.x=Math.max(0,stride)*.65*move;
  b.armL.rotation.x=-swing*.65;b.armR.rotation.x=swing*.65;b.hips.position.y=1+Math.sin(time*18)*.016*move;
- b.spine.rotation.x=.035*move+hit*.10;b.spine.rotation.y=Math.sin(time*9)*.025*move;b.head.rotation.x=-.04;
+ b.spine.position.y=.10+Math.sin(time*2.1)*.004*(1-move);
+ b.spine.rotation.x=.035*move+hit*.10;b.spine.rotation.y=Math.sin(time*9)*.025*move;b.head.rotation.x=-.04+Math.sin(time*1.4)*.008*(1-move);
  b.elbowL.rotation.x=-.13;b.elbowR.rotation.x=-.13;
  b.coat.rotation.x=Math.sin(time*9+.6)*.06*move;
  if(b.ponytail)b.ponytail.rotation.x=Math.sin(time*9+.8)*.12*move;

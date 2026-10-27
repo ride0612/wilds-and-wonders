@@ -126,6 +126,7 @@ function drawEffects(){
  for(const e of effects){const p=center(e.x,e.y),t=1-e.life/e.total;ctx.save();ctx.globalAlpha=Math.max(0,e.life/e.total);
   if(e.type==='skill'){drawSkillFx(e,p,t);}else if(e.type==='text'){ctx.font='bold 20px sans-serif';ctx.textAlign='center';ctx.fillStyle=e.color;ctx.strokeStyle='#0c1528';ctx.lineWidth=3;const yy=p.y-74-t*33;ctx.strokeText(e.text,p.x,yy);ctx.fillText(e.text,p.x,yy);}
   else if(e.type==='beam'){const end=center(e.tx,e.ty),x=p.x+(end.x-p.x)*t,y=p.y-35+(end.y-p.y)*t-Math.sin(t*Math.PI)*18;line([{x:p.x+(end.x-p.x)*Math.max(0,t-.18),y:p.y-35+(end.y-p.y)*Math.max(0,t-.18)-Math.sin(Math.max(0,t-.18)*Math.PI)*18},{x,y}],e.color,3);glow(x,y,12,e.color+'80');ellipse(x,y,3,3,'#fffbe5');}
+  else if(e.type==='impact'){glow(p.x,p.y-42,10*(1-t),e.color+'90');for(let i=0;i<5;i++){const a=i*2.399;line([{x:p.x+Math.cos(a)*t*18,y:p.y-42+Math.sin(a)*t*12},{x:p.x+Math.cos(a)*(t*18+4),y:p.y-42+Math.sin(a)*(t*12+4)}],e.color,1);}}
   else if(e.type==='slash'){const q=center(e.tx,e.ty);ctx.translate(q.x,q.y-28);ctx.rotate(-.5+t);ctx.beginPath();ctx.arc(0,0,15+t*22,-1.8,.7);ctx.strokeStyle=e.color;ctx.lineWidth=7*(1-t);ctx.stroke();}
   else{ellipse(p.x,p.y,20+t*44,10+t*22,e.color+'16',e.color,3);for(let i=0;i<6;i++){const a=i*Math.PI/3;line([{x:p.x+Math.cos(a)*(15+t*30),y:p.y+Math.sin(a)*(8+t*15)},{x:p.x+Math.cos(a)*(22+t*32),y:p.y+Math.sin(a)*(10+t*16)-15*t}],e.color,2);}}
   ctx.restore();
