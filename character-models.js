@@ -131,16 +131,19 @@ function build(id,enemy=false){
  const rest={};for(const [name,bone]of Object.entries(joints))rest[name]=bone.rotation.clone();
  return {root,joints,rest,spec,materials:[...materials.values()],disposed:false,dispose(){if(this.disposed)return;this.disposed=true;root.traverse(o=>{if(o.isMesh)o.geometry.dispose();});for(const m of materials.values())m.dispose();}};
 }
-function pose(model,time,move=0,attack=0,cast=0,hit=0){
+function pose(model,time,move=0,attack=0,cast=0,hit=0,options={}){
  const b=model.joints;for(const [name,joint]of Object.entries(b))joint.rotation.copy(model.rest[name]);
- const stride=Math.sin(time*9),swing=stride*.48*move;
- b.legL.rotation.x=swing;b.legR.rotation.x=-swing;b.kneeL.rotation.x=Math.max(0,-stride)*.65*move;b.kneeR.rotation.x=Math.max(0,stride)*.65*move;
- b.armL.rotation.x=-swing*.65;b.armR.rotation.x=swing*.65;b.hips.position.y=1+Math.sin(time*18)*.016*move;
+ const phase=options.phase??time*9,turn=options.turn||0,stride=Math.sin(phase),swing=stride*.48*move;
+ const liftL=Math.max(0,-stride),liftR=Math.max(0,stride);
+ b.legL.rotation.x=swing;b.legR.rotation.x=-swing;b.kneeL.rotation.x=liftL*.68*move;b.kneeR.rotation.x=liftR*.68*move;
+ b.footL.rotation.x=-liftL*.27*move;b.footR.rotation.x=-liftR*.27*move;
+ b.armL.rotation.x=-swing*.65;b.armR.rotation.x=swing*.65;b.hips.position.y=1+Math.cos(phase*2)*.012*move;
+ b.hips.rotation.z=Math.sin(phase)*.018*move-turn*.018;b.hips.rotation.y=Math.sin(phase)*.027*move;
  b.spine.position.y=.10+Math.sin(time*2.1)*.004*(1-move);
- b.spine.rotation.x=.035*move+hit*.10;b.spine.rotation.y=Math.sin(time*9)*.025*move;b.head.rotation.x=-.04+Math.sin(time*1.4)*.008*(1-move);
+ b.spine.rotation.x=.055*move+hit*.10;b.spine.rotation.y=Math.sin(phase)*.035*move+turn*.06;b.spine.rotation.z=-turn*.045;b.head.rotation.x=-.04+Math.sin(time*1.4)*.008*(1-move);b.head.rotation.y=-turn*.08;
  b.elbowL.rotation.x=-.13;b.elbowR.rotation.x=-.13;
- b.coat.rotation.x=Math.sin(time*9+.6)*.06*move;
- if(b.ponytail)b.ponytail.rotation.x=Math.sin(time*9+.8)*.12*move;
+ b.coat.rotation.x=Math.sin(phase-.65)*.08*move;b.coat.rotation.z=turn*.035;
+ if(b.ponytail){b.ponytail.rotation.x=Math.sin(phase-.95)*.14*move;b.ponytail.rotation.z=turn*.08;}
  const gear=model.spec.gear;
  if(['rifle','beacon','scanner','tablet'].includes(gear)){
   b.armR.rotation.x=-.55-attack*.80;b.elbowR.rotation.x=-.55;b.armL.rotation.x=-.45;b.elbowL.rotation.x=-.95;
@@ -148,10 +151,23 @@ function pose(model,time,move=0,attack=0,cast=0,hit=0){
  }else if(gear==='shield'){
   b.armL.rotation.x=-.48-cast*.38;b.elbowL.rotation.x=-.45;b.armR.rotation.x-=attack*.7;b.spine.rotation.y=attack*.1;
  }else{
-  b.armR.rotation.x=-.28-attack*1.4;b.armR.rotation.z=-.18+attack*.8;b.elbowR.rotation.x=-.25;b.spine.rotation.y=-attack*.28;
+  const shortBlade=gear==='knife';
+  b.armR.rotation.x=-.28-attack*(shortBlade?1.0:1.4);b.armR.rotation.z=-.18+attack*(shortBlade?.28:.8);b.elbowR.rotation.x=-.25-attack*.18;b.spine.rotation.y-=attack*(shortBlade?.2:.38);
+  b.armL.rotation.x=-swing*.65-attack*.35;b.hips.rotation.y+=attack*.10;b.kneeL.rotation.x+=attack*.12;
  }
  if(cast>0){b.armL.rotation.x-=cast*.4;b.spine.rotation.x-=cast*.035;}
  if(b.drone){b.drone.position.y=1.4+Math.sin(time*2.5)*.045;b.drone.rotation.y=time*.4;}
 }
-global.StoryModels={CAST,build,pose};if(typeof module!=='undefined')module.exports=global.StoryModels;
+// Blend joints rather than abruptly replacing a pose; footsteps follow travelled metres.
+function animate(model,input,dt){
+ if(!model.motionState)model.motionState={move:0,attack:0,cast:0,hit:0,turn:0,phase:0,joints:Object.values(model.joints).map(joint=>({joint,q:joint.quaternion.clone(),p:joint.position.clone()}))};
+ const state=model.motionState;if(dt<=0)return;
+ const damp=(a,b,rate)=>a+(b-a)*(1-Math.exp(-rate*dt));
+ state.move=damp(state.move,input.move||0,9);state.attack=damp(state.attack,input.attack||0,24);state.cast=damp(state.cast,input.cast||0,12);state.hit=damp(state.hit,input.hit||0,22);state.turn=damp(state.turn,input.turn||0,10);
+ state.phase+=(input.distance||0)*Math.PI*2/1.75;
+ pose(model,input.idleMotion===false?0:input.time,state.move,state.attack,state.cast,state.hit,{phase:state.phase,turn:state.turn});
+ const weight=1-Math.exp(-30*dt);
+ for(const entry of state.joints){entry.q.slerp(entry.joint.quaternion,weight);entry.p.lerp(entry.joint.position,weight);entry.joint.quaternion.copy(entry.q);entry.joint.position.copy(entry.p);}
+}
+global.StoryModels={CAST,build,pose,animate};if(typeof module!=='undefined')module.exports=global.StoryModels;
 })(globalThis);

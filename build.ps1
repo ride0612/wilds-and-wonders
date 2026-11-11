@@ -20,7 +20,7 @@ foreach ($retiredFile in @('gacha.js','gacha-data.js','gacha.css','account.js','
     $retiredPath = Join-Path "$outputPath\game" $retiredFile
     if (Test-Path -LiteralPath $retiredPath -PathType Leaf) { Remove-Item -LiteralPath $retiredPath -Force }
 }
-Copy-Item -LiteralPath 'index.html','migration.html','style.css','lobby.css','battle.css','portrait-ui.css','cinematics.css','protagonist.css','campaign-expansion.js','skill-fx.js','music.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','character-models.js','battle3d.js','campaign.js','presentation.js','cinematics.js','protagonist.js','dimension-story.js','dimension.js','dimension.css','lobby.js' -Destination "$outputPath\game" -Force
+Copy-Item -LiteralPath 'index.html','migration.html','style.css','lobby.css','battle.css','portrait-ui.css','cinematics.css','protagonist.css','campaign-expansion.js','skill-fx.js','music.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','character-models.js','battle-scenery.js','battle3d.js','campaign.js','presentation.js','cinematics.js','protagonist.js','dimension-story.js','dimension.js','dimension.css','lobby.js' -Destination "$outputPath\game" -Force
 Copy-Item -LiteralPath 'desktop\story-smoke.js' -Destination "$outputPath\game" -Force
 if (Test-Path -LiteralPath 'assets') {
     Copy-Item -LiteralPath 'assets' -Destination "$outputPath\game" -Recurse -Force

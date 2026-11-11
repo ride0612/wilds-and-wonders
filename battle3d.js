@@ -3,8 +3,7 @@
 const Battle3D=(()=>{
  const T=globalThis.THREE,CELL=1.55,W=960,H=660,actors=new Map(),fxNodes=new Map(),retiredUnits=new WeakSet();
  let renderer,scene,camera,ground,grid,props,preview,core,keyLight,rimLight,castLights,quality='',theme=-1,lastWidth=0,lastHeight=0,failed=false,active=false;
- let ray,plane,hit,screen,clock=0,weather,weatherPositions;
- const palettes=[{floor:0x26363e,fog:0x121f2e,key:0xe7cba0,accent:0x87b9d2},{floor:0x2a3943,fog:0x172431,key:0xd2e7ed,accent:0x70cbd6},{floor:0x283b3c,fog:0x132729,key:0xc8dce5,accent:0xaabfac},{floor:0x414247,fog:0x252c35,key:0xf4d6a5,accent:0xe0aa6d},{floor:0x31313d,fog:0x161c30,key:0xd4d6e6,accent:0xb78ea3}];
+ let ray,plane,hit,screen,clock=0,scenery;
  const world=(x,y,height=0)=>new T.Vector3((x-3.5)*CELL,height,(y-2.5)*CELL);
  function material(color,rough=.7,metal=.1){return new T.MeshStandardMaterial({color,roughness:rough,metalness:metal});}
  function mesh(g,m,parent,x=0,y=0,z=0){const o=new T.Mesh(g,m);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;}
@@ -19,7 +18,7 @@ const Battle3D=(()=>{
    renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
    canvas.parentElement.insertBefore(surface,canvas);canvas.classList.add('battle-hud');
    scene=new T.Scene();scene.background=new T.Color(0x172432);scene.fog=new T.Fog(0x172432,20,42);
-   camera=new T.PerspectiveCamera(35,W/H,.1,80);camera.position.set(2.8,16.8,15.2);camera.lookAt(0,0,0);
+   camera=new T.PerspectiveCamera(35,W/H,.1,80);camera.position.set(2.8,16.8,15.2);camera.lookAt(0,.3,-.6);
    scene.add(new T.HemisphereLight(0xc2dcef,0x4d4a40,2.05));
    keyLight=new T.DirectionalLight(0xffe8c2,3.15);keyLight.position.set(-7,12,5);keyLight.castShadow=true;
    Object.assign(keyLight.shadow.camera,{left:-10,right:10,top:9,bottom:-9,near:.5,far:35});keyLight.shadow.bias=-.0004;keyLight.shadow.normalBias=.025;scene.add(keyLight);
@@ -27,11 +26,11 @@ const Battle3D=(()=>{
    castLights=[new T.PointLight(0xff7744,0,5,2),new T.PointLight(0x66ddff,0,4,2)];castLights.forEach(l=>scene.add(l));
    ground=new T.Group();scene.add(ground);box(ground,0,-.17,0,19,.3,16,0x242d36);
    props=new T.Group();scene.add(props);grid=new T.Group();scene.add(grid);preview=new T.Group();scene.add(preview);
-   for(let x=0;x<=8;x++){const a=world(x-.5,-.5,.012),b=world(x-.5,5.5,.012);grid.add(new T.Line(new T.BufferGeometry().setFromPoints([a,b]),new T.LineBasicMaterial({color:0x8aa4ad,transparent:true,opacity:.2})));}
-   for(let y=0;y<=6;y++){const a=world(-.5,y-.5,.012),b=world(7.5,y-.5,.012);grid.add(new T.Line(new T.BufferGeometry().setFromPoints([a,b]),new T.LineBasicMaterial({color:0x8aa4ad,transparent:true,opacity:.2})));}
+   const gridPoints=[];
+   for(let x=0;x<=8;x++)gridPoints.push(world(x-.5,-.5,.012),world(x-.5,5.5,.012));
+   for(let y=0;y<=6;y++)gridPoints.push(world(-.5,y-.5,.012),world(7.5,y-.5,.012));
+   grid.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(gridPoints),new T.LineBasicMaterial({color:0x8aa4ad,transparent:true,opacity:.2})));
    ray=new T.Raycaster();plane=new T.Plane(new T.Vector3(0,1,0),0);hit=new T.Vector3();screen=new T.Vector3();
-   weatherPositions=new Float32Array(100*3);for(let i=0;i<100;i++){weatherPositions[i*3]=(i*1.71%18)-9;weatherPositions[i*3+1]=(i*.37%7);weatherPositions[i*3+2]=(i*2.57%14)-7;}
-   const wg=new T.BufferGeometry();wg.setAttribute('position',new T.BufferAttribute(weatherPositions,3));weather=new T.Points(wg,new T.PointsMaterial({color:0xafcbd4,size:.025,transparent:true,opacity:.4,depthWrite:false}));scene.add(weather);
    surface.addEventListener('webglcontextlost',e=>{e.preventDefault();active=false;failed=true;surface.hidden=true;document.body.dataset.battleRenderer='fallback';});
    active=true;document.body.dataset.battleRenderer='3d';return true;
   }catch(error){failed=true;active=false;if(renderer){renderer.domElement.remove();renderer.dispose();renderer=null;}console.warn('3D rendering unavailable; using normal-proportion compatibility view.',error);return false;}
@@ -41,20 +40,14 @@ const Battle3D=(()=>{
   if(!rect.width||!rect.height)return;
   const setting=presentationSettings.quality||'high';
   if(quality!==setting){quality=setting;renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,setting==='high'?2:setting==='balanced'?1.5:1));renderer.shadowMap.enabled=setting!=='low';keyLight.shadow.mapSize.setScalar(setting==='high'?2048:1024);keyLight.shadow.map?.dispose();keyLight.shadow.map=null;lastWidth=0;}
-  const surface=renderer.domElement;surface.style.left=(rect.left-parent.left)+'px';surface.style.top=(rect.top-parent.top)+'px';surface.style.width=rect.width+'px';surface.style.height=rect.height+'px';
+  const surface=renderer.domElement;
+  for(const [key,value]of Object.entries({left:rect.left-parent.left,top:rect.top-parent.top,width:rect.width,height:rect.height}))if(surface.style[key]!==value+'px')surface.style[key]=value+'px';
   if(lastWidth!==rect.width||lastHeight!==rect.height){lastWidth=rect.width;lastHeight=rect.height;renderer.setSize(rect.width,rect.height,false);camera.aspect=rect.width/rect.height;camera.updateProjectionMatrix();}
  }
  function setTheme(){
   if(theme===stage)return;theme=stage;for(const c of [...props.children])disposeTree(c);
-  const p=palettes[stage%5];scene.background.set(p.fog);scene.fog.color.set(p.fog);keyLight.color.set(p.key);ground.children[0].material.color.set(p.floor);
-  // Actual paving and service equipment: the tactical grid is an overlay, not a raised game board.
-   for(let z=-7;z<=7;z+=2.2)for(let x=-9;x<=9;x+=2.2){box(props,x,-.012,z,2.17,.025,2.17,p.floor,stage%5===0?.32:.78).castShadow=false;}
-  for(const x of [-7.4,7.4]){
-   for(let z=-5.5;z<6;z+=2.75){box(props,x,.34,z,.24,.68,2.4,0x3b4850);box(props,x,.71,z,.32,.065,2.46,0x7a8788);}
-   for(const z of [-6.3,6.3]){box(props,x,1.35,z,.13,2.7,.13,0x3a434b);mesh(new T.BoxGeometry(.28,.10,.45),new T.MeshBasicMaterial({color:p.accent}),props,x,2.65,z);}
-  }
-  for(let i=0;i<5;i++){const x=-5+i*2.3;box(props,x,.30,-6.5,.9,.60,.5,i%2?0x4c5556:0x62615a);box(props,x,.62,-6.5,.94,.05,.54,0x87928b);}
-  if(stage%5===1||stage%5===2)for(const x of [-8.5,8.5])for(let i=0;i<3;i++){box(props,x,.65,-3+i*3,.75,1.3,1.1,0x2c3c48);mesh(new T.PlaneGeometry(.54,.35),new T.MeshBasicMaterial({color:0x6dabae}),props,x,.90,-2.44+i*3);}
+  if(scenery)scenery.dispose();scenery=BattleScenery.build(stage);scene.add(scenery.root);
+  const p=scenery.config;scene.background.set(p.fog);scene.fog.color.set(p.fog);keyLight.color.set(p.key);ground.children[0].material.color.set(p.floor);
   for(const c of [...preview.children])disposeTree(c);
   if(isDefense()){
    for(const pad of DEFENSE_PADS){const c=world(pad.x,pad.y,.025);const m=mesh(new T.PlaneGeometry(1.18,1.18),new T.MeshBasicMaterial({color:0x6db5c6,transparent:true,opacity:.12,depthWrite:false,side:T.DoubleSide}),preview,c.x,c.y,c.z);m.rotation.x=-Math.PI/2;}
@@ -92,14 +85,15 @@ const Battle3D=(()=>{
    if(retiredUnits.has(u))continue;
    let a=actors.get(u.uid);if(a&&a.unit!==u){releaseActor(a);actors.delete(u.uid);a=null;}
    if(u.hp<=0&&!a)continue;present.add(u.uid);
-   if(!a){const model=StoryModels.build(u.id,u.team==='red');const mark=selectionMarker(u.team==='blue'?0xb6d9d0:0xc9858c);scene.add(model.root);scene.add(mark);a={...model,unit:u,mark,protection:protectionField(u),angle:u.team==='blue'?Math.PI:0,deadTime:0};actors.set(u.uid,a);}
+   if(!a){const model=StoryModels.build(u.id,u.team==='red');const mark=selectionMarker(u.team==='blue'?0xb6d9d0:0xc9858c);scene.add(model.root);scene.add(mark);a={...model,unit:u,mark,protection:protectionField(u),angle:u.team==='blue'?Math.PI:0,deadTime:0,lastX:u.px,lastY:u.py};StoryModels.pose(a,0);actors.set(u.uid,a);}
    if(u.hp<=0){a.deadTime+=dt;a.root.rotation.z=Math.min(1.48,a.deadTime*3.5);a.root.position.y=-Math.min(.10,a.deadTime*.1);a.mark.visible=false;a.protection.visible=false;if(a.deadTime>.65){releaseActor(a);actors.delete(u.uid);retiredUnits.add(u);}continue;}
-   const moving=Math.hypot(u.x-u.px,u.y-u.py)>.035,dirX=u.faceX??(u.team==='blue'?0:0),dirY=u.faceY??(u.team==='blue'?-1:1);
+   const distance=Math.hypot(u.px-a.lastX,u.py-a.lastY)*CELL,moving=Math.hypot(u.x-u.px,u.y-u.py)>.035,previousAngle=a.angle,dirX=u.faceX??(u.team==='blue'?0:0),dirY=u.faceY??(u.team==='blue'?-1:1);
    const dx=moving?u.x-u.px:dirX,dy=moving?u.y-u.py:dirY;
-   if(Math.abs(dx)+Math.abs(dy)>.001){const wanted=Math.atan2(dx,dy),diff=Math.atan2(Math.sin(wanted-a.angle),Math.cos(wanted-a.angle));a.angle+=diff*Math.min(1,dt*15);}
+   if(Math.abs(dx)+Math.abs(dy)>.001){const wanted=Math.atan2(dx,dy),diff=Math.atan2(Math.sin(wanted-a.angle),Math.cos(wanted-a.angle));a.angle+=Math.max(-dt*7,Math.min(dt*7,diff*(1-Math.exp(-dt*12))));}
    a.root.position.copy(world(u.px,u.py,.025));a.root.rotation.set(0,a.angle,0);
    const swing=u.action>0?Math.sin((1-u.action/.28)*Math.PI):0,cast=Math.max(0,u.castFlash||0);
-   StoryModels.pose(a,presentationSettings.motion?clock:0,moving?1:0,Math.max(0,swing),cast,u.hitFlash>0?1:0);
+   StoryModels.animate(a,{time:clock,distance,move:moving?Math.min(1,dt>0?distance/dt/2.8:0):0,attack:Math.max(0,swing),cast,hit:u.hitFlash>0?1:0,turn:dt>0?Math.max(-1,Math.min(1,(a.angle-previousAngle)/dt/3)):0,idleMotion:presentationSettings.motion},dt);
+   a.lastX=u.px;a.lastY=u.py;
    a.mark.position.copy(world(u.px,u.py,.028));a.mark.visible=mode==='prep'||(u.id===selected&&u.team==='blue');
    a.protection.position.copy(world(u.px,u.py,a.spec.height*.49));a.protection.rotation.y=a.angle;
    a.protection.visible=u.shield>0&&mode!=='prep'&&presentationSettings.effects;
@@ -168,15 +162,15 @@ const Battle3D=(()=>{
    if(mode==='prep'||u.id===selected&&u.team==='blue'||u.castFlash>0){ctx.font='10px sans-serif';ctx.textAlign='center';ctx.lineWidth=3;ctx.strokeStyle='#0a1525';ctx.fillStyle='#e8eef0';const name=u.team==='red'?(u.id==='boss'?'寂蚀终端':'寂蚀拟态'):heroText(u).name;ctx.strokeText(name,pos.x,pos.y-7);ctx.fillText(name,pos.x,pos.y-7);}
   }
   for(const e of effects)if(e.type==='text'){const p=project(e.x+.5,e.y+.5,1.9),t=1-e.life/e.total;ctx.save();ctx.globalAlpha=Math.min(1,e.life/e.total*1.8);ctx.font='600 13px sans-serif';ctx.textAlign='center';ctx.strokeStyle='#0a1423';ctx.lineWidth=3;ctx.fillStyle=e.color;ctx.strokeText(e.text,p.x,p.y-t*25);ctx.fillText(e.text,p.x,p.y-t*25);ctx.restore();}
-  ctx.font='10px sans-serif';ctx.textAlign='left';ctx.fillStyle='#d2e2e8b0';ctx.fillText(mode==='prep'?'TACTICAL OVERLAY / 战前部署':'LIVE FIELD / 现场战斗',16,22);
+  ctx.font='10px sans-serif';ctx.textAlign='left';ctx.fillStyle='#d2e2e8b0';ctx.fillText((scenery?.config.label||'现场')+(mode==='prep'?' · 选择掩护位置':''),16,22);
  }
  let lastTime=0;
  function render(){
   if(!start())return false;if(failed)return false;resize();setTheme();camera.updateMatrixWorld();
   const dt=Math.max(0,Math.min(.1,visualTime-lastTime));lastTime=visualTime;if(!paused)clock+=dt*speed;
-  grid.visible=mode==='prep'||presentationSettings.grid===true;preview.visible=mode==='prep';weather.visible=presentationSettings.effects&&quality!=='low';
-  if(weather.visible&&!paused){for(let i=0;i<100;i++){weatherPositions[i*3+1]-=dt*(stage%5===0?6:.25);if(weatherPositions[i*3+1]<0)weatherPositions[i*3+1]=7;}weather.geometry.attributes.position.needsUpdate=true;}
-  updateActors(dt*speed);updateFx();renderer.render(scene,camera);hud();$('#timer').textContent=formatTime(elapsed);renderCombatHud();return true;
+  grid.visible=mode==='prep'||presentationSettings.grid===true;preview.visible=mode==='prep';scenery.update(clock,quality,presentationSettings.effects);
+  castLights.forEach(light=>light.visible=presentationSettings.effects&&quality!=='low');
+  updateActors(dt*speed);updateFx();renderer.render(scene,camera);hud();const timer=formatTime(elapsed);if($('#timer').textContent!==timer)$('#timer').textContent=timer;renderCombatHud();return true;
  }
- return {render,project,pick,pickUnit,get active(){return active&&!failed;},get stats(){return renderer?{drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,models:actors.size,quality}:null;}};
+ return {render,project,pick,pickUnit,get active(){return active&&!failed;},get stats(){return renderer?{drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,models:actors.size,quality,sceneryParts:scenery?.root.userData.staticParts,sceneryBatches:scenery?.root.userData.batches,location:scenery?.config.label}:null;}};
 })();

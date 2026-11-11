@@ -73,7 +73,10 @@ function moveDeployment(id,x,y){
  }
  prepare();return true;
 }
+let combatHudSnapshot='';
 function renderCombatHud(){
+ const snapshot=[language,stage,isDefense(),siege?.core,siege?.maxCore,siege?.wave,siege?.total,siege?.remaining,alive('blue').length,alive('red').length].join('|');
+ if(snapshot===combatHudSnapshot)return;combatHudSnapshot=snapshot;
  $('#act-label').textContent=tr('currentAct',{n:stage+1});
  $('#battle-mode').textContent=tr(isDefense()?'modeDefense':'modeExpedition');
  $('#battle-mode').dataset.mode=isDefense()?'defense':'expedition';
