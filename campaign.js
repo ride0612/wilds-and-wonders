@@ -24,7 +24,6 @@ function openCampaign(id='red-tide'){
  if(mode==='prep')openStory(stage,'before','prepare');syncPresentationLayout();return true;
 }
 function initCampaign(){
- $('#back-chapters').onclick=showCampaignLibrary;
  $('#chapter-cards').addEventListener('click',e=>{const button=e.target.closest('[data-campaign]');if(button&&!button.disabled)openCampaign(button.dataset.campaign);});
  renderCampaignLibrary();
 }

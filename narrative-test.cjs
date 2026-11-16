@@ -61,13 +61,13 @@ for(const language of ['zh','en','ja']){
 }
 run("storageBefore=JSON.stringify(profileSnapshot());localStorage.setItem('never-yield.fold-01.collection.v1',JSON.stringify({tickets:99999,equipment:{oak:'crescent'}}));saveProfile();loadProfile()");
 assert.equal(run('JSON.stringify(profileSnapshot())'),run('storageBefore'),'cast refresh preserves story progress');
-assert.equal(run("createUnit('oak','blue',1,3).atk"),run("def('oak').atk"),'retired weapon cannot alter stats');
+assert.equal(run("HEROES.every(h=>ACData.UNITS[h.id]&&ACData.UNITS[h.id].story&&HeroModels.SPECS[h.id])"),true,'every story character is recruitable and has a 3D model');
 run("openStory(7,'before','read');cinema.shot=cinematicShots(7,'before').findIndex(s=>s.speaker==='凯撒');renderCinematic()");
 assert.equal(run("$('#cinema-left').src"),'assets/cast/caesar-portrait.png');assert.equal(run("$('#cinema-left').hidden"),false);
 assert.equal(run("$('#cinema-contact').hidden"),true);run('dismissCinematic()');
-// Exercise normal-proportion compatibility rendering and all eight skill effects.
-run("for(const key of ['save','restore','translate','rotate','scale','roundRect','beginPath','ellipse','fill','stroke','moveTo','lineTo','closePath','fillText','quadraticCurveTo'])ctx[key]=()=>{};ctx.drawImage=(image,x,y,w,h)=>{if(![x,y,w,h].every(Number.isFinite)||Math.abs(w/h-image.naturalWidth/image.naturalHeight)>1e-8)throw Error('sprite dimensions')};");
-for(const h of cast){run('drawMiniature(createUnit('+JSON.stringify(h.id)+',"blue",1,4),{x:100,y:200});drawSkillFx({hero:'+JSON.stringify(h.id)+',sx:1,sy:4,color:"#d1a580"},{x:100,y:200},.5)');}
+// Exercise the auto-chess text helpers and a headless battle for every story character.
+for(const h of cast){assert.ok(run('acName('+JSON.stringify(h.id)+')&&acSkillName('+JSON.stringify(h.id)+')&&acSkillDesc('+JSON.stringify(h.id)+',2)'));const r=run('(()=>{const s=new AC.State(3);s.level=3;s.board["3,5"]={uid:1,id:'+JSON.stringify(h.id)+',star:2};s.board["2,4"]={uid:2,id:"anvil",star:2};return AC.simulateFight(s,ACData.ENCOUNTERS[0],AC.makeRng(9));})()');assert.ok(r.won,'two 2-star units clear stage 1 with '+h.name);}
+run('stage=0;cleared=[];unlocked=0;acState=new AC.State(5);prepare();acStartCombat()');assert.equal(run('mode'),'prep','cannot engage with an empty board');
 console.log('PASS: all eight cast assets and story appearances, no draw UI/API, old-save compatibility, localization, music controls, dialogue portraits and battle rendering');
 
 module.exports={run,context};

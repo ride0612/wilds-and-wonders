@@ -19,18 +19,13 @@ function loadProfile(incoming){
  if(Array.isArray(data.cleared))for(let i=0;i<STAGES.length&&data.cleared.includes(i);i++)cleared.push(i);
  unlocked=Math.min(STAGES.length-1,cleared.length);
  if(Number.isInteger(data.stage)&&data.stage>=0&&data.stage<=unlocked)stage=data.stage;
- if(Array.isArray(data.lineup)&&data.lineup.length<=5){
-  const ids=new Set(),cells=new Set();
-  const valid=data.lineup.every(p=>p&&OWNED_HEROES.includes(p.id)&&Number.isInteger(p.x)&&p.x>=0&&p.x<8&&Number.isInteger(p.y)&&p.y>=3&&p.y<6&&!ids.has(p.id)&&!cells.has(p.x+','+p.y)&&(ids.add(p.id),cells.add(p.x+','+p.y),true));
-  if(valid)lineup=data.lineup.map(({id,x,y})=>({id,x,y}));
-  else if(data.lineup.some(p=>p&&OWNED_HEROES.includes(p.id)))lineup=data.lineup.filter(p=>p&&OWNED_HEROES.includes(p.id)).slice(0,5).map((p,i)=>({id:p.id,x:i,y:4})).filter((p,i,a)=>a.findIndex(q=>q.id===p.id)===i);
- }
+ // 自走棋进度：金币、等级、备战席、棋盘、强化与已发放的关卡补给
+ acState=AC.State.fromJSON(data.autochess);if(!data.autochess&&cleared.length)acState.granted=Math.max(-1,stage-1);
  for(const id of OWNED_HEROES){const skin=data.skinByHero?.[id];skinByHero[id]=APPEARANCES[id].some(a=>a.id===skin)?skin:'base';}
- if(data.defensePositions&&typeof data.defensePositions==='object')for(const id of OWNED_HEROES){const p=data.defensePositions[id];if(p&&DEFENSE_PADS.some(a=>a.x===p.x&&a.y===p.y))defensePositions[id]={x:p.x,y:p.y};}
  const r=data.result;
- return r&&r.win===true&&cleared.includes(stage)&&Number.isFinite(r.time)&&r.time>=0&&r.time<=181&&Number.isInteger(r.survivors)&&r.survivors>=0&&r.survivors<=5?{win:true,timeout:false,time:r.time,survivors:r.survivors,core:Number.isFinite(r.core)?Math.max(0,Math.min(100,r.core)):100,leaks:Number.isInteger(r.leaks)?Math.max(0,r.leaks):0}:null;
+ return r&&r.win===true&&cleared.includes(stage)&&Number.isFinite(r.time)&&r.time>=0&&r.time<=300&&Number.isInteger(r.survivors)&&r.survivors>=0&&r.survivors<=9?{win:true,timeout:false,time:r.time,survivors:r.survivors,mvp:r.mvp&&ACData.UNITS[r.mvp.id]?{id:r.mvp.id,star:r.mvp.star,dealt:r.mvp.dealt}:null,practice:true,report:[]}:null;
 }
-function profileSnapshot(){return {version:2,dimension:dimensionState,protagonist,featureProtagonist,presentation:presentationSettings,language,displayHero,skinByHero,lineup,defensePositions,stage,cleared,result:mode==='win'?battleResult:null};}
+function profileSnapshot(){return {version:2,dimension:dimensionState,protagonist,featureProtagonist,presentation:presentationSettings,language,displayHero,skinByHero,autochess:acState.toJSON(),stage,cleared,result:mode==='win'&&battleResult?{win:true,time:battleResult.time,survivors:battleResult.survivors,mvp:battleResult.mvp}:null};}
 function saveProfile(){
  if(!profileReady)return;
  const snapshot=profileSnapshot();
@@ -69,9 +64,9 @@ function renderLobby(){
  $('#destination-name').textContent=tr(CAMPAIGN_CATALOG[Math.floor(stage/5)].title);$('#hall-progress').textContent=cleared.length===STAGES.length?tr('completed'):tr('clearedCount',{n:cleared.length});
  $('#owned-count').textContent=tr('ownedRoster',{n:OWNED_HEROES.length});$('#relic-summary').textContent=tr('relicCount',{n:cleared.length});
  $('#collection').innerHTML=HEROES.map(h=>h.id).map(id=>{const hero=heroText(def(id));return '<button '+(!OWNED_HEROES.includes(id)?'disabled':'')+' class="collection-card '+(!OWNED_HEROES.includes(id)?'locked':id===displayHero?'active':'')+'" data-display="'+id+'" aria-pressed="'+(id===displayHero)+'"><span class="collection-thumb"><img src="'+characterImage(id)+'" alt=""></span><span class="collection-info"><span class="rarity-stars">'+starText(id)+'</span><strong>'+hero.name+'</strong><small>'+tr(!OWNED_HEROES.includes(id)?'lockedCharacter':id===displayHero?'displayed':'owned')+'</small></span></button>';}).join('');
- renderProtagonistLobby();renderInventory();renderDimensionArchive();applyPresentationSettings();
+ renderProtagonistLobby();renderInventory();renderDimensionArchive();applyPresentationSettings();if(typeof renderLobbyHud==='function')renderLobbyHud();
 }
-function updateStoryBrief(){const c=chapterText(stage);$('#objective-title').textContent=c.before.title;$('#objective-text').textContent=c.goal;$('#story-recap').disabled=mode==='fight';const title=tr(CAMPAIGN_CATALOG[Math.floor(stage/5)].title);$('#current-chapter').textContent=title;$('#battle-chapter-title').textContent=title;}
+function updateStoryBrief(){const c=chapterText(stage);$('#objective-title').textContent=c.before.title;$('#objective-text').textContent=c.goal;$('#story-recap').disabled=mode==='fight';}
 function openStory(index,part,intent='read'){
  if(index>unlocked||index<0||index>=STAGES.length||(part==='after'&&!cleared.includes(index)))return;
  if(mode==='fight'){paused=true;renderUI();}storyScene={index,part,intent};beginCinematic();if(!$('#story-dialog').open)$('#story-dialog').showModal();
@@ -102,5 +97,5 @@ $('#story-dismiss').onclick=()=>{$('#story-dialog').close();storyScene=null;};$(
 $('#journal-open').onclick=()=>{closeUtilityDialogs();renderJournal();$('#journal-dialog').showModal();};$('#journal-close').onclick=()=>$('#journal-dialog').close();
 $('#journal-entries').addEventListener('click',e=>{const button=e.target.closest('[data-journal]');if(button&&!button.disabled){$('#journal-dialog').close();openStory(Number(button.dataset.journal),button.dataset.part,'read');}});
 const restoredResult=loadProfile();localizePage();prepare();
-if(restoredResult){mode='win';battleResult=restoredResult;if(siege){siege.core=restoredResult.core;siege.leaks=restoredResult.leaks;siege.wave=siege.total;}renderUI();}
-profileReady=true;showView('lobby');$('#storage-warning').hidden=storageAvailable;initCampaign();initPresentation();initCinematics();initProtagonist();initMusic();initDimension();requestAnimationFrame(frame);
+if(restoredResult){mode='win';battleResult=restoredResult;acResultReady=true;renderUI();}
+profileReady=true;showView('lobby');$('#storage-warning').hidden=storageAvailable;initCampaign();initPresentation();initCinematics();initProtagonist();initMusic();initDimension();initAutochessUI();requestAnimationFrame(frame);

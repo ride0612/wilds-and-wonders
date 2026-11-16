@@ -1,0 +1,87 @@
+/* 大厅、章节档案与设置菜单的战术终端风格：与战斗界面共用信号黄、斜切角和等宽小字。 */
+:root{--pg-accent:#ffd23a;--pg-ink:#0b0d12;--pg-glass:rgba(10,13,19,.62);--pg-line:rgba(255,255,255,.18);--pg-mono:'JetBrains Mono',ui-monospace,monospace;--pg-num:'Barlow Condensed','Noto Sans SC',sans-serif}
+/* ---------- 大厅 ---------- */
+.pgr-frame{position:absolute;inset:0;pointer-events:none;z-index:1}
+.pgr-frame i{position:absolute;width:46px;height:46px;border:solid rgba(255,255,255,.55);border-width:0}
+.pgr-frame i:nth-child(1){left:22px;top:84px;border-left-width:1.5px;border-top-width:1.5px}.pgr-frame i:nth-child(2){right:22px;top:84px;border-right-width:1.5px;border-top-width:1.5px}
+.pgr-frame i:nth-child(3){left:22px;bottom:22px;border-left-width:1.5px;border-bottom-width:1.5px}.pgr-frame i:nth-child(4){right:22px;bottom:22px;border-right-width:1.5px;border-bottom-width:1.5px}
+.pgr-scan{position:absolute;left:0;right:0;height:120px;top:-120px;background:linear-gradient(transparent,rgba(255,255,255,.05),transparent);animation:pgr-scan 9s linear infinite}
+@keyframes pgr-scan{to{top:100%}}
+.pgr-hud{position:absolute;inset:0;pointer-events:none;z-index:4}
+.pgr-player{position:absolute;left:4.5vw;top:86px;display:flex;align-items:center;gap:12px;color:#fff;pointer-events:auto}
+.pgr-avatar{width:52px;height:52px;overflow:hidden;background:#1a2230;border:1px solid rgba(255,255,255,.6);clip-path:polygon(0 0,100% 0,100% 100%,12px 100%,0 calc(100% - 12px))}
+.pgr-avatar img{width:100%;height:240%;object-fit:cover;object-position:50% 4%}
+.pgr-player small{display:block;font-family:var(--pg-mono);font-size:9px;letter-spacing:.24em;opacity:.7}.pgr-player b{display:block;font-size:17px;letter-spacing:.12em;margin:2px 0}.pgr-player span{font-family:var(--pg-mono);font-size:10px;letter-spacing:.12em;color:var(--pg-accent)}
+.pgr-res{position:absolute;right:calc(4vw + 128px);top:15px;display:flex;gap:2px;pointer-events:auto}
+.pgr-res span{display:grid;min-width:92px;padding:6px 14px 5px;background:rgba(9,12,18,.62);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px);color:#fff}
+.pgr-res span:first-child{clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px)}
+.pgr-res small{font-family:var(--pg-mono);font-size:8px;letter-spacing:.22em;opacity:.65}.pgr-res b{font-family:var(--pg-num);font-size:22px;font-weight:700;line-height:1}
+.pgr-res span:first-child b{color:var(--pg-accent)}
+body[data-view=lobby] .extensions-toggle{border-radius:0;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);background:rgba(9,12,18,.7);border-color:rgba(255,255,255,.3)}
+.hall-signature{top:calc(86px + 76px)}
+.hall-light{background:linear-gradient(90deg,#0b1222c4,transparent 34%,transparent 60%,#0b122299),linear-gradient(0deg,#0a0f1ccc,transparent 38%,#dfe9f50f 70%)}
+/* 右侧菜单：主项为信号黄实色块，其余为深色玻璃 */
+.hall-actions{gap:12px;top:24%}
+.hall-action{min-height:104px;border:1px solid rgba(255,255,255,.22);background:linear-gradient(115deg,rgba(10,14,22,.78),rgba(18,24,36,.58));color:#fff;backdrop-filter:blur(12px);box-shadow:0 10px 30px rgba(5,8,16,.35);clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%);transition:transform .2s,background .2s,border-color .2s}
+.hall-action::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:rgba(255,255,255,.5);transition:width .2s,background .2s}
+.hall-action:hover:not(:disabled){transform:translateX(-8px);background:linear-gradient(115deg,rgba(14,19,30,.92),rgba(24,32,48,.8));border-color:rgba(255,255,255,.5)}
+.hall-action:hover::before{width:6px;background:var(--pg-accent)}
+.hall-action small{font-family:var(--pg-mono);letter-spacing:.3em;opacity:.7}.hall-action strong{font-size:27px;letter-spacing:.14em}.hall-action em{opacity:.75}
+.hall-action .action-number{font-family:var(--pg-num);font-size:30px;font-weight:700;opacity:.35;letter-spacing:0;padding-top:0;line-height:1}
+.hall-action.story-action{min-height:150px;border:0;border-left:0;background:var(--pg-accent);color:var(--pg-ink);clip-path:polygon(0 0,calc(100% - 26px) 0,100% 26px,100% 100%,0 100%)}
+.hall-action.story-action::before{display:none}
+.hall-action.story-action::after{content:'';position:absolute;right:-20px;top:0;bottom:0;width:150px;background:repeating-linear-gradient(-60deg,rgba(0,0,0,.08) 0 10px,transparent 10px 22px);pointer-events:none}
+.hall-action.story-action:hover:not(:disabled){background:#ffdc5a;transform:translateX(-8px)}
+.hall-action.story-action strong{font-size:34px;font-weight:900}.hall-action.story-action small{opacity:.6}.hall-action.story-action .action-number{opacity:.5}
+#hall-progress{color:#5a4600;font-family:var(--pg-mono);font-size:10px;letter-spacing:.1em}
+.hall-action .action-arrow{font-size:20px;opacity:.6}
+/* 角色信息 */
+.hero-caption{border-left:4px solid var(--pg-accent);padding:4px 0 4px 20px;bottom:11vh}
+.hero-caption .rarity-stars{font-family:var(--pg-mono);font-size:10px!important;letter-spacing:.3em;color:var(--pg-accent)!important;text-transform:uppercase}
+.hero-caption #display-role{font-family:var(--pg-mono);font-size:10px;letter-spacing:.24em;opacity:.8}
+.hero-caption h1{font-size:clamp(34px,3.6vw,58px);font-weight:800;letter-spacing:.14em;margin:6px 0 12px}
+.hero-caption blockquote{border-top:1px solid rgba(255,255,255,.3);padding-top:14px}
+.hall-bottom-mark{font-family:var(--pg-mono);letter-spacing:.4em}
+.dimension-lobby-note{z-index:4}
+.dimension-lobby-note #dimension-ending{border-radius:0;clip-path:polygon(8px 0,100% 0,100% 100%,0 100%,0 8px)}
+/* ---------- 章节档案 ---------- */
+body[data-view=adventure]:not(.ac-mode){background:radial-gradient(ellipse at 70% 0%,#1a2436,#07090e 65%)}
+body[data-view=adventure]:not(.ac-mode) .app-header{background:rgba(5,7,11,.7);border-bottom:1px solid rgba(255,255,255,.08)}
+#adventure-view #chapter-library{padding:22px 0 50px}
+#adventure-view #chapter-library>.eyebrow{font-family:var(--pg-mono);color:var(--pg-accent);letter-spacing:.3em}
+#adventure-view #chapter-library>h1{font-size:34px;letter-spacing:.12em;font-weight:800}
+#chapter-cards{gap:16px}
+.chapter-card{position:relative;overflow:hidden;grid-template-columns:120px 1fr auto;gap:28px;padding:26px 30px;min-height:190px;border:1px solid rgba(255,255,255,.14);border-radius:0;background:linear-gradient(90deg,rgba(7,9,14,.96) 0%,rgba(7,9,14,.86) 45%,rgba(7,9,14,.55)),var(--scene) center 40%/cover no-repeat;clip-path:polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px));transition:border-color .2s,transform .2s}
+.chapter-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:rgba(255,255,255,.3)}
+.chapter-card.available{border-color:rgba(255,255,255,.24);box-shadow:none}
+.chapter-card.available:hover{border-color:rgba(255,210,58,.7);transform:translateX(4px)}
+.chapter-card.current::before{background:var(--pg-accent)}
+.chapter-card.unreleased{opacity:.5;min-height:150px;filter:grayscale(.7)}
+.chapter-emblem{height:120px;width:120px;border-radius:0;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.04);font-size:64px;color:#fff;font-family:'Noto Serif SC','Songti SC',Georgia,serif;text-shadow:0 0 30px rgba(255,210,58,.25);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.chapter-card.unreleased .chapter-emblem{height:120px;font-size:64px}
+.chapter-card .eyebrow{font-family:var(--pg-mono);font-size:10px;letter-spacing:.3em;color:var(--pg-accent)}
+.chapter-card h2{font-size:26px;color:#fff;letter-spacing:.1em;margin:8px 0}
+.chapter-card.unreleased h2{font-size:26px}
+.chapter-card p{color:#b9c2cc;font-size:13px}
+.chapter-stages{list-style:none;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;padding:0;margin:14px 0 0}
+.chapter-stages li{display:grid;gap:2px;padding:7px 9px;background:rgba(255,255,255,.05);border-top:2px solid rgba(255,255,255,.2);min-width:0}
+.chapter-stages li span{font-family:var(--pg-num);font-size:18px;font-weight:700;color:#fff;line-height:1}
+.chapter-stages li b{font-size:11px;font-weight:500;color:#d6dde4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chapter-stages li em{font-family:var(--pg-mono);font-size:9px;letter-spacing:.12em;font-style:normal;color:#8d98a6}
+.chapter-stages li.def{border-top-color:#ff9a3a}.chapter-stages li.boss{border-top-color:#ff3b4e}.chapter-stages li.boss em{color:#ff8090}
+.chapter-stages li.done{background:rgba(255,255,255,.12)}.chapter-stages li.done span::after{content:' ✓';font-size:12px;color:var(--pg-accent)}
+.chapter-stages li.now{background:rgba(255,210,58,.16);border-top-color:var(--pg-accent)}.chapter-stages li.locked{opacity:.4}
+.chapter-card>button{border-radius:0;height:52px;padding:0 26px;font-size:15px;letter-spacing:.1em;clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
+#adventure-view .chapter-card>button.primary{background:var(--pg-accent);border:0;color:#111;font-weight:800;box-shadow:none}
+#adventure-view .chapter-card>button.primary:hover:not(:disabled){background:#ffdf62}
+/* ---------- 设置菜单 ---------- */
+.extensions-dialog{color-scheme:dark;color:#e8edf2;background:linear-gradient(180deg,#121722,#0b0e14);border:1px solid rgba(255,255,255,.18);border-top:3px solid var(--pg-accent);border-radius:0}
+.extensions-dialog .modal-heading{border-color:rgba(255,255,255,.12)}.extensions-dialog .modal-heading small{color:#8d98a6;font-family:var(--pg-mono)}
+.extensions-dialog button,.extensions-dialog select{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);color:#e8edf2;border-radius:0}
+.extensions-dialog button:hover:not(:disabled){background:var(--pg-accent);color:#111;border-color:var(--pg-accent)}
+.extensions-dialog .main-nav button.active{background:#e8edf2;color:#111}
+.extensions-dialog .setting-row{border-color:rgba(255,255,255,.1)}.extensions-dialog .setting-row input{accent-color:var(--pg-accent)}.extensions-dialog>p{color:#7c8794}
+.extensions-dialog .music-settings{color:#cfd6dd}
+@media(max-width:1100px){.pgr-res span{min-width:70px;padding:5px 9px}.pgr-res b{font-size:18px}.chapter-stages{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:750px){.pgr-res{display:none}.pgr-player{top:70px}.chapter-card{grid-template-columns:1fr;padding:20px}.chapter-emblem{display:none}.chapter-stages{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.pgr-scan{animation:none;display:none}}

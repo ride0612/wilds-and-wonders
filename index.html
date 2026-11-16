@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="zh-CN">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>绝不认书：次元回响</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="lobby.css"><link rel="stylesheet" href="battle.css"><link rel="stylesheet" href="portrait-ui.css"><link rel="stylesheet" href="cinematics.css"><link rel="stylesheet" href="protagonist.css"><link rel="stylesheet" href="dimension.css"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>绝不认书：次元回响</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="lobby.css"><link rel="stylesheet" href="battle.css"><link rel="stylesheet" href="portrait-ui.css"><link rel="stylesheet" href="cinematics.css"><link rel="stylesheet" href="protagonist.css"><link rel="stylesheet" href="dimension.css"><link rel="stylesheet" href="pgr-theme.css"><link rel="stylesheet" href="autochess.css"></head>
 <body>
 <header class="app-header"><button class="brand" id="brand-home"><span class="brand-icon">✧</span><span data-i18n="brand"></span><small>FOLD PROJECT</small></button><button id="extensions-toggle" class="extensions-toggle" aria-haspopup="dialog"><span>☷</span><span data-i18n="more"></span></button></header>
 <div id="storage-warning" role="status" hidden data-i18n="storageWarning"></div>
 <main id="lobby-view" class="cathedral-lobby">
-<div class="hall-background" aria-hidden="true"></div><div class="hall-light" aria-hidden="true"></div><div class="hall-motes" aria-hidden="true"></div>
+<div class="hall-background" aria-hidden="true"></div><div class="hall-light" aria-hidden="true"></div><div class="hall-motes" aria-hidden="true"></div><div class="pgr-frame" aria-hidden="true"><i></i><i></i><i></i><i></i><span class="pgr-scan"></span></div>
+<div class="pgr-hud"><div class="pgr-player"><span class="pgr-avatar"><img id="lobby-avatar" alt=""></span><div><small>WAYFARER · FOLD-01</small><b id="lobby-player"></b><span id="lobby-level"></span></div></div><div class="pgr-res"><span><small>GOLD</small><b id="lobby-gold">0</b></span><span><small>INTEGRITY</small><b id="lobby-hp">100</b></span><span><small>CLEARED</small><b id="lobby-cleared">0 / 20</b></span></div></div>
 <div class="hall-signature"><span>01 / FOLD PROJECT</span><b data-i18n="atrium"></b><i></i></div>
 <section class="showcase" aria-label="Featured character"><div class="portrait-shadow"></div><div id="display-art"></div><div class="hero-caption"><span id="display-stars" class="rarity-stars"></span><div id="display-role"></div><h1 id="display-name"></h1><p id="display-personality"></p><blockquote id="display-quote"></blockquote></div></section>
 <aside class="hall-actions"><button id="depart" class="hall-action story-action"><span class="action-number">01</span><span><small>MAIN STORY</small><strong data-i18n="storyButton"></strong><em id="destination-name"></em><span id="hall-progress"></span></span><b class="action-arrow">↗</b></button><button id="collection-open" class="hall-action"><span class="action-number">02</span><span><small>PERSONNEL</small><strong data-i18n="allCharacters"></strong><em id="owned-count"></em></span><b class="action-arrow">↗</b></button><button id="inventory-open" class="hall-action"><span class="action-number">03</span><span><small>ARCHIVE</small><strong data-i18n="warehouse"></strong><em id="relic-summary"></em></span><b class="action-arrow">↗</b></button></aside>
@@ -13,19 +14,55 @@
 </main>
 <main id="adventure-view" hidden>
 <section id="chapter-library"><div class="eyebrow" data-i18n="storyLibrary"></div><h1 data-i18n="libraryTitle"></h1><p data-i18n="libraryDesc"></p><div id="chapter-cards"></div></section>
-<section id="chapter-mission" hidden><div class="mission-breadcrumb"><button id="back-chapters" data-i18n="backChapters"></button><span id="current-chapter"></span><b id="act-label"></b></div>
-<section class="title-row"><div><div class="eyebrow" id="battle-chapter-title"></div><h1 data-i18n="battleTitle"></h1><p data-i18n="battleSubtitle"></p></div><div class="chapter"><span data-i18n="adventureProgress"></span><strong id="progress"></strong></div></section>
-<nav id="stages" data-i18n-aria="adventure"></nav>
-<section class="story-brief"><span class="story-symbol">✧</span><div><strong id="objective-title"></strong><p id="objective-text"></p></div><button id="story-recap" data-i18n="readStory"></button></section>
-<div class="game-layout">
-<aside class="panel traits-panel"><div class="panel-heading"><h2 data-i18n="teamTraits"></h2><span id="trait-count"></span></div><p class="muted small" data-i18n="traitHint"></p><div id="traits"></div><div class="tip"><span data-i18n="noteTitle"></span><p data-i18n="noteText"></p></div></aside>
-<section class="arena-panel"><div class="arena-head"><div><span id="phase" class="status"></span><h2 id="stage-title"></h2></div><div class="arena-tools"><button id="battle-back" data-i18n-title="backToArchive" data-i18n-aria="backToArchive">↩</button><span id="timer">00:00</span><button id="speed" data-i18n-title="speed">1×</button><button id="pause" disabled></button></div></div><div class="battle-status-strip"><span id="battle-mode"></span><div class="combat-counters" id="siege-hud" hidden><div><small data-i18n="core"></small><b id="core-value"></b><div class="core-meter"><span id="core-fill"></span></div></div><div><small data-i18n="wave"></small><b id="wave-value"></b></div><div><small data-i18n="remaining"></small><b id="remaining-value"></b></div></div><div class="combat-counters" id="expedition-hud"><div><small data-i18n="alliedCount"></small><b id="allied-value"></b></div><div><small data-i18n="enemyCount"></small><b id="enemy-value"></b></div></div></div><div class="board-wrap"><canvas id="board" width="960" height="660" data-i18n-aria="boardAria"></canvas><div id="result" class="result" hidden></div></div><div class="arena-footer"><span><i class="dot blue"></i><span data-i18n="allies"></span><span class="divider">/</span><i class="dot red"></i><span data-i18n="enemies"></span></span><span id="board-hint"></span></div><div class="command-bar"><div><strong id="team-count"></strong><span data-i18n="deployed"></span><button id="reset" data-i18n="reset"></button></div><button class="primary" id="start" data-i18n="start"></button></div></section>
-<aside class="right-column"><section class="panel details"><div class="panel-heading"><h2 data-i18n="heroProfile"></h2><span>✧</span></div><div id="details"></div></section><section class="panel log-panel"><div class="panel-heading"><h2 data-i18n="combatLog"></h2><span class="live" data-i18n="live"></span></div><div id="log" aria-live="polite"></div></section></aside>
+<section id="chapter-mission" hidden>
+<div id="ac-root" class="ac-root" data-phase="prep">
+ <div id="ac-viewport" class="ac-viewport" data-i18n-aria="boardAria" role="application"><p id="ac-fallback" class="ac-fallback"></p></div>
+ <header class="ac-topbar">
+  <div class="ac-title"><button id="battle-back" class="ac-icon-btn" data-i18n-title="backToArchive" data-i18n-aria="backToArchive">‹</button><div class="ac-brand"><small>TACTICAL AUTO-CHESS <i>//</i> FOLD PROJECT</small><b id="ac-chapter"></b></div></div>
+  <div class="ac-objective"><span class="ac-tag" id="ac-mode-tag"></span><div><strong id="objective-title"></strong><p id="objective-text"></p></div><button id="story-recap" class="ac-btn ghost small" data-i18n="readStory"></button></div>
+  <div class="ac-integrity"><div><small>TERMINAL INTEGRITY</small><span data-i18n="acIntegrity"></span></div><div class="ac-int-bar"><i id="ac-int-fill"></i></div><b id="ac-int-value">100</b><button id="ac-help" class="ac-icon-btn" title="?">?</button></div>
+ </header>
+ <aside class="ac-left">
+  <section class="ac-round">
+   <small class="ac-mono">[ STAGE ]</small>
+   <div class="ac-round-num"><b id="ac-stage-num">01</b><div><small id="phase" class="ac-mono"></small><strong id="ac-phase-cn"></strong><span id="ac-stage-total">/ 20</span></div></div>
+   <h2 id="stage-title"></h2>
+   <nav id="stages" class="ac-pips" data-i18n-aria="adventure"></nav>
+   <div class="ac-augments"><small class="ac-mono">AUGMENTS</small><div id="ac-augments"></div></div>
+  </section>
+  <section class="ac-panel ac-traits"><header class="ac-strip"><i></i><small>SYNERGY</small><b data-i18n="acSynergy"></b><span id="trait-count"></span></header><div id="traits"></div></section>
+ </aside>
+ <aside class="ac-right">
+  <section class="ac-panel" id="ac-intel"><header class="ac-strip"><i></i><small>HOSTILE INTEL</small><b data-i18n="acIntel"></b><span id="ac-intel-count"></span></header><div id="ac-intel-list"></div></section>
+  <section class="ac-panel" id="ac-damage" hidden><header class="ac-strip"><i></i><small>DAMAGE</small><b data-i18n="acDamage"></b><span id="timer">00:00</span></header>
+   <div class="ac-counters"><div><small data-i18n="acAllies"></small><b id="ac-allies">0</b></div><div><small data-i18n="acEnemies"></small><b id="ac-hostiles">0</b></div><span id="ac-wave" hidden></span></div><div id="ac-damage-list"></div></section>
+  <section class="ac-unitfile" id="ac-unitfile" hidden></section>
+ </aside>
+ <footer class="ac-dock">
+  <section class="ac-econ">
+   <header class="ac-strip"><i></i><small>RESOURCE</small><b data-i18n="acGold"></b><span id="ac-interest"></span></header>
+   <div class="ac-econ-body">
+    <div class="ac-level"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" class="trk"/><circle id="ac-xp-ring" cx="50" cy="50" r="46" class="bar"/></svg><div><small data-i18n="acLevel"></small><b id="ac-level">02</b><span id="ac-xp">0 / 2</span></div></div>
+    <div class="ac-gold"><small><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 7v10l-9 5-9-5V7z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.4" fill="currentColor"/></svg> GOLD</small><b id="ac-gold">0</b><div id="ac-interest-pips" class="ac-pipline"></div></div>
+   </div>
+   <div class="ac-econ-btns"><button id="ac-btn-xp" class="ac-pill"><span>⌃</span><b data-i18n="acXp"></b><em>4</em><kbd>F</kbd></button><button id="ac-btn-reroll" class="ac-pill"><span>↻</span><b data-i18n="acReroll"></b><em>2</em><kbd>D</kbd></button></div>
+  </section>
+  <section class="ac-shop">
+   <header class="ac-shop-head"><div class="ac-strip"><i></i><small>RECRUIT</small><b data-i18n="acRecruit"></b></div><div id="ac-odds" class="ac-odds"></div><span class="ac-sellhint" data-i18n="acSellHint"></span><button id="ac-lock" class="ac-pill small"><i>⊡</i><span></span></button></header>
+   <div id="ac-cards" class="ac-cards"></div>
+   <div id="ac-sell" class="ac-sell" hidden><b></b></div>
+  </section>
+  <section class="ac-engage">
+   <div class="ac-engage-tools"><div class="ac-deploy"><small class="ac-mono">DEPLOY</small><b id="ac-deploy">0 / 2</b></div><button id="speed" class="ac-pill small" data-i18n-title="acSpeed">×1</button><button id="pause" class="ac-pill small" disabled>❚❚</button></div>
+   <button id="start" class="ac-start"><small class="ac-mono">[ SPACE ]</small><b id="ac-start-title"></b><span id="ac-start-sub"></span><i class="ac-start-icon">▶</i></button>
+  </section>
+ </footer>
+ <div id="ac-augment" class="ac-augment" hidden></div>
+ <div id="ac-banner" class="ac-banner" hidden></div>
+ <div id="result" class="ac-result" hidden></div>
+ <div id="ac-toast" class="ac-toast" aria-live="polite"></div>
 </div>
-<p id="combat-instructions"></p>
-<section class="roster-section"><div class="roster-heading"><div><h2 data-i18n="yourTeam"></h2><p data-i18n="rosterHint"></p></div><span class="muted" data-i18n="rosterCount"></span></div><div id="roster"></div></section>
-</section>
-</main>
+</section></main>
 <footer class="app-footer"><span>✧ <span data-i18n="brand"></span></span><span data-i18n="footer"></span><span data-i18n="autoSave"></span></footer>
 
 <dialog id="extensions-dialog" class="extensions-dialog"><div class="modal-heading"><div><small>FOLD PROJECT / SYSTEM</small><h2 data-i18n="moreTitle"></h2></div><button data-close="extensions-dialog" class="close" data-i18n-aria="close">×</button></div><p>离线游玩 · 进度自动保存在本机</p><nav class="main-nav"><button id="nav-lobby" data-i18n="lobby"></button><button id="nav-adventure" data-i18n="storyLibrary"></button></nav><label class="setting-row"><span>语言 / Language / 言語</span><select id="language" aria-label="语言 / Language / 言語"><option value="zh">简体中文</option><option value="en">English</option><option value="ja">日本語</option></select></label><label class="setting-row"><span data-i18n="fullEffects"></span><input type="checkbox" id="effects-toggle" checked></label><label class="setting-row"><span data-i18n="idleMotion"></span><input type="checkbox" id="motion-toggle" checked></label><label class="setting-row"><span data-i18n="battleQuality"></span><select id="quality-select"><option value="high" data-i18n="qualityHigh"></option><option value="balanced" data-i18n="qualityBalanced"></option><option value="low" data-i18n="qualityLow"></option></select></label><label class="setting-row"><span data-i18n="battleGrid"></span><input type="checkbox" id="grid-toggle"></label><div class="music-settings"><label><span data-i18n="musicEnabled"></span><input id="music-toggle" type="checkbox" checked></label><label><span data-i18n="musicVolume"></span><input id="music-volume" type="range" min="0" max="100" value="35"></label><small id="music-now"></small></div><div class="extension-links"><button id="protagonist-open" data-i18n="protagonistEdit"></button><button id="journal-open" data-i18n="journal"></button><button id="help" data-i18n="help"></button></div><p data-i18n="settingsSaved"></p></dialog>
@@ -45,5 +82,5 @@
  <p>额外生命锚位只有一个。三人已了解风险并表达同行意愿；未同行的人会留在本世界继续生活与收尾。</p>
  <div id="return-companion-options"></div><p id="return-companion-preview" aria-live="polite"></p>
  <div class="return-actions"><button id="return-companion-cancel" type="button">回到对话，稍后决定</button><button id="return-companion-confirm" type="button" disabled>确认邀请并继续归航 →</button></div>
- </dialog><script src="localization.js"></script><script src="combat-text.js"></script><script src="story.js"></script><script src="game.js"></script><script src="characters.js"></script><script src="defense.js"></script><script src="arena.js"></script><script src="campaign.js"></script><script src="presentation.js"></script><script src="protagonist.js"></script><script src="cinematics.js"></script><script src="campaign-expansion.js"></script><script src="skill-fx.js"></script><script src="music.js"></script><script src="dimension-story.js"></script><script src="dimension.js"></script><script src="assets/vendor/three.js"></script><script src="character-models.js"></script><script src="battle-scenery.js"></script><script src="battle3d.js"></script><script src="lobby.js"></script>
+ </dialog><script src="localization.js"></script><script src="combat-text.js"></script><script src="story.js"></script><script src="autochess-data.js"></script><script src="autochess-core.js"></script><script src="game.js"></script><script src="characters.js"></script><script src="campaign.js"></script><script src="presentation.js"></script><script src="protagonist.js"></script><script src="cinematics.js"></script><script src="campaign-expansion.js"></script><script src="music.js"></script><script src="dimension-story.js"></script><script src="dimension.js"></script><script src="assets/vendor/three.js"></script><script src="hero-models.js"></script><script src="autochess-render.js"></script><script src="autochess-ui.js"></script><script src="lobby.js"></script>
 </body></html>

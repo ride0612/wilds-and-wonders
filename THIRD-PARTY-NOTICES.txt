@@ -167,3 +167,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Character battle meshes are procedural, project-authored unofficial fan interpretations. See assets/models/README.md.
+
+------------------------------------------------------------------------
+Barlow Condensed (SemiBold / Bold / Medium) and JetBrains Mono
+Bundled in assets/autochess/fonts/ for the auto-chess battle interface.
+Licensed under the SIL Open Font License, Version 1.1.
+Full license texts: assets/autochess/fonts/OFL-barlowcondensed.txt and
+assets/autochess/fonts/OFL-jetbrainsmono.txt

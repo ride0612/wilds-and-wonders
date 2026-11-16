@@ -1,4 +1,4 @@
-param([string]$OutputFolder='release\绝不认书-离线版')
+﻿param([string]$OutputFolder='release\绝不认书-离线版')
 $ErrorActionPreference = 'Stop'
 Set-Location -LiteralPath $PSScriptRoot
 $sdkPath = Join-Path $PSScriptRoot '.build\webview2'
@@ -16,11 +16,11 @@ if (!(Test-Path -LiteralPath "$sdkPath\lib\net462\Microsoft.Web.WebView2.WinForm
 }
 $outputPath = Join-Path $PSScriptRoot $OutputFolder
 New-Item -ItemType Directory -Force -Path "$outputPath\game" | Out-Null
-foreach ($retiredFile in @('gacha.js','gacha-data.js','gacha.css','account.js','account.css')) {
+foreach ($retiredFile in @('gacha.js','gacha-data.js','gacha.css','account.js','account.css','defense.js','arena.js','skill-fx.js','character-models.js','battle-scenery.js','battle3d.js')) {
     $retiredPath = Join-Path "$outputPath\game" $retiredFile
     if (Test-Path -LiteralPath $retiredPath -PathType Leaf) { Remove-Item -LiteralPath $retiredPath -Force }
 }
-Copy-Item -LiteralPath 'index.html','migration.html','style.css','lobby.css','battle.css','portrait-ui.css','cinematics.css','protagonist.css','campaign-expansion.js','skill-fx.js','music.js','localization.js','combat-text.js','story.js','game.js','characters.js','defense.js','arena.js','character-models.js','battle-scenery.js','battle3d.js','campaign.js','presentation.js','cinematics.js','protagonist.js','dimension-story.js','dimension.js','dimension.css','lobby.js' -Destination "$outputPath\game" -Force
+Copy-Item -LiteralPath 'index.html','migration.html','style.css','lobby.css','battle.css','portrait-ui.css','cinematics.css','protagonist.css','dimension.css','pgr-theme.css','autochess.css','campaign-expansion.js','music.js','localization.js','combat-text.js','story.js','game.js','characters.js','campaign.js','presentation.js','cinematics.js','protagonist.js','dimension-story.js','dimension.js','autochess-data.js','autochess-core.js','hero-models.js','autochess-render.js','autochess-ui.js','lobby.js' -Destination "$outputPath\game" -Force
 Copy-Item -LiteralPath 'desktop\story-smoke.js' -Destination "$outputPath\game" -Force
 if (Test-Path -LiteralPath 'assets') {
     Copy-Item -LiteralPath 'assets' -Destination "$outputPath\game" -Recurse -Force

@@ -20,8 +20,8 @@ function applyPresentationSettings(){
 function syncPresentationLayout(){
  if(!document.body)return;
  document.body.dataset.view=currentView;
- const focused=currentView==='adventure'&&!$('#chapter-mission').hidden&&mode!=='prep',entering=focused&&!document.body.classList.contains('battle-focus');
- document.body.classList.toggle('battle-focus',focused);if(entering)window.scrollTo(0,0);
+ const mission=currentView==='adventure'&&!$('#chapter-mission').hidden;if(mission&&!document.body.classList.contains('ac-mode'))window.scrollTo(0,0);
+ document.body.classList.toggle('ac-mode',mission);
  document.body.classList.toggle('fx-paused',paused);
 }
 function clearUltimate(){ultimateQueue=[];ultimateActive=null;$('#ultimate-overlay').hidden=true;$('#ultimate-overlay').classList.remove('playing');}
