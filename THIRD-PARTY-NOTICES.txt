@@ -174,3 +174,12 @@ Bundled in assets/autochess/fonts/ for the auto-chess battle interface.
 Licensed under the SIL Open Font License, Version 1.1.
 Full license texts: assets/autochess/fonts/OFL-barlowcondensed.txt and
 assets/autochess/fonts/OFL-jetbrainsmono.txt
+
+Touhou Project
+--------------
+The eight story characters are fan-work (二次創作) depictions of characters from
+Touhou Project by Team Shanghai Alice (ZUN). Touhou Project and its characters
+belong to their rights holder. This project is unofficial and not affiliated
+with Team Shanghai Alice. No official images, music or game data are included;
+character text and 3D models are original to this project. Distribution should
+follow the Touhou Project fan-work guidelines: https://touhou-project.news/guideline/

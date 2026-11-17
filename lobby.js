@@ -75,8 +75,9 @@ function renderStory(){if(cinema){cinema.chars=0;cinema.hold=0;}renderCinematic(
 function completeStory(){
  if(!storyScene)return;
  if(storyScene.index===19&&storyScene.part==='after'&&cleared.includes(19)){
-  if(!dimensionState.companion){showReturnCompanionPicker();return;}
-  dimensionState.returned=true;
+  // 章末同行邀请仅在配置了同行者时出现（当前剧情编写中，未配置）
+  if(!dimensionState.companion&&Object.keys(RETURN_COMPANIONS).length){showReturnCompanionPicker();return;}
+  if(dimensionState.companion)dimensionState.returned=true;
  }
  rememberDimensionScene();const {index,part,intent}=storyScene;$('#story-dialog').close();storyScene=null;cinema=null;
  if(intent==='advance'&&part==='after'){

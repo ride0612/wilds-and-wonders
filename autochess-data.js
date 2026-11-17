@@ -35,21 +35,21 @@ const UNITS={
   skill:{name:['六棱圣域','Hex Sanctum','六稜の聖域'],type:'team_shield',values:[0,200,300,550],desc:'为全体友军提供 {v} 点护盾。'}},
  // —— 剧情协作者：沿用主线存档里的角色 ID，名称与技能名取自 characters.js ——
  warden:{story:true,code:'S-01',cost:1,traits:['bulwark','echo'],hp:720,atk:46,range:1,as:.65,armor:38,mana:80,startMana:30,
-  skill:{type:'shield_near',values:[0,220,330,520],count:2,desc:'打开应急掩护设备，为自身及最近两名友军施加 {v} 点护盾。'}},
+  skill:{type:'shield_near',values:[0,220,330,520],count:2,desc:'展开二重结界，为自身及最近两名友军施加 {v} 点护盾。'}},
  arrow:{story:true,code:'S-02',cost:1,traits:['marksman','dawn'],hp:500,atk:52,range:4,as:.75,armor:15,mana:60,startMana:0,
-  skill:{type:'snipe',values:[0,250,375,560],desc:'用信标锁定敌方信号，定向脉冲对当前目标造成 {v} 点伤害。'}},
+  skill:{type:'snipe',values:[0,250,375,560],desc:'八卦炉全功率照射极限火花，对当前目标造成 {v} 点伤害。'}},
  oak:{story:true,code:'S-03',cost:1,traits:['bulwark','arcanist'],hp:780,atk:48,range:1,as:.6,armor:40,mana:90,startMana:30,
-  skill:{type:'shield_near',values:[0,200,300,480],count:2,desc:'启动预置掩护装置，为自身及最近两名友军施加 {v} 点护盾。'}},
+  skill:{type:'shield_near',values:[0,200,300,480],count:2,desc:'运转七彩之气，为自身及最近两名友军施加 {v} 点护盾。'}},
  frost:{story:true,code:'S-04',cost:2,traits:['arcanist','marksman'],hp:560,atk:50,range:3,as:.7,armor:15,mana:70,startMana:20,
-  skill:{type:'nova',values:[0,230,345,520],radius:1.5,stun:.5,fx:'mark',desc:'侧写敌方移动规律，指引协同火力对目标周围造成 {v} 点伤害并压制 0.5 秒。'}},
+  skill:{type:'nova',values:[0,230,345,520],radius:1.5,stun:.5,fx:'frost',desc:'释放完美冻结，对目标周围敌人造成 {v} 点伤害并冻结 0.5 秒。'}},
  knight:{story:true,code:'S-05',cost:2,traits:['striker','dawn'],hp:780,atk:68,range:1,as:.8,armor:30,mana:60,startMana:10,
-  skill:{type:'strike',values:[0,320,480,740],desc:'根据听觉定位发起猎刀突进，连斩当前目标造成 {v} 点伤害。'}},
+  skill:{type:'strike',values:[0,320,480,740],desc:'瞬步突进，以现世斩连斩当前目标造成 {v} 点伤害。'}},
  sage:{story:true,code:'S-06',cost:2,traits:['arcanist','echo'],hp:560,atk:40,range:3,as:.7,armor:15,mana:80,startMana:30,
-  skill:{type:'heal',values:[0,280,420,650],radius:1.6,desc:'派出医疗无人机，治疗生命比例最低的友军 {v} 点，并为其周围友军恢复一半。'}},
+  skill:{type:'heal',values:[0,280,420,650],radius:1.6,desc:'调配蓬莱之药，治疗生命比例最低的友军 {v} 点，并为其周围友军恢复一半。'}},
  ember:{story:true,code:'S-07',cost:3,traits:['striker','arcanist'],hp:820,atk:80,range:1,as:.8,armor:30,mana:80,startMana:20,
-  skill:{type:'nova',values:[0,380,570,1100],radius:1.7,fx:'fire',desc:'控制君焰覆盖目标区域，对目标周围敌人造成 {v} 点伤害。'}},
+  skill:{type:'nova',values:[0,380,570,1100],radius:1.7,fx:'fire',desc:'挥舞莱瓦汀，烈焰覆盖目标区域，对周围敌人造成 {v} 点伤害。'}},
  moon:{story:true,code:'S-08',cost:3,traits:['marksman','echo'],hp:620,atk:88,range:4,as:.72,armor:15,mana:70,startMana:0,
-  skill:{type:'snipe',values:[0,520,780,1500],pick:'weakest',desc:'复核目标轨迹后进行精密射击，对生命最低的敌人造成 {v} 点伤害。'}}
+  skill:{type:'snipe',values:[0,520,780,1500],pick:'weakest',desc:'停止时间布下飞刀，对生命最低的敌人造成 {v} 点伤害。'}}
 };
 
 const ENEMIES={

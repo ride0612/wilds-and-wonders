@@ -1,198 +1,55 @@
 'use strict';
-// Legacy IDs retain existing save positions; all visible identities use this story cast.
+// 剧情角色：东方 Project（上海爱丽丝幻乐团）二次创作。人物设定归原作者所有；台词、简介与 3D 造型为本作原创。
+// 旧存档沿用的内部 ID（warden、arrow 等）保持不变，仅替换可见身份。
 const STORY_CAST={
-  "oak": {
-    "asset": "fingel",
-    "name": "芬格尔",
-    "en": "Fingel",
-    "ja": "フィンゲル",
-    "tone": "#b9b6a1",
-    "skill": "可靠的后手",
-    "enSkill": "Contingency Plan",
-    "jaSkill": "最後の備え",
-    "quote": "吐槽归吐槽，人我一定给你带回来。",
-    "enQuote": "I can complain and still get everyone home.",
-    "personality": [
-      "懒散外表 · 敏锐情报 · 关键时刻可靠",
-      "Irreverent · Resourceful · Dependable",
-      "飄々 · 情報通 · 頼れる"
-    ],
-    "bio": [
-      "学院里的情报熟手。总能把紧张局面说得像欠了一顿饭，却会先替队伍找好撤离路线。宽松制服、旧挎包和终端记录着他不肯明说的认真。",
-      "An academy information specialist whose jokes conceal careful evacuation plans.",
-      "冗談の裏で退路を確保する、学院の情報通。"
-    ],
-    "desc": "启动预置掩护装置，为自身及最近两名友军施加 200 点护盾。",
-    "faction": "学院协作"
-  },
-  "arrow": {
-    "asset": "fangqing",
-    "name": "方晴",
-    "en": "Fang Qing",
-    "ja": "方晴",
-    "tone": "#efaa63",
-    "skill": "信标定向",
-    "enSkill": "Beacon Lock",
-    "jaSkill": "ビーコン照準",
-    "quote": "信号还在。我听着呢，你继续说。",
-    "enQuote": "The signal is here. I am listening.",
-    "personality": [
-      "直率 · 机敏 · 记得你的日常",
-      "Candid · Quick-thinking · Caring",
-      "率直 · 機転 · 気配り"
-    ],
-    "bio": [
-      "现实世界的通信员，也是主角的老朋友。橙色工装、耳麦和信标是她的工作装备；她既会校准跨界链路，也会追问你是否按时吃饭。",
-      "Your old friend and communications specialist on Earth, carrying a radio and signal beacon.",
-      "現実世界の通信員で、主人公の旧友。通信と日々の暮らしを支える。"
-    ],
-    "desc": "用信标锁定敌方信号，定向脉冲对最近敌人造成 250 点伤害。",
-    "faction": "现实支援"
-  },
-  "ember": {
-    "asset": "chuzihang",
-    "name": "楚子航",
-    "en": "Chu Zihang",
-    "ja": "楚子航",
-    "tone": "#d58667",
-    "skill": "君焰",
-    "enSkill": "Royal Flame",
-    "jaSkill": "君焔",
-    "quote": "先确认退路。剩下的，我来处理。",
-    "enQuote": "Confirm the escape route. I will handle the rest.",
-    "personality": [
-      "寡言 · 自律 · 责任感强",
-      "Reserved · Disciplined · Responsible",
-      "寡黙 · 自律 · 責任感"
-    ],
-    "bio": [
-      "卡塞尔学院的行动协作者。黑发、金色眼睛与收束的黑色制服构成冷静的轮廓。村雨与君焰用于守住撤离窗口；他更关心任务结束后是否所有人都能交接、休息。",
-      "A disciplined academy field operative. His blade and fire hold the evacuation window open.",
-      "黒髪と金色の瞳を持つ行動協力者。村雨と君焔で仲間の退路を守る。"
-    ],
-    "desc": "控制君焰覆盖目标区域，对目标及周围一格敌人造成 185 点伤害。",
-    "faction": "学院协作"
-  },
-  "sage": {
-    "asset": "shenlan",
-    "name": "沈岚",
-    "en": "Shen Lan",
-    "ja": "沈嵐",
-    "tone": "#81cbd0",
-    "skill": "应急稳态",
-    "enSkill": "Emergency Stabilization",
-    "jaSkill": "緊急安定化",
-    "quote": "成功的数据要记录，承担的风险也一样。",
-    "enQuote": "Record the success, and the risks we accepted.",
-    "personality": [
-      "理性 · 克制 · 对风险负责",
-      "Analytical · Measured · Accountable",
-      "理性的 · 慎重 · 責任を負う"
-    ],
-    "bio": [
-      "折页计划的研究负责人。眼镜、白色研究外套与青色监测设备服务于现场观察。她不会把穿越者当作可替换的参数，优先维持生命信号与撤离条件。",
-      "The Fold Project lead researcher, responsible for the traveler rather than just the experiment.",
-      "折頁計画の研究責任者。実験の結果より、参加者の安全と帰還を重視する。"
-    ],
-    "desc": "派出医疗无人机，治疗生命比例最低的友军 280 点及相邻友军 140 点。",
-    "faction": "现实支援"
-  },
-  "knight": {
-    "asset": "caesar",
-    "name": "凯撒",
-    "en": "Caesar Gattuso",
-    "ja": "シーザー",
-    "tone": "#e3c78c",
-    "skill": "猎刀突进",
-    "enSkill": "Hunting Blade",
-    "jaSkill": "狩猟刃の突進",
-    "quote": "既然由我带队，就不会留下任何人。",
-    "enQuote": "If I lead this team, no one is left behind.",
-    "personality": [
-      "骄傲 · 果断 · 重视伙伴",
-      "Proud · Decisive · Protective",
-      "誇り · 決断力 · 仲間思い"
-    ],
-    "bio": [
-      "卡塞尔学院的行动领队。金发、蓝眼与白色作战礼装体现鲜明的自信。狄克推多配合听觉定位使用；他的指挥既要求效率，也接受同伴指出计划中的漏洞。",
-      "An academy leader with a proud bearing, a hunting blade, and a willingness to answer for his plans.",
-      "金髪と青い瞳の行動指揮者。自信に満ち、仲間の指摘にも耳を傾ける。"
-    ],
-    "desc": "根据听觉定位发起猎刀突进，对最近敌人造成 230 点伤害。",
-    "faction": "学院协作"
-  },
-  "frost": {
-    "asset": "nono",
-    "name": "诺诺",
-    "en": "Nono",
-    "ja": "ノノ",
-    "tone": "#dd8c7b",
-    "skill": "侧写协同",
-    "enSkill": "Profiling Coordination",
-    "jaSkill": "プロファイル連携",
-    "quote": "先别急着相信答案。把你漏看的那一处告诉我。",
-    "enQuote": "Before accepting an answer, show me what you missed.",
-    "personality": [
-      "敏锐 · 洒脱 · 独立判断",
-      "Perceptive · Unconventional · Independent",
-      "鋭敏 · 自由 · 自分で判断"
-    ],
-    "bio": [
-      "参与空白站台调查的协作者。红发、四叶草耳饰与学院制服保留轻快又锐利的气质。她用侧写寻找破绽，再指引队友集火；并不施放冰系魔法。",
-      "An independent investigator who uses profiling to identify openings and coordinate a team.",
-      "赤髪と四つ葉の耳飾りが印象的な調査協力者。側写で突破口を見つける。"
-    ],
-    "desc": "侧写敌方移动规律，指引协同火力对目标及周围一格造成 170 点伤害。",
-    "faction": "学院协作"
-  },
-  "warden": {
-    "asset": "lumingfei",
-    "name": "路明非",
-    "en": "Lu Mingfei",
-    "ja": "路明非",
-    "tone": "#8fbaa5",
-    "skill": "别落下一个人",
-    "enSkill": "Leave No One Behind",
-    "jaSkill": "誰も置いていかない",
-    "quote": "我可能会害怕，但我记得你还没回来。",
-    "enQuote": "I may be scared, but I know you are still out there.",
-    "personality": [
-      "爱吐槽 · 会犹豫 · 在意普通人",
-      "Self-deprecating · Hesitant · Kind",
-      "自嘲 · ためらい · 優しさ"
-    ],
-    "bio": [
-      "穿着略显凌乱的学院制服，背着旧挎包的年轻学生。他会紧张，也会说冷笑话，却常常最先注意到掉队的人。战斗中的护盾来自本作应急装备，不是原著能力设定。",
-      "An awkward student whose humor and hesitation do not stop him noticing those left behind. His shield is game-specific equipment.",
-      "少し着崩した制服の学生。怖がりながらも、取り残された人を見捨てない。盾は本作の装備。"
-    ],
-    "desc": "打开应急掩护设备，为自身及最近两名友军施加 220 点护盾。",
-    "faction": "学院协作"
-  },
-  "moon": {
-    "asset": "zero",
-    "name": "零",
-    "en": "Zero",
-    "ja": "零",
-    "tone": "#bbd1df",
-    "skill": "精确复现",
-    "enSkill": "Precision Replay",
-    "jaSkill": "精密再現",
-    "quote": "坐标确认。给我一个清晰的窗口。",
-    "enQuote": "Coordinates confirmed. Give me a clear window.",
-    "personality": [
-      "冷静 · 简洁 · 执行精确",
-      "Calm · Concise · Precise",
-      "冷静 · 簡潔 · 精確"
-    ],
-    "bio": [
-      "在外围观察点协助校准信号的学院行动人员。浅金短发、冰蓝眼睛与白色外套形成清晰轮廓。言语简短，行动细致，用精密射击与记录复核支持小队。",
-      "A precise observer supporting the perimeter with measured shots and carefully verified records.",
-      "浅金色の髪と青い瞳の観測協力者。精密射撃と丁寧な照合で小隊を支える。"
-    ],
-    "desc": "复核目标轨迹后进行精密射击，对最近敌人造成 290 点伤害。",
-    "faction": "学院协作"
-  }
+ warden:{asset:'reimu',name:'博丽灵梦',en:'Reimu Hakurei',ja:'博麗霊夢',type:['少女','Girl','少女'],tone:'#e0525a',
+  skill:'二重结界',enSkill:'Double Barrier',jaSkill:'二重結界',
+  quote:'麻烦事快点解决，我还要回去喝茶。',enQuote:'Let’s wrap this up quickly. My tea is getting cold.',
+  personality:['少女 · 随性 · 直觉惊人','Girl · Easygoing · Uncanny intuition','少女 · マイペース · 鋭い勘'],
+  bio:['博丽神社的巫女，负责维持幻想乡与外界之间的大结界。平时懒散，香火钱永远不够；一旦出手，结界与御币便是最可靠的防线。','The Hakurei shrine maiden who keeps the Great Barrier standing. Lazy until it matters, then nothing gets past her barriers.','博麗神社の巫女。普段はのんびりだが、異変となれば結界でどんな攻撃も通さない。'],
+  desc:'展开二重结界，为自身及最近两名友军施加 220 点护盾。',faction:['博丽神社','Hakurei Shrine','博麗神社']},
+ arrow:{asset:'marisa',name:'雾雨魔理沙',en:'Marisa Kirisame',ja:'霧雨魔理沙',type:['少女','Girl','少女'],tone:'#f2c84a',
+  skill:'极限火花',enSkill:'Master Spark',jaSkill:'マスタースパーク',
+  quote:'弹幕就是火力！借来的东西，等我用完再还。',enQuote:'Firepower is everything. I’ll return what I borrowed—eventually.',
+  personality:['少女 · 好胜 · 努力家','Girl · Competitive · Hard-working','少女 · 負けず嫌い · 努力家'],
+  bio:['住在魔法森林的普通魔法使。骑着扫帚到处“借”书，靠不服输的练习把八卦炉的火力推到极致。','An ordinary magician of the Forest of Magic who “borrows” books and out-practices everyone to push her Mini-Hakkero to the limit.','魔法の森に住む普通の魔法使い。努力で八卦炉の火力を極めた。'],
+  desc:'八卦炉全功率照射，对当前目标造成 250 点伤害。',faction:['魔法森林','Forest of Magic','魔法の森']},
+ oak:{asset:'meiling',name:'红美铃',en:'Hong Meiling',ja:'紅美鈴',type:['御姐','Mature','お姉さん'],tone:'#4caf6a',
+  skill:'彩光护体',enSkill:'Rainbow Guard',jaSkill:'彩光護身',
+  quote:'门由我来守。……放心，这次我绝对不会打瞌睡。',enQuote:'I’ll hold the gate. And no, I won’t doze off this time.',
+  personality:['御姐 · 豪爽 · 武术高手','Mature · Cheerful · Martial artist','お姉さん · 朗らか · 武術の達人'],
+  bio:['红魔馆的门卫，擅长运用“气”的武术家。性格开朗随和，偶尔会在门口打盹，但站上前线时比谁都结实。','The Scarlet Devil Mansion’s gatekeeper, a cheerful martial artist who wields qi. She naps on duty, but nobody holds a line better.','紅魔館の門番。気を操る武術家で、居眠りはしても前線では誰より頼もしい。'],
+  desc:'运转七彩之气，为自身及最近两名友军施加 200 点护盾。',faction:['红魔馆','Scarlet Devil Mansion','紅魔館']},
+ frost:{asset:'cirno',name:'琪露诺',en:'Cirno',ja:'チルノ',type:['萝莉','Petite','ロリ'],tone:'#6ab4ff',
+  skill:'完美冻结',enSkill:'Perfect Freeze',jaSkill:'パーフェクトフリーズ',
+  quote:'哼哼，因为我是最强的！全部冻成冰块吧！',enQuote:'Because I’m the strongest! Everything turns to ice!',
+  personality:['萝莉 · 天真 · 自称最强','Petite · Carefree · “The strongest”','ロリ · 天真爛漫 · 自称最強'],
+  bio:['住在雾之湖的冰之妖精。个子小小，自信满满，总把“最强”挂在嘴边；寒气一放，整片战场都会结霜。','An ice fairy of the Misty Lake. Small, endlessly confident, and convinced she is the strongest—her chill frosts the whole field.','霧の湖に住む氷の妖精。小さな体で自信満々、冷気で戦場を凍らせる。'],
+  desc:'释放冻气，对目标周围敌人造成 230 点伤害并冻结 0.5 秒。',faction:['雾之湖','Misty Lake','霧の湖']},
+ knight:{asset:'youmu',name:'魂魄妖梦',en:'Youmu Konpaku',ja:'魂魄妖夢',type:['少女','Girl','少女'],tone:'#8fd0b0',
+  skill:'现世斩',enSkill:'Present Life Slash',jaSkill:'現世斬',
+  quote:'楼观剑斩不断的东西，几乎不存在。',enQuote:'There is little the Roukanken cannot cut.',
+  personality:['少女 · 认真 · 一根筋','Girl · Earnest · Single-minded','少女 · 真面目 · 一途'],
+  bio:['白玉楼的庭师兼剑术指南役，半人半灵。认真到有些死板，身边总飘着自己的半灵；双刀出鞘时快得只剩残影。','Gardener and sword instructor of Hakugyokurou, half human and half phantom. Earnest to a fault, and her twin blades leave only afterimages.','白玉楼の庭師兼剣術指南役。半人半霊。真面目すぎるが、二刀の速さは残像のみ。'],
+  desc:'瞬步突进，以现世斩连斩当前目标造成 320 点伤害。',faction:['白玉楼','Hakugyokurou','白玉楼']},
+ sage:{asset:'eirin',name:'八意永琳',en:'Eirin Yagokoro',ja:'八意永琳',type:['御姐','Mature','お姉さん'],tone:'#6a7ad8',
+  skill:'蓬莱之药',enSkill:'Hourai Elixir',jaSkill:'蓬莱の薬',
+  quote:'伤口交给我处理。药效嘛……保证是你见过最好的。',enQuote:'Leave the wounds to me. My medicine is the finest you’ll ever see.',
+  personality:['御姐 · 沉着 · 天才药师','Mature · Composed · Genius pharmacist','お姉さん · 沈着 · 天才薬師'],
+  bio:['永远亭的药师，月之头脑。言谈温和却深不可测，红蓝两色的衣装与长弓同样出名；没有她治不好的伤。','The pharmacist of Eientei and the brains of the Moon. Gentle in speech, unfathomable in skill—there is no wound she cannot treat.','永遠亭の薬師で月の頭脳。穏やかだが底知れない。治せない傷はない。'],
+  desc:'调配蓬莱之药，治疗生命比例最低的友军 280 点，并为其周围友军恢复一半。',faction:['永远亭','Eientei','永遠亭']},
+ ember:{asset:'flandre',name:'芙兰朵露·斯卡雷特',en:'Flandre Scarlet',ja:'フランドール・スカーレット',type:['萝莉','Petite','ロリ'],tone:'#e0303a',
+  skill:'禁忌「莱瓦汀」',enSkill:'Taboo “Laevatein”',jaSkill:'禁忌「レーヴァテイン」',
+  quote:'一起来玩吧？要是坏掉了，可不能怪我哦。',enQuote:'Want to play? Don’t blame me if something breaks.',
+  personality:['萝莉 · 纯真 · 破坏力惊人','Petite · Innocent · Devastating','ロリ · 無邪気 · 破壊の力'],
+  bio:['红魔馆的二小姐，外表是孩子的吸血鬼，实际已活了近五百年。好奇又天真，背后的彩晶之翼闪烁时，莱瓦汀会烧尽周围的一切。','The younger Scarlet sister: a vampire who looks like a child but has lived nearly five centuries. Curious and innocent—until Laevatein burns everything nearby.','紅魔館の妹。子供の姿の吸血鬼で五百年近く生きている。レーヴァテインは周囲を焼き尽くす。'],
+  desc:'挥舞莱瓦汀，烈焰覆盖目标区域，对周围敌人造成 380 点伤害。',faction:['红魔馆','Scarlet Devil Mansion','紅魔館']},
+ moon:{asset:'sakuya',name:'十六夜咲夜',en:'Sakuya Izayoi',ja:'十六夜咲夜',type:['御姐','Mature','お姉さん'],tone:'#8fb0e8',
+  skill:'幻符「杀人玩偶」',enSkill:'Illusion “Killing Doll”',jaSkill:'幻符「殺人ドール」',
+  quote:'时间我已经停好了。请慢慢挑选您的结局。',enQuote:'I’ve already stopped the clock. Please, take your time choosing an ending.',
+  personality:['御姐 · 完美 · 冷静优雅','Mature · Flawless · Cool and elegant','お姉さん · 完璧 · 冷静で優雅'],
+  bio:['红魔馆的女仆长，能够操纵时间。家务与战斗都一丝不苟；当她停下时间，银色飞刀会同时从四面八方抵达。','Head maid of the Scarlet Devil Mansion who can manipulate time. Flawless at chores and combat alike—when time stops, her silver knives arrive from every side.','紅魔館のメイド長。時間を操る。時を止めれば銀のナイフが四方から届く。'],
+  desc:'停止时间布下飞刀，对生命最低的敌人造成 520 点伤害。',faction:['红魔馆','Scarlet Devil Mansion','紅魔館']}
 };
 const CHARACTER_DESIGNS=STORY_CAST;
 for(const hero of HEROES){
@@ -200,12 +57,15 @@ for(const hero of HEROES){
  ZH_QUOTES[hero.id]='「'+c.quote+'」';
  for(const [i,name,skill,quote] of [[0,c.en,c.enSkill,c.enQuote],[1,c.ja,c.jaSkill,c.quote]]){const t=HERO_TEXT[hero.id][i];t[0]=name;t[2]=skill;t[4]=quote;}
 }
-const characterImage=(id,kind='portrait')=>'assets/cast/'+STORY_CAST[id].asset+'-portrait.png';
+// 立绘：开局用本作 3D 模型实时渲染（见 autochess-ui.js renderCastPortraits）；渲染不可用时显示剪影占位。
+const CAST_PORTRAITS={};
+const castPlaceholder=id=>{const c=STORY_CAST[id];return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c.tone}" stop-opacity=".55"/><stop offset="1" stop-color="#101218"/></linearGradient></defs><rect width="400" height="600" fill="url(#g)"/><circle cx="200" cy="190" r="78" fill="#0b0c10" opacity=".55"/><path d="M80 600c8-160 56-250 120-250s112 90 120 250z" fill="#0b0c10" opacity=".55"/><text x="200" y="540" text-anchor="middle" font-size="44" font-family="sans-serif" fill="#fff" opacity=".85">${c.name}</text></svg>`);};
+const characterImage=(id,kind='portrait')=>CAST_PORTRAITS[id]||castPlaceholder(id);
 const characterModel=id=>'assets/models/'+STORY_CAST[id].asset+'.glb';
 const characterText=(id,key)=>CHARACTER_DESIGNS[id][key][{zh:0,en:1,ja:2}[language]];
-const starText=id=>language==='zh'?STORY_CAST[id].faction:language==='en'?(STORY_CAST[id].faction==='现实支援'?'EARTH SUPPORT':'ACADEMY ALLY'):(STORY_CAST[id].faction==='现实支援'?'現実支援':'学院協力');
+const starText=id=>STORY_CAST[id].faction[{zh:0,en:1,ja:2}[language]];
 Object.assign(TEXT,{
- atrium:['星穹中庭','CELESTIAL ATRIUM','星穹の中庭'],storyButton:['剧情','STORY','物語'],allCharacters:['全部角色','CHARACTERS','キャラクター'],warehouse:['仓库','INVENTORY','倉庫'],more:['扩展','MORE','その他'],moreTitle:['扩展菜单','More options','拡張メニュー'],collectionSubtitle:['与你同行的八位同伴','Eight companions by your side','共に歩む八人の仲間'],characterProfile:['角色档案','CHARACTER PROFILE','キャラクターファイル'],personality:['性格','PERSONALITY','性格'],featuredNow:['当前大厅展示','Featured in the atrium','ロビー展示中'],chooseDisplay:['点击头像，切换大厅展示角色','Choose a portrait to feature in the lobby','肖像を選ぶとロビーの展示が切り替わります'],
+ atrium:['星穹中庭','CELESTIAL ATRIUM','星穹の中庭'],storyButton:['剧情','STORY','物語'],allCharacters:['全部角色','CHARACTERS','キャラクター'],warehouse:['仓库','INVENTORY','倉庫'],more:['扩展','MORE','その他'],moreTitle:['扩展菜单','More options','拡張メニュー'],collectionSubtitle:['幻想乡的八位少女','Eight girls of Gensokyo','幻想郷の八人の少女'],characterProfile:['角色档案','CHARACTER PROFILE','キャラクターファイル'],personality:['性格','PERSONALITY','性格'],featuredNow:['当前大厅展示','Featured in the atrium','ロビー展示中'],chooseDisplay:['点击头像，切换大厅展示角色','Choose a portrait to feature in the lobby','肖像を選ぶとロビーの展示が切り替わります'],
  idleMotion:['大厅动态立绘','Animated lobby portraits','ロビー立ち絵の動き'],settingsSaved:['设置自动保存在本机','Settings save on this device','設定は端末に自動保存されます'],
  relics:['剧情收藏','STORY RELICS','物語の収集品'],relicHint:['通关各幕后获得纪念物，记录你们共同走过的旅程。','Clear each act to collect a keepsake from your journey.','各幕をクリアすると、旅の記念品が手に入ります。'],relicEmpty:['尚未获得纪念物。完成第一幕后，再回来看看。','No keepsakes yet. Return after clearing the first act.','記念品はまだありません。第一幕をクリアして戻ってきましょう。'],relicCount:['已收集 {n} / 5','{n} / 5 collected','収集済み {n} / 5'],ownedSkins:['已拥有外观','OWNED APPEARANCES','所持している外見'],skinHint:['每位角色均拥有一款基础外观，可在全部角色中展示。','Each companion owns a base appearance, available in Characters.','全員の基本衣装を所持。「キャラクター」で展示できます。'],
  relicLetter:['密封的录取信','Sealed admission letter','封印された入学通知'],relicKey:['观测站密钥','Observatory key','観測所の鍵'],relicPhoto:['旧档案中的合影','Archive photograph','古い記録の集合写真'],relicStar:['孩子折的纸星星','A child’s paper star','子供が折った紙の星'],relicBell:['停摆的钟芯','Silent clockwork','止まった時計の芯'],
@@ -214,13 +74,13 @@ Object.assign(TEXT,{
 });
 
 Object.assign(TEXT,{
- ownedRoster:['主角 + 八位剧情角色 · 全部可用','Protagonist + eight story characters · All available','主人公＋物語の8人・全員使用可能'],
+ ownedRoster:['主角 + 幻想乡八位少女 · 全部可用','Protagonist + eight Gensokyo girls · All available','主人公＋幻想郷の8人・全員使用可能'],
  lockedCharacter:['角色资料','Character dossier','人物資料'],
  battleQuality:['战斗画质','Battle quality','戦闘画質'],qualityHigh:['高 · 软阴影','High · soft shadows','高 · ソフトシャドウ'],qualityBalanced:['均衡','Balanced','標準'],qualityLow:['流畅 · 无阴影','Low · no shadows','低 · 影なし'],battleGrid:['战斗中显示战术网格','Show tactical grid in combat','戦闘中にグリッドを表示'],
  rarityNote:['八位角色可自由编队，剧情登场以当前场景为准。人物亲自在现场作战，地面网格只是指挥标记。','Build a squad from all eight characters. Story appearances follow each scene; the ground grid is a tactical overlay.','8人から自由に編成。登場は各場面に準じます。地面のグリッドは指揮用の目印です。'],
  ultimateTalent:['行动特写 · 首次技能演出','ACTION CUT-IN · FIRST CAST','アクション演出・初回スキル'],ultimateKicker:['行动特写','ACTION CUT-IN','アクション演出'],fullEffects:['技能特写演出','Skill cinematics','スキル演出'],
- baseSkin:['剧情行动装','Story field outfit','物語の行動服'],skinHint:['人物档案、剧情立绘与战斗形象使用同一套设计。','Dossiers, dialogue portraits and battle miniatures share each character design.','人物資料・立ち絵・戦闘ミニチュアは同じ設定を使用。'],
- collectionSubtitle:['现实与次元世界的八位协作者','Eight allies across two worlds','二つの世界の8人の協力者']
+ baseSkin:['剧情行动装','Story field outfit','物語の行動服'],skinHint:['立绘由战斗中的 3D 模型直接渲染，二者造型一致。','Portraits are rendered from the same 3D models used in battle.','立ち絵は戦闘用3Dモデルから直接描画されます。'],
+ collectionSubtitle:['幻想乡的八位少女','Eight girls of Gensokyo','幻想郷の八人の少女']
 });
 for(const [id,names] of Object.entries({wild:['互助','Mutual Aid','相互支援'],arcane:['共鸣','Resonance','共鳴'],dawn:['先遣','Vanguard','先遣'],ranger:['协同','Coordination','連携'],guard:['守护','Protection','守護']})){TRAITS[id].name=names[0];TRAIT_TEXT[id][0][0]=names[1];TRAIT_TEXT[id][1][0]=names[2];}
 

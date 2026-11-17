@@ -19,7 +19,7 @@ Object.assign(TEXT,{
  acOverload:['终端过载：金币减半，完整度已重置','Terminal overload: gold halved, integrity restored','端末過負荷：ゴールド半減・耐久リセット'],acPractice:['重温关卡 · 不消耗完整度、不发放奖励','Replay · No rewards or integrity loss','再挑戦・報酬と損傷なし'],
  acRetry:['调整阵容再战 ↻','Regroup & retry ↻','編成して再挑戦 ↻'],acStay:['留在本关继续整备','Stay and refine','このステージで整備'],acMvp:['MVP · {name}','MVP · {name}','MVP · {name}'],acIncome:['关卡补给 +{n} 金币 · 经验 +{x}','Stage supply +{n} gold · XP +{x}','ステージ補給 +{n}G・経験+{x}'],
  acCost:['{n} 费','{n} COST','{n}コスト'],acHp:['生命','HP','HP'],acAtk:['攻击','ATK','攻撃'],acAs:['攻速','AS','攻速'],acRange:['射程','RANGE','射程'],acArmor:['护甲','ARMOR','防御'],acMana:['法力','MANA','マナ'],acSkill:['技能','SKILL','スキル'],
- acStory:['剧情协作者','STORY ALLY','物語の協力者'],acHostile:['寂蚀群','HOSTILE','寂蝕群'],acTime:['用时','TIME','時間'],acSurvive:['存活','SURVIVORS','生存'],acPhasePlan:['备战阶段','PLANNING','準備フェーズ'],acPhaseFight:['交战中','ENGAGED','交戦中'],
+ acStory:['幻想乡','GENSOKYO','幻想郷'],acHostile:['寂蚀群','HOSTILE','寂蝕群'],acTime:['用时','TIME','時間'],acSurvive:['存活','SURVIVORS','生存'],acPhasePlan:['备战阶段','PLANNING','準備フェーズ'],acPhaseFight:['交战中','ENGAGED','交戦中'],
  acPhaseWin:['作战成功','CLEARED','クリア'],acPhaseLose:['防线受损','BREACHED','損傷'],acEngageBanner:['交战开始','ENGAGE','交戦開始'],acMerged:['升星 ★{n}','STAR UP ★{n}','スターアップ ★{n}'],acLevelUp:['等级提升 · 部署上限 {n}','Level up · {n} slots','レベルアップ・配置{n}'],
  acNoSynergy:['把棋子部署到棋盘后，这里会显示激活的羁绊。','Deploy units to see active synergies.','ユニットを配置するとシナジーが表示されます。'],acHint:['拖动棋子部署 · D 刷新 · F 经验 · 空格开战','Drag to deploy · D reroll · F XP · Space to engage','ドラッグで配置・D更新・F経験・Space開戦'],
  acEnemies:['剩余敌人','HOSTILES','残敵'],acAllies:['我方存活','ALLIES','味方'],acUnsupported:['此设备无法启用 WebGL 2 3D 战场。战斗仍会自动结算。','WebGL 2 is unavailable. Battles still auto-resolve.','WebGL 2 を利用できません。戦闘は自動で決着します。'],
@@ -39,6 +39,19 @@ const TRAIT_ICON={bulwark:'<path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-1
 const traitSvg=t=>`<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${TRAIT_ICON[t]||''}</svg>`;
 
 // ---------- 名称与说明 ----------
+// 剧情角色立绘：开局用 3D 模型渲染一次全身像，供大厅、图鉴、对话与商店使用
+function renderCastPortraits(){
+ if(typeof document==='undefined'||typeof HeroModels==='undefined'||typeof THREE==='undefined'||typeof CAST_PORTRAITS==='undefined')return;
+ let renderer;
+ try{
+  const cv=document.createElement('canvas'),gl=cv.getContext?.('webgl2',{alpha:true,antialias:true});
+  if(!gl||typeof gl.getExtension!=='function')return; // 无 WebGL 2（含无界面测试）时使用占位图
+  renderer=new THREE.WebGLRenderer({canvas:cv,context:gl,alpha:true,antialias:true});
+  Object.assign(CAST_PORTRAITS,HeroModels.renderPortraits(renderer,Object.keys(STORY_CAST),480,720,{full:true}));
+ }catch(err){console.warn('立绘渲染失败，使用占位图',err);}
+ finally{if(renderer){renderer.dispose();renderer.forceContextLoss?.();}}
+}
+renderCastPortraits();
 function acName(id){const u=ACD.UNITS[id];if(u)return u.story?heroText(def(id)).name:u.name[LI()];const e=ACD.ENEMIES[id];return e?e.name[LI()]:id;}
 function acSkillName(id){const u=ACD.UNITS[id]||ACD.ENEMIES[id];if(!u||!u.skill)return '';if(u.story)return heroText(def(id)).skill;return u.skill.name?u.skill.name[LI()]:'';}
 function acSkillDesc(id,star=1){const u=ACD.UNITS[id];if(!u)return '';const v=Math.round(u.skill.values[star]),tpl=LI()===0?u.skill.desc:SKILL_DESC[u.skill.type][LI()-1];return tpl.replace('{v}',v);}

@@ -22,12 +22,11 @@ foreach ($retiredFile in @('gacha.js','gacha-data.js','gacha.css','account.js','
 }
 Copy-Item -LiteralPath 'index.html','migration.html','style.css','lobby.css','battle.css','portrait-ui.css','cinematics.css','protagonist.css','dimension.css','pgr-theme.css','autochess.css','campaign-expansion.js','music.js','localization.js','combat-text.js','story.js','game.js','characters.js','campaign.js','presentation.js','cinematics.js','protagonist.js','dimension-story.js','dimension.js','autochess-data.js','autochess-core.js','hero-models.js','autochess-render.js','autochess-ui.js','lobby.js' -Destination "$outputPath\game" -Force
 Copy-Item -LiteralPath 'desktop\story-smoke.js' -Destination "$outputPath\game" -Force
+# 先清空输出里的旧素材目录，避免上次构建留下已删除的立绘与模型
+$outputAssets = Join-Path "$outputPath\game" 'assets'
+if (Test-Path -LiteralPath $outputAssets) { Remove-Item -LiteralPath $outputAssets -Recurse -Force }
 if (Test-Path -LiteralPath 'assets') {
     Copy-Item -LiteralPath 'assets' -Destination "$outputPath\game" -Recurse -Force
-}
-foreach ($retiredModel in @('caesar','chuzihang','fangqing','fingel','lumingfei','nono','shenlan','zero')) {
-    $retiredPath = Join-Path "$outputPath\game\assets\cast" "$retiredModel-battle.png"
-    if (Test-Path -LiteralPath $retiredPath -PathType Leaf) { Remove-Item -LiteralPath $retiredPath -Force }
 }
 Copy-Item -LiteralPath "$sdkPath\lib\net462\Microsoft.Web.WebView2.Core.dll","$sdkPath\lib\net462\Microsoft.Web.WebView2.WinForms.dll","$sdkPath\runtimes\win-x64\native\WebView2Loader.dll" -Destination $outputPath -Force
 $compilerPath = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'

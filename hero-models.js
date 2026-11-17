@@ -132,14 +132,15 @@ const chainY=(names,ys)=>(x,y)=>{for(let i=0;i<ys.length;i++)if(y>ys[i]){if(i===
 // ---------- 角色设定 ----------
 // 颜色：skin 肤色 hair 发色 eye 瞳色 top 上衣 top2 衬里/副色 inner 内衬 pants 下装 boots 鞋 trim 饰边 glow 自发光
 const SPECS={
- warden:{h:1.77,skin:0xf2ccb2,hair:0x23222a,eye:0x6b5848,style:'messy',top:'jacket',topC:0x2b4a40,top2:0x1c2a26,inner:0xe9ecea,pants:0x30353c,boots:0x1b1e24,trim:0x96b9a2,glow:0x7fffd0,tie:0x3a5a4c,coatLen:0,acc:['satchel'],weapon:'shield',shield:'riot'},
- arrow:{h:1.66,female:true,skin:0xf3cdb6,hair:0x3a2620,eye:0xd9913a,style:'bob',top:'jacket',topC:0xd06e22,top2:0x2a2f36,inner:0x262b31,pants:0x30373f,boots:0x22262c,trim:0xffc070,glow:0xffb84a,coatLen:.12,acc:['headset'],weapon:'beacon'},
- oak:{h:1.9,build:'heavy',skin:0xe2c0a2,hair:0xa49a7c,eye:0x5d7066,style:'messy',top:'jacket',topC:0x33473c,top2:0x25332c,inner:0xd8d6c6,pants:0x353a3e,boots:0x24262a,trim:0xcfc19a,glow:0xffe08a,coatLen:.22,acc:['satchel','terminal'],weapon:'shield',shield:'tower'},
- frost:{h:1.7,female:true,skin:0xf5d0bc,hair:0xb23a26,eye:0x5aa07a,style:'ponytail',top:'jacket',topC:0x24443a,top2:0x18241f,inner:0xf0eeea,pants:0x1f2730,skirt:0x2a2f3a,boots:0x1d2026,trim:0xe2b07a,glow:0xff8c7a,tie:0x9c2e2a,coatLen:0,acc:['clover','visor'],weapon:'pistol'},
- knight:{h:1.9,skin:0xf3cbb0,hair:0xe6c06a,eye:0x3c86d6,style:'long',top:'coat',topC:0xeee8d6,top2:0x2c3442,inner:0x2a303a,pants:0x232a33,boots:0x1e2128,trim:0xd8ae58,glow:0xffd07a,coatLen:.58,acc:['pauldron'],weapon:'hunt'},
- sage:{h:1.72,female:true,skin:0xf4d0bc,hair:0x232c33,eye:0x4c8a8a,style:'long',top:'coat',topC:0xeef2f3,top2:0xbfe6e6,inner:0x2e3b44,pants:0x2f3d47,boots:0x252b31,trim:0x63c4c7,glow:0x63f0f2,coatLen:.62,acc:['glasses'],weapon:'tablet'},
- ember:{h:1.82,skin:0xf3cdb4,hair:0x16181e,eye:0xffb238,style:'short',top:'coat',topC:0x17191f,top2:0x8e1c22,inner:0xeceeee,pants:0x1c1f25,boots:0x111317,trim:0xb88a4a,glow:0xff5a32,tie:0x1a1c22,coatLen:.68,acc:['harness'],weapon:'katana'},
- moon:{h:1.62,female:true,skin:0xf6d6c4,hair:0xebe2cc,eye:0x8ed8ff,style:'bob',top:'coat',topC:0xe9ecef,top2:0x2b3540,inner:0x2a313b,pants:0x232b35,boots:0x1f242b,trim:0x9ec7df,glow:0x9fe6ff,coatLen:.5,acc:['earpiece'],weapon:'sniper'},
+// 剧情角色：东方 Project 二次创作造型（参照角色公开设定的配色与标志物，原创程序化建模）
+ warden:{h:1.56,female:true,bust:.6,skin:0xf4c9b0,hair:0x3a2420,eye:0xb0383a,style:'long',top:'robe',topC:0xd8313a,top2:0xe6e3ea,inner:0xe6e3ea,pants:0xe6e3ea,skirt:0xc82832,boots:0x3a2a24,trim:0xf2d36a,glow:0xff6a6a,tie:0xf2d36a,coatLen:0,acc:['bigbow','yinyang'],weapon:'gohei'},
+ arrow:{h:1.56,female:true,bust:.6,skin:0xf4c9b0,hair:0xf2d27a,eye:0xe0a83a,style:'long',top:'robe',topC:0x1c1c22,top2:0xe8e8ee,inner:0xe8e8ee,pants:0x1c1c22,skirt:0x1c1c22,boots:0x2a221c,trim:0xe8e8ee,glow:0xffd84a,coatLen:0,acc:['witchhat','apron'],weapon:'hakkero'},
+ oak:{h:1.74,female:true,skin:0xf4c9b0,hair:0xc8303a,eye:0x5aa07a,style:'long',top:'robe',topC:0x3a9a5a,top2:0xe8e4da,inner:0xe8e4da,pants:0xe8e4da,skirt:0x3a9a5a,boots:0x2a2a2a,trim:0xf2d36a,glow:0x7affb0,coatLen:.62,acc:['beret'],weapon:'fist'},
+ frost:{h:1.38,female:true,bust:0,skin:0xf4c9b0,hair:0x6ab4ff,eye:0x3a7ad8,style:'bob',top:'robe',topC:0x3a78d8,top2:0xe4ecf6,inner:0xe4ecf6,pants:0xe4ecf6,skirt:0x3a78d8,boots:0x2a3a5a,trim:0xf2f6fb,glow:0x9fe6ff,tie:0xd8313a,coatLen:0,acc:['hairbow','icewings'],weapon:'wand'},
+ knight:{h:1.54,female:true,bust:.6,skin:0xf4c9b0,hair:0xe8eaee,eye:0x5aa0c8,style:'bob',top:'jacket',topC:0x4a8a5a,top2:0xe6e6ea,inner:0xe6e6ea,pants:0xe6e6ea,skirt:0x4a8a5a,boots:0x2a2a2e,trim:0x1c1c22,glow:0xc8f0ff,tie:0x1c1c22,coatLen:0,acc:['hairband','phantom'],weapon:'katana'},
+ sage:{h:1.74,female:true,skin:0xf4c9b0,hair:0xd8dce4,eye:0x5a6ad0,style:'braid',top:'robe',topC:0xc8303a,top2:0x2a3a8a,inner:0x2a3a8a,pants:0x2a3a8a,skirt:0x2a3a8a,boots:0x2a2a30,trim:0xf2d36a,glow:0x8fd0ff,coatLen:.7,acc:['nursecap'],weapon:'longbow'},
+ ember:{h:1.42,female:true,bust:0,skin:0xf4c9b0,hair:0xf2d27a,eye:0xd8283a,style:'bob',top:'robe',topC:0xc8202a,top2:0xe6e3ea,inner:0xe6e3ea,pants:0xe6e3ea,skirt:0xc8202a,boots:0x8a1a22,trim:0xf2d36a,glow:0xff4a3a,tie:0xf2d36a,coatLen:0,acc:['mobcap','crystalwings'],weapon:'laevatein'},
+ moon:{h:1.7,female:true,skin:0xf4c9b0,hair:0xe0e4ec,eye:0x4a7ad8,style:'bob',top:'jacket',topC:0x2a3a7a,top2:0xe8e8ee,inner:0xe8e8ee,pants:0xe8e8ee,skirt:0x2a3a7a,boots:0x1c1c22,trim:0xe8e8ee,glow:0x9fe6ff,tie:0x3a8a5a,coatLen:0,acc:['maidcap','apron','sidebraids'],weapon:'knives'},
  anvil:{h:1.62,female:true,skin:0xf6d8c6,hair:0xff7a2a,eye:0xff9a2a,style:'messy',top:'armor',topC:0x8c9097,top2:0x2b2e33,inner:0x2a2c30,pants:0x24262b,boots:0x2a2d32,trim:0xffd23a,glow:0xffd23a,coatLen:.3,acc:['goggles','pauldron'],weapon:'shield',shield:'tower'},
  reed:{h:1.72,skin:0xf0d6c2,hair:0x24242a,eye:0x9ab060,style:'hood',top:'hoodie',topC:0x4f5f2e,top2:0x9ba3a6,inner:0x1c1d20,pants:0x1e1f22,boots:0x26282b,trim:0xd2ff4a,glow:0xd8ff5a,coatLen:.18,acc:['headphones'],weapon:'crossbow'},
  mote:{h:1.58,female:true,skin:0xf8e2d6,hair:0xcfccdc,eye:0x9a7bff,style:'twin',top:'coat',topC:0xf1f1f4,top2:0x26262e,inner:0x1f1f26,pants:0x1c1c22,skirt:0x23232b,boots:0xe8e8ee,trim:0xb28cff,glow:0xb28cff,coatLen:.48,acc:['star'],weapon:'wand'},
@@ -152,7 +153,7 @@ const SPECS={
  helion:{h:1.8,skin:0xf0d6c4,hair:0x18181c,eye:0xffd23a,style:'messy',top:'coat',topC:0x18191d,top2:0xd8b200,inner:0x111214,pants:0x16171a,boots:0x1f2023,trim:0xffd000,glow:0x5ad0ff,coatLen:.55,acc:['harness'],weapon:'railgun'},
  aegis:{h:1.76,female:true,skin:0xf6e0d4,hair:0xd8dbe2,eye:0x7aa6c8,style:'ponytail',top:'armor',topC:0xe8ebef,top2:0x1f2a33,inner:0x222b33,pants:0x1e252c,skirt:0xe8ebef,boots:0xdfe3e8,trim:0x46d5f2,glow:0x46d5f2,coatLen:.46,acc:['pauldron'],weapon:'sword',shield:'hex'}
 };
-const WEAPON_CLASS={katana:'blade',hunt:'blade',sword:'blade',daggers:'dual',gauntlet:'heavy',rifle:'gun',sniper:'gun',railgun:'gun',crossbow:'gun',pistol:'gun',wand:'staff',sunstaff:'staff',bellstaff:'staff',shield:'shield',tablet:'support',beacon:'support'};
+const WEAPON_CLASS={katana:'blade',hunt:'blade',sword:'blade',daggers:'dual',gauntlet:'heavy',rifle:'gun',sniper:'gun',railgun:'gun',crossbow:'gun',pistol:'gun',wand:'staff',sunstaff:'staff',bellstaff:'staff',shield:'shield',tablet:'support',beacon:'support',gohei:'blade',laevatein:'blade',hakkero:'gun',longbow:'gun',knives:'gun',fist:'heavy'};
 
 // ---------- 面部贴图 ----------
 const css=c=>'#'+new T.Color(c).getHexString();
@@ -211,7 +212,7 @@ function body(R,s){
  R.add('hips',G.oval((f?.165:.155)*bw,.12,.118),s.pants,{m:M(0,-.02,0)});
  R.add('spine',G.lathe([[.0,-.14],[.148*bw,-.13],[(f?.118:.132)*bw,-.02],[(f?.125:.138)*bw,.1],[(f?.13:.15)*bw,.21]],20,1,.74),top,{w:blendY('chest','spine',.16,.05)});
  R.add('chest',G.lathe([[(f?.13:.15)*bw,-.04],[(f?.15:.175)*bw,.06],[(f?.155:.185)*bw,.13],[(f?.14:.16)*bw,.2],[.08,.245],[.0,.25]],20,1,f?.6:.64),top);
- if(f)for(const sg of [-1,1])R.add('chest',G.oval(.064,.06,.055),top,{m:M(sg*.058,.07,.058)});
+ const bust=s.bust??1;if(f&&bust>0)for(const sg of [-1,1])R.add('chest',G.oval(.064*bust,.06*bust,.055*bust),top,{m:M(sg*.058,.07,.058-.012*(1-bust))});
  R.add('neck',G.cyl(.046,.052,.13,12),skin,{m:M(0,.03,0)});
  // 手臂（肘部双骨骼平滑过渡）
  for(const sg of [1,-1]){const t=sg>0?'L':'R',arm='arm'+t,fore='fore'+t,hand='hand'+t;
@@ -345,6 +346,25 @@ function outfit(R,s,rand){
  if(acc.includes('clover'))R.add('head',G.oval(.01,.01,.004),0x5ad07a,{m:M(.104,.06,.01),glow:true,i:1.3});
  if(acc.includes('ribbon'))for(const sg of [-1,1])R.add('head',G.oval(.04,.022,.012),s.trim,{m:M(sg*.06,.2,-.08,0,sg*.6,sg*.4)});
  if(acc.includes('star')){R.add('head',G.oct(.022).scale(1,1.4,.4),s.glow,{m:M(.085,.19,.06),glow:true,i:2});}
+ // 东方 Project 角色标志物
+ if(acc.includes('bigbow')){for(const sg of [-1,1]){R.add('head',G.oval(.085,.055,.022),0xd8202a,{m:M(sg*.085,.245,-.085,0,sg*.35,sg*.45)});R.add('head',G.oval(.088,.058,.012),0xf4f2ee,{m:M(sg*.088,.245,-.1,0,sg*.35,sg*.45)});R.add('head',G.oval(.02,.08,.012),0xd8202a,{m:M(sg*.05,.15,-.12,0,0,sg*.35)});}R.add('head',G.oval(.03,.032,.03),0xb81a22,{m:M(0,.235,-.1)});
+  for(const sg of [-1,1]){R.add('head',G.cyl(.016,.016,.05,10),0xd8202a,{m:M(sg*.105,.0,.03)});R.add('head',G.cyl(.017,.017,.008,10),0xf4f2ee,{m:M(sg*.105,-.024,.03)});}}
+ if(acc.includes('yinyang'))for(const [x,y] of [[0,0],[-.84,-.18]]){R.add('drone',G.part(1,18,10,0,Math.PI).scale(.07,.07,.07),0xf4f2ee,{m:M(x,y,0,0,0,Math.PI/2)});R.add('drone',G.part(1,18,10,Math.PI,Math.PI).scale(.07,.07,.07),0x16161a,{m:M(x,y,0,0,0,Math.PI/2)});R.add('drone',G.oval(.018,.018,.018),0xd8202a,{m:M(x,y+.035,.06),glow:true,i:1.4});}
+ if(acc.includes('witchhat')){R.add('head',G.cyl(.26,.25,.012,32),0x1c1c22,{m:M(0,.215,-.01,-.12)});R.add('head',G.lathe([[.125,0],[.118,.07],[.09,.17],[.05,.27],[.018,.36],[0,.39]],24),0x1c1c22,{m:M(0,.22,-.02,-.32)});
+  R.add('head',G.cyl(.127,.127,.035,24,true),0xf2f2f4,{m:M(0,.24,-.02,-.12)});for(const sg of [-1,1])R.add('head',G.oval(.05,.03,.012),0xf2f2f4,{m:M(sg*.06,.25,-.13,0,sg*.4,sg*.3)});}
+ if(acc.includes('apron')){R.add('hips',G.plate(.17,.22,.006,.12),0xf6f6f8,{m:M(0,-.13,.175,-.2)});R.add('spine',G.plate(.14,.1,.006,.2),0xf6f6f8,{m:M(0,-.03,f?.12:.13,-.05)});R.add('hips',G.box(.18,.012,.006),s.trim,{m:M(0,-.02,.165,-.2)});}
+ if(acc.includes('beret')){R.add('head',G.oval(.135,.045,.13),s.topC,{m:M(0,.225,-.005,-.15,0,.12)});R.add('head',G.torus(.11,.01,6,24),s.topC,{m:M(0,.205,0,Math.PI/2-.15)});R.add('head',G.oct(.026).scale(1,1,.35),0xf2d36a,{m:M(0,.235,.12),glow:true,i:1.6});}
+ if(acc.includes('hairbow')){for(const sg of [-1,1])R.add('head',G.oval(.075,.05,.02),0x2a5ad8,{m:M(sg*.07,.245,-.06,0,sg*.3,sg*.5)});R.add('head',G.oval(.026,.026,.024),0x2048b8,{m:M(0,.235,-.065)});}
+ if(acc.includes('icewings'))for(const sg of [-1,1])for(let i=0;i<3;i++){const a=.35+i*.42;R.add('chest',G.oct(.12).scale(.32,1.3,.12),0xc8f0ff,{m:M(sg*(.1+Math.cos(a)*.2),.12+Math.sin(a)*.16-.08*i,-.14,0,sg*.25,-sg*(a+.5)),glow:true,i:1.25});}
+ if(acc.includes('hairband')){R.add('head',G.torus(.118,.01,6,26,Math.PI*1.25),0x16161a,{m:M(0,.19,-.01,Math.PI/2-.25,0,-Math.PI*.125)});for(const sg of [-1,1])R.add('head',G.oval(.035,.022,.01),0x16161a,{m:M(.085+sg*.03,.2,.04,0,.6,sg*.4)});}
+ if(acc.includes('phantom')){R.add('drone',G.oval(.11,.1,.11),0xeef6ff,{glow:true,i:1.05});R.add('drone',G.strand([[0,0,-.06],[.05,-.04,-.16],[-.02,-.02,-.26],[.04,.02,-.34]],.07,.012,{seg:10,rad:8}),0xeef6ff,{glow:true,i:1.05});}
+ if(acc.includes('nursecap')){R.add('head',G.plate(.17,.075,.06,.3),0xc8303a,{m:M(0,.235,-.005,-.15)});R.add('head',G.box(.05,.012,.004),0xf4f4f6,{m:M(.03,.24,.032,-.15)});R.add('head',G.box(.012,.05,.004),0xf4f4f6,{m:M(.03,.24,.032,-.15)});}
+ if(acc.includes('mobcap')){R.add('head',G.oval(.14,.08,.14),0xf8f6f2,{m:M(0,.205,-.01,-.12)});R.add('head',G.torus(.132,.016,6,30),0xf8f6f2,{m:M(0,.175,-.005,Math.PI/2-.12)});R.add('head',G.torus(.128,.008,6,30),0xc8202a,{m:M(0,.19,-.008,Math.PI/2-.12)});R.add('head',G.oval(.035,.022,.012),0xc8202a,{m:M(.1,.2,.0,0,.9,.3)});}
+ if(acc.includes('crystalwings')){const cols=[0xff5a6a,0xffa84a,0xfff05a,0x6aff8a,0x5ad8ff,0x6a8aff,0xd06aff];
+  for(const sg of [-1,1]){const pts=[[sg*.04,.16,-.11],[sg*.2,.3,-.17],[sg*.4,.3,-.2],[sg*.58,.16,-.22]],curve=new T.CatmullRomCurve3(pts.map(q=>V(...q)));R.add('chest',G.strand(pts,.012,.008,{seg:12,rad:5}),0x2a2228,{});
+   for(let i=0;i<4;i++){const c=curve.getPointAt(.28+i*.22);R.add('chest',G.oct(.045).scale(.55,1.5,.55),cols[(i*2+(sg>0?0:1))%7],{m:M(c.x,c.y-.09,c.z),glow:true,i:1.7});}}}
+ if(acc.includes('maidcap')){R.add('head',G.torus(.118,.013,6,26,Math.PI),0xf8f8fa,{m:M(0,.19,.02,-.5)});for(let i=0;i<7;i++){const a=.25+i/6*(Math.PI-.5);R.add('head',G.oval(.022,.016,.008),0xf8f8fa,{m:M(Math.cos(a)*.118,.19+Math.sin(a)*.05,.02+Math.sin(a)*.04,-.5)});}}
+ if(acc.includes('sidebraids'))for(const sg of [-1,1]){for(let i=0;i<4;i++)R.add('head',G.oval(.019,.024,.019,8,6),s.hair,{m:M(sg*.105,.05-i*.035,.07)});R.add('head',G.oval(.02,.012,.008),0x3a8a5a,{m:M(sg*.105,-.08,.075)});}
  if(acc.includes('halo')){
   R.add('head',G.torus(.19,.012,6,40),0xd8dce2,{m:M(0,.31,-.08,Math.PI/2-.3)});
   R.add('head',G.torus(.17,.007,4,40),s.glow,{m:M(0,.31,-.08,Math.PI/2-.3),glow:true,i:2.6});
@@ -394,6 +414,16 @@ function weapon(R,s){
   if(w==='bellstaff'){R.add(hand,G.lathe([[.0,-.07],[.05,-.06],[.075,.0],[.06,.05],[.02,.08],[0,.08]],16),0xd8ecff,{m:M(0,-.07,top+.02,-Math.PI/2)});R.add(hand,G.oval(.03,.03,.03),s.glow,{m:M(0,-.07,top-.06),glow:true,i:3});
    for(let i=0;i<3;i++)R.add(hand,G.oct(.04).scale(.5,1.5,.5),s.glow,{m:M(Math.cos(i*2.1)*.11,-.07+Math.sin(i*2.1)*.11,top+.04,0,0,i*2.1),glow:true,i:2});}
  }
+ if(w==='gohei'){R.add(hand,G.cyl(.012,.012,.56,8),0x9a7442,{m:M(0,-.07,.24,Math.PI/2)});R.add(hand,G.cyl(.018,.018,.03,8),s.trim,{m:M(0,-.07,.5,Math.PI/2)});
+  for(const sg of [-1,1])for(let i=0;i<4;i++)R.add(hand,G.box(.05,.004,.045),0xfafaf6,{m:M(sg*(.03+(i%2)*.018),-.07,.49-i*.045,0,0,sg*.25)});R.add(hand,G.box(.004,.004,.42),g,{m:M(.016,-.07,.26),glow:true,i:1.6});}
+ if(w==='hakkero'){R.add(hand,G.cyl(.065,.07,.06,8),0x6a4a2a,{m:M(0,-.12,.02)});R.add(hand,G.cyl(.05,.05,.006,8),g,{m:M(0,-.152,.02),glow:true,i:3});for(let i=0;i<8;i++){const a=i/8*Math.PI*2;R.add(hand,G.box(.012,.004,.012),0xf2d36a,{m:M(Math.cos(a)*.052,-.155,.02+Math.sin(a)*.052)});}
+  R.add('spine',G.cyl(.013,.013,1.05,8),0x7a5a32,{m:M(.05,.04,-.15,0,0,.55)});R.add('spine',G.cone(.07,.26,10),0xc8a65a,{m:M(-.24,-.38,-.15,0,0,.55+Math.PI)});}
+ if(w==='longbow'){R.add(hand,G.strand([[0,-.08,-.48],[0,-.16,-.25],[0,-.18,0],[0,-.16,.25],[0,-.08,.48]],.012,.012,{seg:14,rad:5}),0x5a1a22,{});R.add(hand,G.box(.003,.003,.95),g,{m:M(0,-.07,0),glow:true,i:1.6});R.add(hand,G.cyl(.014,.014,.06,8),s.trim,{m:M(0,-.18,0,Math.PI/2)});
+  R.add('spine',G.cyl(.05,.04,.36,10),0x5a1a22,{m:M(.1,.08,-.15,0,0,-.3)});for(let i=0;i<3;i++)R.add('spine',G.cyl(.004,.004,.2,4),0xd8d8d0,{m:M(.16+i*.02,.32,-.15+i*.01,0,0,-.3)});}
+ if(w==='laevatein'){R.add(hand,G.cyl(.014,.012,.82,8),0x1d1416,{m:M(0,-.07,.33,Math.PI/2)});R.add(hand,G.cone(.05,.14,4).scale(1,1,.35),0x1d1416,{m:M(0,-.07,.8,Math.PI/2)});
+  R.add(hand,G.strand([[0,-.07,0],[.03,-.04,.2],[-.03,-.1,.4],[.03,-.04,.6],[0,-.07,.78]],.008,.004,{seg:16,rad:4}),g,{glow:true,i:3});R.add(hand,G.cone(.035,.1,4).scale(1,1,.35),g,{m:M(0,-.07,.86,Math.PI/2),glow:true,i:3});}
+ if(w==='knives')for(let i=-1;i<=1;i++){R.add(hand,G.box(.012,.035,.014),0x2a2a30,{m:M(i*.03,-.06,.0,0,0,i*.3)});R.add(hand,G.box(.008,.15,.022),0xd8dde4,{m:M(i*.055,-.15,.0,0,0,i*.3)});R.add(hand,G.box(.003,.13,.003),g,{m:M(i*.057,-.15,.012,0,0,i*.3),glow:true,i:2.4});}
+ if(w==='fist')for(const sg of [1,-1]){const t=sg>0?'L':'R';R.add('hand'+t,G.torus(.06,.006,4,20),g,{m:M(0,-.07,0,Math.PI/2),glow:true,i:2.2});R.add('fore'+t,G.cyl(.05,.05,.04,14),s.trim,{m:M(0,-.2,0)});}
  if(w==='shield'||s.shield){
   // 盾牌挂在左前臂，前臂前伸时盾面朝前（局部 -Y）
   const type=s.shield||'riot',H=type==='tower'?.78:type==='hex'?.6:.55,Wd=type==='tower'?.5:type==='hex'?.46:.44;
@@ -620,7 +650,7 @@ function animate(I,s,dt){if(I.kind==='enemy')poseEnemy(I,s,dt);else poseHero(I,s
 // ---------- 卡面头像：用实际模型渲染半身像 ----------
 // 渲染目标输出的是线性光，读回后用查找表做 ACES 色调映射与 sRGB 编码
 const LUT=new Uint8Array(256).map((_,i)=>{const x=i/255*1.2,a=(x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),c=clamp(a);return Math.round(255*(c<=.0031308?c*12.92:1.055*Math.pow(c,1/2.4)-.055));});
-function renderPortraits(renderer,ids,w=240,h=240){
+function renderPortraits(renderer,ids,w=240,h=240,{full=false}={}){
  const out={};if(!renderer)return out;
  const scene=new T.Scene(),cam=new T.PerspectiveCamera(24,w/h,.05,20);
  scene.add(new T.HemisphereLight(0xdfe8ff,0x3a3440,1.6));const key=new T.DirectionalLight(0xfff2e0,2.6);key.position.set(-1.2,2.2,2.4);scene.add(key);
@@ -630,7 +660,7 @@ function renderPortraits(renderer,ids,w=240,h=240){
  renderer.setClearColor(0x000000,0);
  for(const id of ids){
   const I=createHero(id);scene.add(I.root);poseHero(I,{time:.6,idleMotion:true},0);I.root.rotation.y=-.38;I.root.updateMatrixWorld(true);
-  const hh=I.height;cam.position.set(.42*hh/1.75,hh*.9,1.45*hh/1.75);cam.lookAt(0,hh*.82,0);cam.updateMatrixWorld();
+  const hh=I.height;if(full){I.root.rotation.y=-.28;I.root.updateMatrixWorld(true);cam.position.set(.5,1.02,4.6);cam.lookAt(0,.92,0);}else{cam.position.set(.42*hh/1.75,hh*.9,1.45*hh/1.75);cam.lookAt(0,hh*.82,0);}cam.updateMatrixWorld();
   renderer.setRenderTarget(rt);renderer.clear();renderer.render(scene,cam);renderer.readRenderTargetPixels(rt,0,0,w,h,pixels);
   for(let y=0;y<h;y++)for(let x=0;x<w*4;x++){const v=pixels[(h-1-y)*w*4+x];img.data[y*w*4+x]=(x&3)===3?v:LUT[v];}
   cx.putImageData(img,0,0);out[id]=cv.toDataURL('image/png');I.dispose();

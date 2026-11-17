@@ -109,7 +109,7 @@ internal sealed class GameWindow : Form
             await Task.Delay(1200);
             if (smokePass == 1)
             {
-                string reload = await browser.CoreWebView2.ExecuteScriptAsync("({passed:dimensionState.companion==='nono'&&dimensionState.returned&&cleared.length===20,companion:dimensionState.companion,returned:dimensionState.returned,errors:window.testErrors})");
+                string reload = await browser.CoreWebView2.ExecuteScriptAsync("({passed:cleared.length===20,cleared:cleared.length,errors:window.testErrors})");
                 File.WriteAllText(Path.Combine(root, "smoke-story-reload.json"), reload);
                 smokePass=2;Close();return;
             }
@@ -119,9 +119,8 @@ internal sealed class GameWindow : Form
             string result = await browser.CoreWebView2.ExecuteScriptAsync("window.storySmokeResult");
             File.WriteAllText(Path.Combine(root,"smoke-offline.json"),result);
             if (!result.Contains("\"passed\":true")) throw new Exception(result);
-            await CapturePreview("smoke-choice.png", "renderReturnCompanionPicker();");
-            await CapturePreview("smoke-dialogue.png", "$('#return-companion-dialog').close();dismissCinematic();openStory(6,'before','read');cinema.shot=7;renderCinematic();revealCinematic();");
-            await browser.CoreWebView2.ExecuteScriptAsync("dismissCinematic();openStory(19,'after','advance');completeStory();pendingReturnCompanion='nono';confirmReturnCompanion();completeStory();saveProfile();");
+                        await CapturePreview("smoke-dialogue.png", "dismissCinematic();openStory(6,'before','read');renderCinematic();revealCinematic();");
+            await browser.CoreWebView2.ExecuteScriptAsync("dismissCinematic();openStory(19,'after','advance');completeStory();saveProfile();");
             smokePass=1;browser.CoreWebView2.Reload();
         }
         catch(Exception error)

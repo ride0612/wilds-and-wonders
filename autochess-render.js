@@ -11,10 +11,10 @@ const hex=c=>'#'+new T.Color(c).getHexString();
 
 // 四个篇章的场景氛围：天空渐变、雾、灯光、强调色、天气
 const THEMES=[
- {label:['现实 · 临江夜雨','Linjiang · Night Rain','臨江・夜雨'],sky:[0x04060c,0x18223a,0x3c3550],fog:0x121a28,hemi:[0x9ab2d8,0x3a302c,.9],key:[0xffd8b4,2.5],rim:[0x5ab8ff,2.2],accent:0xff9a3a,ally:0x5fe3ff,enemy:0xff3b4e,weather:'rain',city:0x0c1119,windows:0xffb070,floor:0x1e252f},
- {label:['次元 · 卡塞尔暮色','Cassell · Dusk','カッセル・黄昏'],sky:[0x100a1c,0x4a2840,0xe0915e],fog:0x3a2634,hemi:[0xffd6c0,0x40303a,.95],key:[0xffd2a0,2.6],rim:[0xff9a6a,1.8],accent:0xffc46a,ally:0x7fe8ff,enemy:0xff3b4e,weather:'motes',city:0x1c1420,windows:0xffcf7a,floor:0x2a2530},
- {label:['次元 · 相位档案层','Phase Archive','位相アーカイブ'],sky:[0x020c14,0x0b3040,0x2a8088],fog:0x0c2630,hemi:[0x9ff0ff,0x203238,.9],key:[0xd8fff8,2.3],rim:[0x46f2e0,2.4],accent:0x46f2e0,ally:0x7fe8ff,enemy:0xff3b4e,weather:'data',city:0x081820,windows:0x46f2e0,floor:0x18262c},
- {label:['归航 · 赤潮通道','Homebound · Red Tide','帰航・赤潮'],sky:[0x0a0205,0x380a14,0xb03444],fog:0x260810,hemi:[0xffb0b0,0x301418,.85],key:[0xffc8b0,2.4],rim:[0xff4a6a,2.4],accent:0xff4a5a,ally:0x7fe8ff,enemy:0xff9a3a,weather:'embers',city:0x1a080c,windows:0xff6a5a,floor:0x2a1c22}
+ {label:['第一幕 · 夜雨','Act I · Night Rain','第一幕・夜雨'],sky:[0x04060c,0x18223a,0x3c3550],fog:0x121a28,hemi:[0x9ab2d8,0x3a302c,.9],key:[0xffd8b4,2.5],rim:[0x5ab8ff,2.2],accent:0xff9a3a,ally:0x5fe3ff,enemy:0xff3b4e,weather:'rain',city:0x0c1119,windows:0xffb070,floor:0x1e252f},
+ {label:['第二幕 · 暮色','Act II · Dusk','第二幕・黄昏'],sky:[0x100a1c,0x4a2840,0xe0915e],fog:0x3a2634,hemi:[0xffd6c0,0x40303a,.95],key:[0xffd2a0,2.6],rim:[0xff9a6a,1.8],accent:0xffc46a,ally:0x7fe8ff,enemy:0xff3b4e,weather:'motes',city:0x1c1420,windows:0xffcf7a,floor:0x2a2530},
+ {label:['第三幕 · 结界层','Act III · Barrier Layer','第三幕・結界層'],sky:[0x020c14,0x0b3040,0x2a8088],fog:0x0c2630,hemi:[0x9ff0ff,0x203238,.9],key:[0xd8fff8,2.3],rim:[0x46f2e0,2.4],accent:0x46f2e0,ally:0x7fe8ff,enemy:0xff3b4e,weather:'data',city:0x081820,windows:0x46f2e0,floor:0x18262c},
+ {label:['第四幕 · 赤雾','Act IV · Scarlet Mist','第四幕・紅霧'],sky:[0x0a0205,0x380a14,0xb03444],fog:0x260810,hemi:[0xffb0b0,0x301418,.85],key:[0xffc8b0,2.4],rim:[0xff4a6a,2.4],accent:0xff4a5a,ally:0x7fe8ff,enemy:0xff9a3a,weather:'embers',city:0x1a080c,windows:0xff6a5a,floor:0x2a1c22}
 ];
 
 // ---------- 泛光后期 ----------

@@ -3,15 +3,13 @@
   const check=(v,label)=>{if(!v)throw new Error(label);};
   $('#protagonist-dialog').close();dimensionState=freshDimensionState();protagonist='female';featureProtagonist=true;stage=0;cleared=[];unlocked=0;prepare();
   check(!$('#account-dialog'),'account UI absent');check(document.title==='绝不认书：次元回响','renamed window title');
-  openStory(0,'before','prepare');revealCinematic();$('#story-next').click();revealCinematic();$('#story-next').click();
-  check(cinema.shot===2,'advance dialogue');dismissCinematic();openStory(0,'before','prepare');check(cinema.shot===2,'resume dialogue');dismissCinematic();
+  openStory(0,'before','prepare');revealCinematic();check(cinematicShots(0,'before').length>=1,'placeholder dialogue');dismissCinematic();
   cleared=Array.from({length:20},(_,i)=>i);unlocked=19;
   const bounds=[];
   for(let i=0;i<20;i++)for(const part of ['before','after']){
    openStory(i,part,'read');
    const shots=cinematicShots(i,part);for(let k=0;k<shots.length;k++){
-    // A real playthrough gates this portion behind the choice. Use a selected route for layout checks.
-    dimensionState.companion='nono';cinema.shot=k;renderCinematic();revealCinematic();
+    cinema.shot=k;renderCinematic();revealCinematic();
     const next=$('#story-next').getBoundingClientRect(),text=$('#cinema-text').getBoundingClientRect();
     if(next.right>innerWidth+1||next.bottom>innerHeight+1||text.top<0||$('#cinema-text').scrollWidth>$('#cinema-text').clientWidth+1)bounds.push([i,part,k]);
    }

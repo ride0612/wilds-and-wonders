@@ -1,28 +1,26 @@
-> 说明：本目录对应旧版战斗（源码已移至 `legacy/`）。当前自走棋战斗的人物与场景见 `hero-models.js` 与 `autochess-render.js`。
+# 角色 3D 模型
 
-# 正常比例战斗模型
+## 当前运行时模型
 
-八套实际 3D 网格，单位为米，约 7.4 头身；身高 1.62–1.90 m。俯视战斗以各自发型、服装色块、装备和动作区分人物。采用风格化轻量模型，不是 Q 版精灵，也不是写实扫描资产。角色为本项目的非官方同人诠释。
+战斗、招募卡面与角色立绘使用 `hero-models.js` 程序生成的蒙皮模型（约 7.5 头身，卡通分层光照、描边、边缘光与动漫面部），不需要外部 GLB，可通过 `file://` 离线启动。八位剧情角色（东方 Project 二次创作）的造型参数见 `hero-models.js` 中的 `SPECS`。
 
-| GLB | 人物 | 装备 |
+## Tripo 高精度模型（制作中）
+
+八位角色另在 Tripo（tripo3d.ai）中用文字描述生成高精度模型，文件名约定如下，放入本目录即可在后续接入：
+
+| 文件 | 角色 | 内部 ID |
 | --- | --- | --- |
-| fingel.glb | 芬格尔 | 护盾、挎包 |
-| fangqing.glb | 方晴 | 通信信标、耳麦 |
-| chuzihang.glb | 楚子航 | 刀与刀鞘、黑色长外套 |
-| shenlan.glb | 沈岚 | 平板、眼镜、医疗无人机 |
-| caesar.glb | 凯撒 | 猎刀、白色长外套 |
-| nono.glb | 诺诺 | 扫描终端、红发马尾 |
-| lumingfei.glb | 路明非 | 应急盾、制服与挎包 |
-| zero.glb | 零 | 步枪、瞄具、白色外套 |
+| reimu.glb | 博丽灵梦 | warden |
+| marisa.glb | 雾雨魔理沙 | arrow |
+| meiling.glb | 红美铃 | oak |
+| cirno.glb | 琪露诺 | frost |
+| youmu.glb | 魂魄妖梦 | knight |
+| eirin.glb | 八意永琳 | sage |
+| flandre.glb | 芙兰朵露·斯卡雷特 | ember |
+| sakuya.glb | 十六夜咲夜 | moon |
 
-源模型与关节动作在 `../../character-models.js`，运行时直接生成，无外部纹理、GLB 加载器或网络请求，因此可通过 `file://` 离线启动。GLB 由 `node scripts/export-models.cjs` 导出，供三维编辑器继续修改；仅修改导出文件不会自动改变运行时模型，需要同步源模型。
+生成时只用文字描述，不上传官方图像。使用的提示词见 `tripo-prompts.md`。Tripo 生成的模型需遵守 Tripo 的使用条款；角色本身属于东方 Project 二次创作，见根目录 README 的声明。
 
-每套含 16–17 个关节节点和 idle / walk / attack / skill 四段动画。采用刚性分件关节结构，不是带蒙皮权重的整身角色；衣摆和马尾为程序摆动，非布料物理。相同关节下按材质合并网格，控制绘制次数。战斗使用软阴影、地面光照、待机呼吸、受击颜色反馈、定向挥击、持续护盾、火花、倒地动作和独立武器特效。
-
-运行时 `StoryModels.animate` 按实际位移推进步伐，平滑混合移动、攻击、施法与受击动作，再对关节旋转和位置插值。起停、转身、重心偏移、躯干反向摆动、膝踝配合和武器收势共同减少姿势突变。衣摆、马尾跟随运动延迟摆动；暂停不推进姿势。GLB 保留四组独立动画，运行时的混合行为由源代码控制。
-
-![八位人物几何预览](model-preview.png)
-
-上图通过 `scripts/preview-models.cjs` 对实际网格进行离线三角形投影，需 Node.js 的 sharp 包。它用于检查身材、轮廓与装备，**不是游戏截图**；不包含 WebGL 的平滑光照和阴影。真实游戏窗口的视觉、帧率和 GPU 兼容性仍需实机验收。
+旧版模型（原第一章角色）已删除。原创角色方晴、沈岚的旧模型与立绘保留在 `legacy/original-cast/`。
 
 Third-party renderer: Three.js 0.180.0, MIT. See `../vendor/THREE-LICENSE.txt`.
